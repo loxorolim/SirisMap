@@ -14,7 +14,8 @@
   </head>
   <body>
     <div id ="topRight">
-
+	 <h3>This is a heading</h3>
+  <p>This is a paragraph.</p>
     </div>
     <div id="map-canvas"></div>
     <div id ="controls" class="insert-router">

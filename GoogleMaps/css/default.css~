@@ -34,5 +34,5 @@ input[type="button"].gray
     background-color: #5e5e5e;
 }
 #topRight{
-float:right;width:400px;margin-right:5px;margin-top:10px;margin-left:4px;
+float:right;width:320px;margin-right:5px;margin-top:10px;margin-left:4px;
 }
