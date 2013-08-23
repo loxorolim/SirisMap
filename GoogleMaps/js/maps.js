@@ -11,6 +11,7 @@ var markerPair = [];
 var markerConnections = [];
 var ID = 0;
 var lines = [];
+var request;
 function initialize() {
 
     var mapOptions = {
@@ -25,13 +26,50 @@ function initialize() {
 
     }
 
-
     var map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
     // Create an ElevationService
     elevator = new google.maps.ElevationService();
+/*
+    function loadXMLDoc(dname) {
+        if (window.XMLHttpRequest) {
+            xhttp = new XMLHttpRequest();
+        }
+        else {
+            xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xhttp.open("GET", dname, false);
+        xhttp.send();
+        return xhttp.responseXML;
+    }
+    var xmlDoc = loadXMLDoc("test.xml");
+    document.write(xmlDoc.getElementsByTagName("Name")[0].childNodes[0].nodeValue + "<br>");
+    document.write(xmlDoc.getElementsByTagName("Content")[0].childNodes[0].nodeValue + "<br>");
+    document.write(xmlDoc.getElementsByTagName("Latitude")[0].childNodes[0].nodeValue) + "<br>";
+    document.write(xmlDoc.getElementsByTagName("Longitude")[0].childNodes[0].nodeValue);
+ */   
+
+   
+ 
+    
+    /*
+    jQuery.get("test.xml", function(data) {
+        jQuery(data).find("marker").each(function() {
+            var eachMarker = jQuery(this);
+            var markerCoords = new google.maps.LatLng(
+        parseFloat(eachMarker.find("Latitude").text()),
+        parseFloat(eachMarker.find("Longitude").text())
+    );
+            var name = eachMarker.find("Name").text();
+            var content = eachMarker.find("Content").text();
+            var html = "<div class='info-blob'>" + name + "<br />" + content + "</div>";
+
+            var marker = addMarker(html, markerCoords);
+
+        });
+    });*/
     // Add a listener for the click event and call getElevation on that location
-    google.maps.event.addListener(map, 'click', getElevation);
+
     google.maps.event.addListener(map, 'click',
           function (event) {
               placeMarker(event);
@@ -48,7 +86,7 @@ function initialize() {
     ControlDiv.index = 1;
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(ControlDiv);
 
-
+    
     
     $("#btnInsertion").click(function () {
 
@@ -87,7 +125,22 @@ function initialize() {
     });
 
 
-
+	$(document).ready(function() {
+        $.ajax({
+            type: "GET",
+            url: "test.xml",
+            dataType: "xml",
+            success: function(xml) {
+                $(xml).find('marker').each(function() {
+                    //var name = $(this).attr('Name').text();
+                    var content = $(this).find('Content').text();
+                    var latitude = $(this).find('Latitude').text();
+                    var longitude = $(this).find('Longitude').text();
+                    loadMarker(latitude,longitude);      
+                });
+            }
+        });
+    });
 
     function getElevation(event) {
 
@@ -122,6 +175,68 @@ function initialize() {
             var locations = [];
             var clickedLocation = locationEvent.latLng;
             locations.push(clickedLocation);
+
+            // Create a LocationElevationRequest object using the array's one value
+            var positionalRequest = {
+                'locations': locations
+            }
+
+            elevator.getElevationForLocations(positionalRequest, function (results, status) {
+
+                if (status == google.maps.ElevationStatus.OK) {
+
+                    // Retrieve the first result
+                    if (results[0]) {
+
+                        // Open an info window indicating the elevation at the clicked position
+                        marker.elevation = results[0].elevation;
+
+                        allMarkers.push(marker);
+                        google.maps.event.addListener(marker, 'click', function (event) {
+                            removeMarker(marker);
+                        });
+                        google.maps.event.addListener(marker, 'click', function (event) {
+                            displayInfoWindow(marker);
+                        });
+						google.maps.event.addListener(marker, 'click', function (event) {
+                            selectRouterToDraw(marker);
+                        });
+                        google.maps.event.addListener(marker, 'drag', function (event) {
+                            reconnectMovedMarker(marker,event.latLng)
+							marker.setPosition(event.latLng);
+                            displayInfoWindow(marker, event.latLng);
+							
+                        });
+
+                    } else {
+                        return -1;
+                    }
+                } else {
+                    return -1;
+                }
+            });
+
+
+
+
+        }
+    }
+    function loadMarker(latitude,longitude) {
+
+        var latLng = new google.maps.LatLng(latitude, longitude);
+        if (opMode == "Insertion") {
+            var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                draggable: true,
+				neighbours: [],
+				ID: ID
+            });
+			ID++;
+
+            var locations = [];
+            var markerLocation = latLng;
+            locations.push(markerLocation);
 
             // Create a LocationElevationRequest object using the array's one value
             var positionalRequest = {

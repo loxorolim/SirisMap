@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <markers>
+        <marker>
+            <Name>Jane Smith</Name>
+            <Content>A bit of content goes here.</Content>
+            <Latitude>53.69629</Latitude>
+            <Longitude>-123.925437</Longitude>
+        </marker>
+        <marker>
+            <Name>Joe Smith</Name>
+            <Content>A bit of content goes here.</Content>
+            <Latitude>55.627598</Latitude>
+            <Longitude>-115.136375</Longitude>
+        </marker>
+</markers>
