@@ -1,23 +1,26 @@
 div#controls
 {
+	width:410px;
     background-color: white;
     border-style: solid;
     border-width: 2px;
     cursor: pointer;
     text-align: center;
-    float: right;
-    margin: 10px;
-    padding: 10px;
+    margin: 5px;
+    padding: 5px;
+
+		margin-left: auto;
+    margin-right: auto;
 }
 
 input[type=button]
 {
-    padding: 5px 10px 5px 10px;
+    padding: 5px;
     width: auto;
     min-width: 85px;
     border-radius: 0px;
     font-family: "Helvetica Neue", "Lucida Grande", "Segoe UI", Arial, Helvetica, Verdana, sans-serif;
-    font-size: 1.2em;
+    font-size: 1.0em;
     font-weight: 600;
     color: #fff;
     margin-right: 0px;
@@ -34,5 +37,29 @@ input[type="button"].gray
     background-color: #5e5e5e;
 }
 #topRight{
-float:right;width:400px;margin-right:5px;margin-top:10px;margin-left:4px;
+	height: 840px;
+	width:  420px;
+
+	overflow:scroll;
+	border-style: solid;
+    border-width: 2px;
+	margin-left: auto;
+    margin-right: auto;	
+	background-color: #FFFFFF
+}
+#rightBackground{
+	float:right;
+	height: 950px;
+	width:450px;
+	border-style: solid;
+    border-width: 2px;
+	background-color: #5e5e5e;
+	
+}
+#map-canvas{
+	height:950px;
+
+	
+	
+	
 }

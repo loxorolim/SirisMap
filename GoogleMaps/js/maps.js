@@ -40,10 +40,10 @@ function initialize() {
 
 
     // Chama o botãozinho inserir  
-    var ControlDiv = document.getElementById("controls");
+ //   var ControlDiv = document.getElementById("controls");
     //var InsertionControl = new InsertionControl(InsertionControlDiv, map);
-    ControlDiv.index = 1;
-    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(ControlDiv);
+  //  ControlDiv.index = 1;
+  //  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(ControlDiv);
 
 
 
@@ -54,7 +54,7 @@ function initialize() {
 		$("#btnInsertion").attr("class","orange");
 		$("#btnRemoval").attr("class","gray");
 		$("#btnConnection").attr("class","gray");
-		$("#btnSave").attr("class","gray");		
+		$("#btnDisplayXML").attr("class","gray");		
 		if(markerPair.length > 0)
 			toggleBounce(markerPair[0]);
 		markerPair = [];
@@ -67,7 +67,7 @@ function initialize() {
 		$("#btnInsertion").attr("class","gray");
 		$("#btnRemoval").attr("class","orange");
 		$("#btnConnection").attr("class","gray");
-		$("#btnSave").attr("class","gray");	
+		$("#btnDisplayXML").attr("class","gray");	
 		if(markerPair.length > 0)
 			toggleBounce(markerPair[0]);
 		markerPair = [];
@@ -79,20 +79,20 @@ function initialize() {
 		$("#btnInsertion").attr("class","gray");
 		$("#btnRemoval").attr("class","gray");
 		$("#btnConnection").attr("class","orange");
-		$("#btnSave").attr("class","gray");	
+		$("#btnDisplayXML").attr("class","gray");	
 		if(markerPair.length > 0)
 			toggleBounce(markerPair[0]);
 		markerPair = [];
 		infowindow.setMap(null);
 
     });
-    $("#btnSave").click(function () {
-		opMode = "Save";
+    $("#btnDisplayXML").click(function () {
+		opMode = "DisplayXML";
         	showNodesXml();
 		$("#btnInsertion").attr("class","gray");
 		$("#btnRemoval").attr("class","gray");
 		$("#btnConnection").attr("class","gray");
-		$("#btnSave").attr("class","orange");	
+		$("#btnDisplayXML").attr("class","orange");	
 		if(markerPair.length > 0)
 			toggleBounce(markerPair[0]);
 		markerPair = [];
@@ -120,10 +120,10 @@ function initialize() {
         var nodesXml = "&lt?xml version=\"1.0\" encoding=\"utf-8\"?&gt" +"<br>&ltmarkers&gt";
 	for(i = 0;i< allMarkers.length ;i++)
        	{
-		nodesXml+="<br>&ltmarker&gt" 
-		+ "<br>&ltLatitude&gt"+allMarkers[i].position.lat()+"&lt\/Latitude&gt"
-		+ "<br>&ltLongitude&gt"+allMarkers[i].position.lng()+"&lt\/Longitude&gt"
-		+ "<br>&lt\/marker&gt";
+		nodesXml+="<br>&nbsp&ltmarker&gt" 
+		+ "<br>&nbsp&nbsp&ltLatitude&gt"+allMarkers[i].position.lat()+"&lt\/Latitude&gt"
+		+ "<br>&nbsp&nbsp&ltLongitude&gt"+allMarkers[i].position.lng()+"&lt\/Longitude&gt"
+		+ "<br>&nbsp&lt\/marker&gt";
 
 	}
 	nodesXml += "<br>&lt\/markers&gt";
