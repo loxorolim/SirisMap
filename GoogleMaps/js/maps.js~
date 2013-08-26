@@ -31,7 +31,7 @@ function initialize() {
     elevator = new google.maps.ElevationService();
 
     markerCluster = new MarkerClusterer(map);
-    markerCluster.setGridSize(25);
+    markerCluster.setGridSize(10);
     loadNodesFromXml();
 
 
