@@ -16,6 +16,8 @@ function initialize() {
 
     var mapOptions = {
         zoom: 3,
+		minZoom:2,
+
         center: new google.maps.LatLng(-28.643387, 153.612224),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapTypeControl: true,
@@ -26,13 +28,14 @@ function initialize() {
 
     }
 
-    var map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
+    var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+
     // Create an ElevationService
     elevator = new google.maps.ElevationService();
 
+
     markerCluster = new MarkerClusterer(map);
-    markerCluster.setGridSize(25);
+    markerCluster.setGridSize(10);
     loadNodesFromXml();
 
 
@@ -56,10 +59,10 @@ function initialize() {
         opMode = "Insertion";
 		$("#btnInsertion").attr("class","orange");
 		$("#btnRemoval").attr("class","gray");
-		$("#btnConnection").attr("class","gray");
+//		$("#btnConnection").attr("class","gray");
 		$("#btnDisplayXML").attr("class","gray");		
-		if(markerPair.length > 0)
-			toggleBounce(markerPair[0]);
+//		if(markerPair.length > 0)
+//			toggleBounce(markerPair[0]);
 		markerPair = [];
 		infowindow.setMap(null);
     });
@@ -69,14 +72,14 @@ function initialize() {
         opMode = "Removal";
 		$("#btnInsertion").attr("class","gray");
 		$("#btnRemoval").attr("class","orange");
-		$("#btnConnection").attr("class","gray");
+//		$("#btnConnection").attr("class","gray");
 		$("#btnDisplayXML").attr("class","gray");	
-		if(markerPair.length > 0)
-			toggleBounce(markerPair[0]);
+//		if(markerPair.length > 0)
+//			toggleBounce(markerPair[0]);
 		markerPair = [];
 		infowindow.setMap(null);
     });
-	$("#btnConnection").click(function () {
+/*	$("#btnConnection").click(function () {
 
         opMode = "Connection";
 		$("#btnInsertion").attr("class","gray");
@@ -88,16 +91,16 @@ function initialize() {
 		markerPair = [];
 		infowindow.setMap(null);
 
-    });
+    });*/
     $("#btnDisplayXML").click(function () {
 		opMode = "DisplayXML";
         	showNodesXml();
 		$("#btnInsertion").attr("class","gray");
 		$("#btnRemoval").attr("class","gray");
-		$("#btnConnection").attr("class","gray");
+//		$("#btnConnection").attr("class","gray");
 		$("#btnDisplayXML").attr("class","orange");	
-		if(markerPair.length > 0)
-			toggleBounce(markerPair[0]);
+//		if(markerPair.length > 0)
+//			toggleBounce(markerPair[0]);
 		markerPair = [];
 		infowindow.setMap(null);
     });
@@ -168,14 +171,15 @@ $(document).ready(function() {
 
         if (opMode == "Insertion") {
 
-            var marker = new google.maps.Marker({
+            var marker = new google.maps.Marker({		
+				type: "router",
                 position: locationEvent.latLng,
                 map: map,
                 draggable: true,
-		neighbours: [],
-		ID: ID,
-		teleTech: "Rede Teste",
-		reach: 30
+				neighbours: [],
+				ID: ID,
+				teleTech: "Rede Teste",
+				reach: 30
             });
 			ID++;
 
@@ -192,13 +196,14 @@ $(document).ready(function() {
             elevator.getElevationForLocations(positionalRequest, function (results, status) {
 
                 if (status == google.maps.ElevationStatus.OK) {
-		    connectNodesByDistance(marker);
+					
+					connectNodesByDistance(marker);
                     // Retrieve the first result
                     if (results[0]) {
 
                         // Open an info window indicating the elevation at the clicked position
                         marker.elevation = results[0].elevation;
-
+						allMarkers.push(marker);
                         prepareMarkerEvents(marker)
 
                     } else {
@@ -220,6 +225,7 @@ $(document).ready(function() {
         var latLng = new google.maps.LatLng(latitude, longitude);
         if (opMode == "Insertion") {
             var marker = new google.maps.Marker({
+				type: "marker",
                 position: latLng,
                 map: map,
                 draggable: true,
@@ -247,7 +253,7 @@ icon: 'redSquare.png',
 
                         // Open an info window indicating the elevation at the clicked position
                         marker.elevation = results[0].elevation;
-			allMarkers.push(marker);
+						allMarkers.push(marker);
                         prepareMarkerEvents(marker);
 
                     } else {
@@ -263,7 +269,6 @@ icon: 'redSquare.png',
 {
 	for(var i = 0; i< allMarkers.length ; i++)
 	{
-
 		var dis = distance(marker.position.lat(),marker.position.lng(),allMarkers[i].position.lat(),allMarkers[i].position.lng(),"K");
 		dis = dis*1000;
 		if(dis <= marker.reach)
@@ -300,19 +305,25 @@ function distance(lat1, lon1, lat2, lon2, unit) {
                         google.maps.event.addListener(marker, 'click', function (event) {
                            	 displayInfoWindow(marker);
                         });
-			google.maps.event.addListener(marker, 'click', function (event) {
-				if(opMode == "Connection")
-				{
-		                    selectRouterToDraw(marker);
-				}
-                        });
+						if(marker.type == "router")
+						{
+							google.maps.event.addListener(marker, 'click', function (event) {
+								if(opMode == "Connection")
+								{
+									selectRouterToDraw(marker);
+								}
+							});
+						}
                         google.maps.event.addListener(marker, 'drag', function (event) {
-			    infowindow.setMap(null);
+							infowindow.setMap(null);
                             reconnectMovedMarker(marker,event.latLng)
+							removeMarkerConnections(marker);
+				        	connectNodesByDistance(marker);
 							
                         });
  			google.maps.event.addListener(marker, 'dragend', function (event) {
-                            reconnectMovedMarker(marker,event.latLng)
+                           // reconnectMovedMarker(marker,event.latLng)
+				    
 		            marker.setPosition(event.latLng);
 var locations = [];
             var markerLocation = marker.getPosition();
@@ -345,7 +356,7 @@ var locations = [];
 			if(markerPair.length == 0)
 			{
 				markerPair.push(marker);
-				toggleBounce(markerPair[0]);
+				//toggleBounce(markerPair[0]);
 			}
 			else if(markerPair.length == 1 && checkIfConnectionIsPossible(markerPair[0], marker))
 			{
@@ -353,13 +364,14 @@ var locations = [];
 				markerPair[0].neighbours.push(markerPair[1]);
 				markerPair[1].neighbours.push(markerPair[0]);	
 				markerConnections.push(markerPair);			
-				connectRouters();
-				toggleBounce(markerPair[0]);
+				//connectRouters();
+				drawLine(markerPair[0],markerPair[1]);
+				//toggleBounce(markerPair[0]);
 				markerPair = [];
 			}
 			else
 			{
-				toggleBounce(markerPair[0]);
+				//toggleBounce(markerPair[0]);
 				markerPair = [];
 			}
 				
@@ -380,16 +392,27 @@ var locations = [];
 		}
 		return true;
 	}
-	function connectRouters(){
+	/*function connectRouters(){
 		for (i=0; i<lines.length; i++) 
 		{                           
-			lines[i].setVisible(false);
+			lines[i].setVisible(false);			
 		}
+		lines = [];
 		for(var i = 0; i < markerConnections.length ; i++){
 			var markerPositions = [markerConnections[i][0].getPosition(),markerConnections[i][1].getPosition()];
+			var color;
+			var dis = distance(markerConnections[i][0].position.lat(),markerConnections[i][0].position.lng(),markerConnections[i][1].position.lat(),markerConnections[i][1].position.lng(),"K");
+		    dis = dis*1000;
+			if(dis < markerConnections[i][0].reach/3)
+				color = "00FF00";
+			else if(dis < markerConnections[i][0].reach*(2/3))
+				color = "FFFF00"
+			else
+				color = "FF0000"
+			
 			var routerPath = new google.maps.Polyline({
 			path: markerPositions,
-			strokeColor: '#FF0000',
+			strokeColor: color,
 			strokeOpacity: 1.0,
 			strokeWeight: 2
 			});
@@ -399,8 +422,29 @@ var locations = [];
 		for (i=0; i<lines.length; i++) 
 		{                           
 			lines[i].setMap(map); //or line[i].setVisible(false);
-		}
-		
+		}	
+	*/
+	function drawLine(marker1,marker2)
+	{
+			var markerPositions = [marker1.getPosition(),marker2.getPosition()];
+			var color;
+			var dis = distance(markerConnections[i][0].position.lat(),markerConnections[i][0].position.lng(),markerConnections[i][1].position.lat(),markerConnections[i][1].position.lng(),"K");
+		    dis = dis*1000;
+			if(dis < markerConnections[i][0].reach/3)
+				color = "00FF00";
+			else if(dis < markerConnections[i][0].reach*(2/3))
+				color = "FFFF00"
+			else
+				color = "FF0000"
+			
+			var routerPath = new google.maps.Polyline({
+			path: markerPositions,
+			strokeColor: color,
+			strokeOpacity: 1.0,
+			strokeWeight: 2
+			});
+			lines.push(routerPath);
+			lines[lines.length-1].setMap(map);
 	}
 	function reconnectMovedMarker(marker,newPosition){
 		for(var i = 0; i< markerConnections.length ; i++){
@@ -411,12 +455,29 @@ var locations = [];
 				}
 			}
 		}
-		connectRouters();
+	//	connectRouters();
 		
 	}
     function refreshLocation(marker, location) {
         mar.setPosition()
     }
+	function removeMarkerConnections(marker)
+	{
+	for(var i = 0; i< markerConnections.length ; i++){
+					if(markerConnections[i][0].ID == marker.ID || markerConnections[i][1].ID == marker.ID)
+					{
+					    //remove da lista de vizinhos
+						lines[i].setVisible(false);
+						lines.splice(i,1);
+						markerConnections[i][0].neighbours.splice(markerConnections[i][1]);
+						markerConnections[i][1].neighbours.splice(markerConnections[i][0]);
+						markerConnections.splice(i,1);
+						i--;
+					}
+				
+			}
+	//connectRouters();
+	}
     function removeMarker(marker) {
         if (opMode == "Removal") {
 	    infowindow.setMap(null);
@@ -431,12 +492,17 @@ var locations = [];
 			for(var i = 0; i< markerConnections.length ; i++){
 					if(markerConnections[i][0].ID == marker.ID || markerConnections[i][1].ID == marker.ID)
 					{
+						//remove da lista de vizinhos
+						lines[i].setVisible(false);
+						lines.splice(i,1);
+						markerConnections[i][0].neighbours.splice(markerConnections[i][1]);
+						markerConnections[i][1].neighbours.splice(markerConnections[i][0]);
 						markerConnections.splice(i,1);
 						i--;
 					}
 				
 			}
-			connectRouters();
+		//	connectRouters();
         }
 	
 

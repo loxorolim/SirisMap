@@ -9,7 +9,7 @@ div#controls
     margin: 5px;
     padding: 5px;
 
-		margin-left: auto;
+	margin-left: auto;
     margin-right: auto;
 }
 
@@ -58,9 +58,21 @@ input[type="button"].gray
 	
 }
 #map-canvas{
-	height:950px;
-
-	
-	
-	
+	height:100%;
+	width: 100%;
 }
+#background
+{
+	height:954px;
+	width: 1500px;
+
+}
+#leftBackground
+{
+	float: left;
+	height: 954px;
+	width: 1045px;
+
+
+}
+

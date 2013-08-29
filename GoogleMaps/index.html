@@ -16,23 +16,28 @@
 
   </head>
   <body>
-    <div id = "rightBackground"> 
-	   
-		<div id ="controls" class="insert-router">
-			<input id="btnInsertion" class="orange" type="button" value="Insertion"/>
-			<input id="btnRemoval" class="gray" type="button" value="Removal"/>
-			<input id="btnConnection" class="gray" type="button" value="Connection"/>
-			<input id="btnDisplayXML" class="gray" type="button" value="DisplayXML"/>
-			<input id="btnUploadXML"  class="gray" type="button" value="UploadXML"/>
-<form action="uploadXml.asp">
-  <input type="file" name="xmlFile">
-  <input type="submit">
-</form>
+	<div id = "background">
+		<div id = "rightBackground">    
+			<div id ="controls" class="insert-router">
+				<input id="btnInsertion" class="orange" type="button" value="Insertion"/>
+				<input id="btnRemoval" class="gray" type="button" value="Removal"/>
+				<!--<input id="btnConnection" class="gray" type="button" value="Connection"/>-->
+				<input id="btnDisplayXML" class="gray" type="button" value="DisplayXML"/>
+				<input id="btnUploadXML"  class="gray" type="button" value="UploadXML"/>
+				<form action="uploadXml.asp">
+				  <input type="file" name="xmlFile">
+				  <input type="submit">
+				</form>
+			</div>
+			<div id ="topRight">
+			</div>
 		</div>
-		<div id ="topRight"></div>
+		<div id="leftBackground">
+		<div id="map-canvas" ></div>
+		</div>
+		</div>
 	</div>
- 
-    <div id ="map-canvas"></div>
+	
    
     
 
