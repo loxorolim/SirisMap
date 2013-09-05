@@ -6,10 +6,12 @@ var allMarkers = [];
 var routers = [];
 var infowindow = new google.maps.InfoWindow();
 var opMode = "Insertion";
+var radioMode = "Line";
 var markerPair = [];
 var markerConnections = [];
 var ID = 0;
 var lines = [];
+var circles = [];
 var request;
 var markerCluster;
 function initialize() {
@@ -79,6 +81,24 @@ function initialize() {
 		markerPair = [];
 		infowindow.setMap(null);
     });
+	$("#radioLine").click(function () {
+
+			radioMode = "Line";
+			$('#radioLine').attr("class","orange");
+			$("#radioRadius").attr("class","gray");
+			setLinesVisible();
+			setCirclesInvisible();
+						
+	    });
+	$("#radioRadius").click(function () {
+
+			radioMode = "Radius";
+			$("#radioRadius").attr("class","orange");	
+			$('#radioLine').attr("class","gray");
+			setLinesInvisible();
+			setCirclesVisible();
+					
+	    });
 /*	$("#btnConnection").click(function () {
 
         opMode = "Connection";
@@ -115,7 +135,49 @@ $("#btnUploadXML").mouseout(function () {
 });
 
 
+function setLinesInvisible()
+{
+	for(i = 0; i< lines.length ; i++)
+	{
+		lines[i].setVisible(false);
+	}
+}
+function setCirclesInvisible()
+{
+	for(i = 0; i< allMarkers.length ; i++)
+	{
+		if(allMarkers[i].reachCircles != null)
+		{
+			allMarkers[i].reachCircles[2].setVisible(false);
+			allMarkers[i].reachCircles[1].setVisible(false);
+			allMarkers[i].reachCircles[0].setVisible(false);
 
+			
+			
+		}
+	}
+}
+function setLinesVisible()
+{
+	for(i = 0; i< lines.length ; i++)
+	{
+		lines[i].setVisible(true);
+	}
+
+}
+function setCirclesVisible()
+{
+	for(i = 0; i< allMarkers.length ; i++)
+	{
+		if(allMarkers[i].reachCircles != null)
+		{
+			allMarkers[i].reachCircles[2].setVisible(true);
+			allMarkers[i].reachCircles[1].setVisible(true);			
+			allMarkers[i].reachCircles[0].setVisible(true);
+		}
+	}
+
+}
 
     function loadNodesFromXml()
 {
@@ -178,8 +240,9 @@ $(document).ready(function() {
                 draggable: true,
 				neighbours: [],
 				ID: ID,
-				teleTech: "Rede Teste",
-				reach: 30
+				teleTech: "RolimTech",
+				reach: 30,
+				reachCircles:[]
             });
 			ID++;
 
@@ -202,8 +265,9 @@ $(document).ready(function() {
                     if (results[0]) {
 
                         // Open an info window indicating the elevation at the clicked position
+			drawCircle(marker);
                         marker.elevation = results[0].elevation;
-						allMarkers.push(marker);
+			allMarkers.push(marker);
                         prepareMarkerEvents(marker)
 
                     } else {
@@ -229,7 +293,8 @@ $(document).ready(function() {
                 position: latLng,
                 map: map,
                 draggable: true,
-icon: 'redSquare.png',
+
+icon: 'blackSquare.png',
 
 				neighbours: [],
 				ID: ID
@@ -319,11 +384,15 @@ function distance(lat1, lon1, lat2, lon2, unit) {
                             reconnectMovedMarker(marker,event.latLng)
 							removeMarkerConnections(marker);
 				        	connectNodesByDistance(marker);
+						marker.reachCircles[0].setVisible(false);
+					marker.reachCircles[1].setVisible(false);
+					marker.reachCircles[2].setVisible(false);
 							
                         });
  			google.maps.event.addListener(marker, 'dragend', function (event) {
                            // reconnectMovedMarker(marker,event.latLng)
-				    
+			  	
+			    drawCircle(marker);
 		            marker.setPosition(event.latLng);
 var locations = [];
             var markerLocation = marker.getPosition();
@@ -392,38 +461,7 @@ var locations = [];
 		}
 		return true;
 	}
-	/*function connectRouters(){
-		for (i=0; i<lines.length; i++) 
-		{                           
-			lines[i].setVisible(false);			
-		}
-		lines = [];
-		for(var i = 0; i < markerConnections.length ; i++){
-			var markerPositions = [markerConnections[i][0].getPosition(),markerConnections[i][1].getPosition()];
-			var color;
-			var dis = distance(markerConnections[i][0].position.lat(),markerConnections[i][0].position.lng(),markerConnections[i][1].position.lat(),markerConnections[i][1].position.lng(),"K");
-		    dis = dis*1000;
-			if(dis < markerConnections[i][0].reach/3)
-				color = "00FF00";
-			else if(dis < markerConnections[i][0].reach*(2/3))
-				color = "FFFF00"
-			else
-				color = "FF0000"
-			
-			var routerPath = new google.maps.Polyline({
-			path: markerPositions,
-			strokeColor: color,
-			strokeOpacity: 1.0,
-			strokeWeight: 2
-			});
-			lines.push(routerPath);
-			//routerPath.setMap(map);
-		}
-		for (i=0; i<lines.length; i++) 
-		{                           
-			lines[i].setMap(map); //or line[i].setVisible(false);
-		}	
-	*/
+
 	function drawLine(marker1,marker2)
 	{
 			var markerPositions = [marker1.getPosition(),marker2.getPosition()];
@@ -431,11 +469,23 @@ var locations = [];
 			var dis = distance(markerConnections[i][0].position.lat(),markerConnections[i][0].position.lng(),markerConnections[i][1].position.lat(),markerConnections[i][1].position.lng(),"K");
 		    dis = dis*1000;
 			if(dis < markerConnections[i][0].reach/3)
-				color = "00FF00";
+			{
+				color = "#00FF00";
+				if(marker2.type != "router")
+				marker2.setIcon('greenSquare.png');
+			}
 			else if(dis < markerConnections[i][0].reach*(2/3))
-				color = "FFFF00"
-			else
-				color = "FF0000"
+			     {
+				color = "#FFFF00"
+				if(marker2.type != "router")
+				marker2.setIcon('yellowSquare.png')
+			     }
+			     else
+			     {
+			        color = "#FF0000"
+				if(marker2.type != "router")
+				marker2.setIcon('redSquare.png')
+			     }
 			
 			var routerPath = new google.maps.Polyline({
 			path: markerPositions,
@@ -445,7 +495,59 @@ var locations = [];
 			});
 			lines.push(routerPath);
 			lines[lines.length-1].setMap(map);
+			if(radioMode == "Radius")
+			{
+				lines[lines.length-1].setVisible(false);
+			}
 	}
+
+function drawCircle(marker) {
+ 
+    var greenCircle;
+    var yellowCircle;
+    var redCircle;
+	
+	
+      redCircle = new google.maps.Circle({
+        center: marker.getPosition(),
+        radius: marker.reach,
+        strokeColor: "#FF0000",
+        strokeOpacity: 0.8,
+        strokeWeight: 0,
+        fillColor: "#FF0000",
+        fillOpacity: 0.35,
+        map: map
+    });
+     yellowCircle = new google.maps.Circle({
+        center: marker.getPosition(),
+        radius: marker.reach*(2/3),
+        strokeColor: "#FFFF00",
+        strokeOpacity: 0.8,
+        strokeWeight: 0,
+        fillColor: "#FFFF00",
+        fillOpacity: 0.35,
+        map: map
+    });
+    greenCircle = new google.maps.Circle({
+        center: marker.getPosition(),
+        radius: marker.reach/3,
+        strokeColor: "#00FF00",
+        strokeOpacity: 0.8,
+        strokeWeight: 0,
+        fillColor: "#00FF00",
+        fillOpacity: 0.35,
+        map: map
+    });
+    
+    marker.reachCircles = [greenCircle,yellowCircle,redCircle];
+    if(radioMode != "Radius")
+    {
+		greenCircle.setVisible(false);
+		yellowCircle.setVisible(false);
+		redCircle.setVisible(false);
+    }
+
+}
 	function reconnectMovedMarker(marker,newPosition){
 		for(var i = 0; i< markerConnections.length ; i++){
 			for(var j = 0; j < 2; j++){
@@ -471,6 +573,8 @@ var locations = [];
 						lines.splice(i,1);
 						markerConnections[i][0].neighbours.splice(markerConnections[i][1]);
 						markerConnections[i][1].neighbours.splice(markerConnections[i][0]);
+						if(markerConnections[i][1].type != "router")
+							markerConnections[i][1].setIcon('blackSquare.png');
 						markerConnections.splice(i,1);
 						i--;
 					}
@@ -523,10 +627,15 @@ var locations = [];
 			{
 				neighboursIDs += marker.neighbours[i].ID + ", ";
 			}
-			infowindow.setContent('ID: ' + marker.ID + '<br>Latitude: ' + 
+			var content =  'ID: ' + marker.ID + '<br>Latitude: ' + 
 			marker.position.lat() + '<br>Longitude: ' + marker.position.lng() 
-			+ '<br>Elevation: ' + marker.elevation + '<br>Neighbours IDs: ' +neighboursIDs)
+			+ '<br>Elevation: ' + marker.elevation + '<br>Neighbours IDs: ' +neighboursIDs;
+
+			if(marker.teleTech != null && marker.reach != null)
+				content += '<br>Tecnology: ' + marker.teleTech +'<br>Reach: '+ marker.reach +' meters';
+			infowindow.setContent(content);				
 			infowindow.open(map, marker);
+
 }
 		
     }
