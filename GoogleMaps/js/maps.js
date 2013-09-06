@@ -1,8 +1,10 @@
 /// <reference path="/js/jquery-1.10.2.min.js" />
-
-var elevator;
+var
+elevator;
 var map;
 var allMarkers = [];
+var meters = [];
+var daps = [];
 var routers = [];
 var infowindow = new google.maps.InfoWindow();
 var opMode = "Insertion";
@@ -14,637 +16,674 @@ var lines = [];
 var circles = [];
 var request;
 var markerCluster;
-function initialize() {
 
-    var mapOptions = {
-        zoom: 3,
-		minZoom:2,
-
-        center: new google.maps.LatLng(-28.643387, 153.612224),
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        mapTypeControl: true,
-        mapTypeControlOptions: {
-            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-            position: google.maps.ControlPosition.BOTTOM_CENTER
-        }
-
-    }
-
-    var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
-
-    // Create an ElevationService
-    elevator = new google.maps.ElevationService();
-
-
-    markerCluster = new MarkerClusterer(map);
-    markerCluster.setGridSize(10);
-    loadNodesFromXml();
-
-
-
-
-
-    
-    google.maps.event.addListener(map, 'click',
-          function (event) {
-              placeMarker(event);
-          }
-      );
-
-
-
-
-
-    
-    $("#btnInsertion").click(function () {
-
-        opMode = "Insertion";
-		$("#btnInsertion").attr("class","orange");
-		$("#btnRemoval").attr("class","gray");
-//		$("#btnConnection").attr("class","gray");
-		$("#btnDisplayXML").attr("class","gray");		
-//		if(markerPair.length > 0)
-//			toggleBounce(markerPair[0]);
+function initialize()
+{
+	var mapOptions =
+	{
+		zoom : 3,
+		minZoom : 2,
+		center : new google.maps.LatLng(-28.643387, 153.612224),
+		mapTypeId : google.maps.MapTypeId.ROADMAP,
+		mapTypeControl : true,
+		mapTypeControlOptions :
+		{
+			style : google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+			position : google.maps.ControlPosition.BOTTOM_CENTER
+		}
+	}
+	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	// Create an ElevationService
+	elevator = new google.maps.ElevationService();
+	markerCluster = new MarkerClusterer(map);
+	markerCluster.setGridSize(10);
+	loadNodesFromXml();
+	google.maps.event.addListener(map, 'click', function(event)
+	{
+		placeMarker(event);
+	});
+	$("#btnInsertion").click(function()
+	{
+		opMode = "Insertion";
+		$("#btnInsertion").attr("class", "orange");
+		$("#btnRemoval").attr("class", "gray");
+		//		$("#btnConnection").attr("class","gray");
+		$("#btnDisplayXML").attr("class", "gray");
+		//		if(markerPair.length > 0)
+		//			toggleBounce(markerPair[0]);
 		markerPair = [];
 		infowindow.setMap(null);
-    });
-
-    $("#btnRemoval").click(function () {
-
-        opMode = "Removal";
-		$("#btnInsertion").attr("class","gray");
-		$("#btnRemoval").attr("class","orange");
-//		$("#btnConnection").attr("class","gray");
-		$("#btnDisplayXML").attr("class","gray");	
-//		if(markerPair.length > 0)
-//			toggleBounce(markerPair[0]);
+	});
+	$("#btnRemoval").click(function()
+	{
+		opMode = "Removal";
+		$("#btnInsertion").attr("class", "gray");
+		$("#btnRemoval").attr("class", "orange");
+		//		$("#btnConnection").attr("class","gray");
+		$("#btnDisplayXML").attr("class", "gray");
+		//		if(markerPair.length > 0)
+		//			toggleBounce(markerPair[0]);
 		markerPair = [];
 		infowindow.setMap(null);
-    });
-	$("#radioLine").click(function () {
-
-			radioMode = "Line";
-			$('#radioLine').attr("class","orange");
-			$("#radioRadius").attr("class","gray");
-			setLinesVisible();
-			setCirclesInvisible();
-						
-	    });
-	$("#radioRadius").click(function () {
-
-			radioMode = "Radius";
-			$("#radioRadius").attr("class","orange");	
-			$('#radioLine').attr("class","gray");
-			setLinesInvisible();
-			setCirclesVisible();
-					
-	    });
-/*	$("#btnConnection").click(function () {
-
-        opMode = "Connection";
-		$("#btnInsertion").attr("class","gray");
-		$("#btnRemoval").attr("class","gray");
-		$("#btnConnection").attr("class","orange");
-		$("#btnDisplayXML").attr("class","gray");	
-		if(markerPair.length > 0)
-			toggleBounce(markerPair[0]);
-		markerPair = [];
-		infowindow.setMap(null);
-
-    });*/
-    $("#btnDisplayXML").click(function () {
+	});
+	$("#radioLine").click(function()
+	{
+		radioMode = "Line";
+		$('#radioLine').attr("class", "orange");
+		$("#radioRadius").attr("class", "gray");
+		setLinesVisible();
+		setCirclesInvisible();
+	});
+	$("#radioRadius").click(function()
+	{
+		radioMode = "Radius";
+		$("#radioRadius").attr("class", "orange");
+		$('#radioLine').attr("class", "gray");
+		setLinesInvisible();
+		setCirclesVisible();
+	});
+	/*	$("#btnConnection").click(function () {
+	 opMode = "Connection";
+	 $("#btnInsertion").attr("class","gray");
+	 $("#btnRemoval").attr("class","gray");
+	 $("#btnConnection").attr("class","orange");
+	 $("#btnDisplayXML").attr("class","gray");
+	 if(markerPair.length > 0)
+	 toggleBounce(markerPair[0]);
+	 markerPair = [];
+	 infowindow.setMap(null);
+	 });*/
+	$("#btnDisplayXML").click(function()
+	{
 		opMode = "DisplayXML";
-        	showNodesXml();
-		$("#btnInsertion").attr("class","gray");
-		$("#btnRemoval").attr("class","gray");
-//		$("#btnConnection").attr("class","gray");
-		$("#btnDisplayXML").attr("class","orange");	
-//		if(markerPair.length > 0)
-//			toggleBounce(markerPair[0]);
+		showNodesXml();
+		$("#btnInsertion").attr("class", "gray");
+		$("#btnRemoval").attr("class", "gray");
+		//		$("#btnConnection").attr("class","gray");
+		$("#btnDisplayXML").attr("class", "orange");
+		//		if(markerPair.length > 0)
+		//			toggleBounce(markerPair[0]);
 		markerPair = [];
 		infowindow.setMap(null);
-    });
-$("#btnUploadXML").click(function () {
+	});
+	$("#btnUploadXML").click(function()
+	{
 		$("#upFile").trigger('click');
-    });
-$("#btnUploadXML").mouseover(function () {
-		$("#btnUploadXML").attr("class","orange");
-});
-$("#btnUploadXML").mouseout(function () {
-		$("#btnUploadXML").attr("class","gray");
-});
-
-
-function setLinesInvisible()
-{
-	for(i = 0; i< lines.length ; i++)
+	});
+	$("#btnUploadXML").mouseover(function()
 	{
-		lines[i].setVisible(false);
-	}
-}
-function setCirclesInvisible()
-{
-	for(i = 0; i< allMarkers.length ; i++)
+		$("#btnUploadXML").attr("class", "orange");
+	});
+	$("#btnUploadXML").mouseout(function()
 	{
-		if(allMarkers[i].reachCircles != null)
+		$("#btnUploadXML").attr("class", "gray");
+	});
+	function setLinesInvisible()
+	{
+		for ( i = 0; i < lines.length; i++)
 		{
-			allMarkers[i].reachCircles[2].setVisible(false);
-			allMarkers[i].reachCircles[1].setVisible(false);
-			allMarkers[i].reachCircles[0].setVisible(false);
-
-			
-			
+			lines[i].setVisible(false);
 		}
 	}
-}
-function setLinesVisible()
-{
-	for(i = 0; i< lines.length ; i++)
+	function setCirclesInvisible()
 	{
-		lines[i].setVisible(true);
-	}
-
-}
-function setCirclesVisible()
-{
-	for(i = 0; i< allMarkers.length ; i++)
-	{
-		if(allMarkers[i].reachCircles != null)
+		for ( i = 0; i < allMarkers.length; i++)
 		{
-			allMarkers[i].reachCircles[2].setVisible(true);
-			allMarkers[i].reachCircles[1].setVisible(true);			
-			allMarkers[i].reachCircles[0].setVisible(true);
+			if (allMarkers[i].reachCircles != null)
+			{
+				allMarkers[i].reachCircles[2].setVisible(false);
+				allMarkers[i].reachCircles[1].setVisible(false);
+				allMarkers[i].reachCircles[0].setVisible(false);
+			}
 		}
 	}
-
-}
-
-    function loadNodesFromXml()
-{
-$(document).ready(function() {
-        $.ajax({
-            type: "GET",
-            url: "test.xml",
-            dataType: "xml",
-            success: function(xml) {
-                $(xml).find('marker').each(function() {
-                    var latitude = $(this).find('Latitude').text();
-                    var longitude = $(this).find('Longitude').text();
-                    loadMarker(latitude,longitude);      
-                });
-            }
-        });
-    });
-}	
-    function showNodesXml()
-    {
-        var nodesXml = "&lt?xml version=\"1.0\" encoding=\"utf-8\"?&gt" +"<br>&ltmarkers&gt";
-	for(i = 0;i< allMarkers.length ;i++)
-       	{
-		nodesXml+="<br>&nbsp&ltmarker&gt" 
-		+ "<br>&nbsp&nbsp&ltLatitude&gt"+allMarkers[i].position.lat()+"&lt\/Latitude&gt"
-		+ "<br>&nbsp&nbsp&ltLongitude&gt"+allMarkers[i].position.lng()+"&lt\/Longitude&gt"
-		+ "<br>&nbsp&lt\/marker&gt";
-
+	function setLinesVisible()
+	{
+		for ( i = 0; i < lines.length; i++)
+		{
+			lines[i].setVisible(true);
+		}
 	}
-	nodesXml += "<br>&lt\/markers&gt";
-	$("#topRight").html(nodesXml);
-	  
-    }
-
-    function getElevation(event) {
-
-        var locations = [];
-
-        // Retrieve the clicked location and push it on the array
-        var clickedLocation = event.latLng;
-        locations.push(clickedLocation);
-
-        // Create a LocationElevationRequest object using the array's one value
-        var positionalRequest = {
-            'locations': locations
-        }
-
-        // Initiate the location request
-
-
-    }
-    function placeMarker(locationEvent) {
-
-        if (opMode == "Insertion") {
-
-            var marker = new google.maps.Marker({		
-				type: "router",
-                position: locationEvent.latLng,
-                map: map,
-                draggable: true,
-				neighbours: [],
-				ID: ID,
-				teleTech: "RolimTech",
-				reach: 30,
-				reachCircles:[]
-            });
+	function setCirclesVisible()
+	{
+		for ( i = 0; i < allMarkers.length; i++)
+		{
+			if (allMarkers[i].reachCircles != null)
+			{
+				allMarkers[i].reachCircles[2].setVisible(true);
+				allMarkers[i].reachCircles[1].setVisible(true);
+				allMarkers[i].reachCircles[0].setVisible(true);
+			}
+		}
+	}
+	function loadNodesFromXml()
+	{
+		$(document).ready(function()
+		{
+			$.ajax(
+			{
+				type : "GET",
+				url : "test2.xml",
+				dataType : "xml",
+				success : function(xml)
+				{
+					$(xml).find('meter').each(function()
+					{
+						var latitude = $(this).find('Latitude').text();
+						var longitude = $(this).find('Longitude').text();
+						loadMarker(latitude, longitude);
+					});
+					$(xml).find('DAP').each(function()
+					{
+						var latitude = $(this).find('Latitude').text();
+						var longitude = $(this).find('Longitude').text();
+						var technology = $(this).find('Technology').text();
+						var reach = $(this).find('Reach');
+						// loadMarker(latitude,longitude);
+						loadDAP(latitude, longitude, technology, reach);
+					});
+				}
+			});
+		});
+	}
+	function showNodesXml()
+	{
+		var nodesXml = "&lt?xml version=\"1.0\" encoding=\"utf-8\"?&gt" + "<br>&ltNodes&gt";
+		for ( i = 0; i < meters.length; i++)
+		{	
+				nodesXml += "<br>&nbsp&ltmeter&gt" 
+				+ "<br>&nbsp&nbsp&ltLatitude&gt" + meters[i].position.lat() + "&lt\/Latitude&gt"
+				+ "<br>&nbsp&nbsp&ltLongitude&gt" + meters[i].position.lng() + "&lt\/Longitude&gt" 
+				+ "<br>&nbsp&lt\/meter&gt";
+		
+		}
+		for(i = 0;i<daps.length;i++)
+		{
+				nodesXml += "<br>&nbsp&ltDAP&gt" 
+				+ "<br>&nbsp&nbsp&ltLatitude&gt" + daps[i].position.lat() + "&lt\/Latitude&gt" 
+				+ "<br>&nbsp&nbsp&ltLongitude&gt" + daps[i].position.lng() + "&lt\/Longitude&gt" 
+				+ "<br>&nbsp&nbsp&ltTechnology&gt" + daps[i].teleTech + "&lt\/Technology&gt" 
+				+ "<br>&nbsp&nbsp&ltReach&gt" + daps[i].reach + "&lt\/Reach&gt" 
+				+ "<br>&nbsp&lt\/DAP&gt";
+		}
+		nodesXml += "<br>&lt\/Nodes&gt";
+		$("#topRight").html(nodesXml);
+	}
+	function getElevation(event)
+	{
+		var locations = [];
+		// Retrieve the clicked location and push it on the array
+		var clickedLocation = event.latLng;
+		locations.push(clickedLocation);
+		// Create a LocationElevationRequest object using the array's one value
+		var positionalRequest =
+		{
+			'locations' : locations
+		}
+		// Initiate the location request
+	}
+	function placeMarker(locationEvent)
+	{
+		if (opMode == "Insertion")
+		{
+			var marker = new google.maps.Marker(
+			{
+				type : "DAP",
+				position : locationEvent.latLng,
+				map : map,
+				draggable : true,
+				neighbours : [],
+				ID : ID,
+				teleTech : "RolimTech",
+				reach : 30,
+				reachCircles : []
+			});
 			ID++;
-
-	    
-            var locations = [];
-            var clickedLocation = locationEvent.latLng;
-            locations.push(clickedLocation);
-
-            // Create a LocationElevationRequest object using the array's one value
-            var positionalRequest = {
-                'locations': locations
-            }
-
-            elevator.getElevationForLocations(positionalRequest, function (results, status) {
-
-                if (status == google.maps.ElevationStatus.OK) {
-					
+			var locations = [];
+			var clickedLocation = locationEvent.latLng;
+			locations.push(clickedLocation);
+			// Create a LocationElevationRequest object using the array's one value
+			var positionalRequest =
+			{
+				'locations' : locations
+			}
+			elevator.getElevationForLocations(positionalRequest, function(results, status)
+			{
+				if (status == google.maps.ElevationStatus.OK)
+				{
 					connectNodesByDistance(marker);
-                    // Retrieve the first result
-                    if (results[0]) {
-
-                        // Open an info window indicating the elevation at the clicked position
-			drawCircle(marker);
-                        marker.elevation = results[0].elevation;
-			allMarkers.push(marker);
-                        prepareMarkerEvents(marker)
-
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    return -1;
-                }
-            });
-
-
-
-
-        }
-    }
-
-    function loadMarker(latitude,longitude) {
-
-        var latLng = new google.maps.LatLng(latitude, longitude);
-        if (opMode == "Insertion") {
-            var marker = new google.maps.Marker({
-				type: "marker",
-                position: latLng,
-                map: map,
-                draggable: true,
-
-icon: 'blackSquare.png',
-
-				neighbours: [],
-				ID: ID
-            });
-			ID++;
-
-            var locations = [];
-            var markerLocation = latLng;
-            locations.push(markerLocation);
-            // Create a LocationElevationRequest object using the array's one value
-            var positionalRequest = {
-                'locations': locations
-            }
-
-            elevator.getElevationForLocations(positionalRequest, function (results, status) {
-
-                if (status == google.maps.ElevationStatus.OK) {
-
-                    // Retrieve the first result
-                    if (results[0]) {
-
-                        // Open an info window indicating the elevation at the clicked position
-                        marker.elevation = results[0].elevation;
+					// Retrieve the first result
+					if (results[0])
+					{
+						// Open an info window indicating the elevation at the clicked position
+						drawCircle(marker);
+						marker.elevation = results[0].elevation;
 						allMarkers.push(marker);
-                        prepareMarkerEvents(marker);
-
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    return -1;
-                }
-            });
-        }
-    }
-    function connectNodesByDistance(marker)
-{
-	for(var i = 0; i< allMarkers.length ; i++)
-	{
-		var dis = distance(marker.position.lat(),marker.position.lng(),allMarkers[i].position.lat(),allMarkers[i].position.lng(),"K");
-		dis = dis*1000;
-		if(dis <= marker.reach)
-		{			
-			selectRouterToDraw(marker),
-			selectRouterToDraw(allMarkers[i]);
+						daps.push(marker);
+						prepareMarkerEvents(marker)
+					}
+					else
+					{
+						return -1;
+					}
+				}
+				else
+				{
+					return -1;
+				}
+			});
 		}
 	}
-	
-}
-function distance(lat1, lon1, lat2, lon2, unit) {
-	    var radlat1 = Math.PI * lat1/180
-	    var radlat2 = Math.PI * lat2/180
-	    var radlon1 = Math.PI * lon1/180
-	    var radlon2 = Math.PI * lon2/180
-	    var theta = lon1-lon2
-	    var radtheta = Math.PI * theta/180
-	    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-	    dist = Math.acos(dist)
-	    dist = dist * 180/Math.PI
-	    dist = dist * 60 * 1.1515
-	    if (unit=="K") { dist = dist * 1.609344 }
-	    if (unit=="N") { dist = dist * 0.8684 }
-	    return dist
+	function loadMarker(latitude, longitude)
+	{
+		var latLng = new google.maps.LatLng(latitude, longitude);
+		if (opMode == "Insertion")
+		{
+			var marker = new google.maps.Marker(
+			{
+				type : "meter",
+				position : latLng,
+				map : map,
+				draggable : true,
+				icon : 'blackSquare.png',
+				neighbours : [],
+				ID : ID
+			});
+			ID++;
+			var locations = [];
+			var markerLocation = latLng;
+			locations.push(markerLocation);
+			// Create a LocationElevationRequest object using the array's one value
+			var positionalRequest =
+			{
+				'locations' : locations
+			}
+			elevator.getElevationForLocations(positionalRequest, function(results, status)
+			{
+				if (status == google.maps.ElevationStatus.OK)
+				{
+					// Retrieve the first result
+					if (results[0])
+					{
+						// Open an info window indicating the elevation at the clicked position
+						marker.elevation = results[0].elevation;
+						allMarkers.push(marker);
+						meters.push(marker);
+						prepareMarkerEvents(marker);
+					}
+					else
+					{
+						return -1;
+					}
+				}
+				else
+				{
+					return -1;
+				}
+			});
+		}
 	}
-
-    function prepareMarkerEvents(marker)
-{
-                        
-			markerCluster.addMarker(marker);
-                        google.maps.event.addListener(marker, 'click', function (event) {
-                            removeMarker(marker);
-                        });
-                        google.maps.event.addListener(marker, 'click', function (event) {
-                           	 displayInfoWindow(marker);
-                        });
-						if(marker.type == "router")
-						{
-							google.maps.event.addListener(marker, 'click', function (event) {
-								if(opMode == "Connection")
-								{
-									selectRouterToDraw(marker);
-								}
-							});
-						}
-                        google.maps.event.addListener(marker, 'drag', function (event) {
-							infowindow.setMap(null);
-                            reconnectMovedMarker(marker,event.latLng)
-							removeMarkerConnections(marker);
-				        	connectNodesByDistance(marker);
-						marker.reachCircles[0].setVisible(false);
-					marker.reachCircles[1].setVisible(false);
-					marker.reachCircles[2].setVisible(false);
-							
-                        });
- 			google.maps.event.addListener(marker, 'dragend', function (event) {
-                           // reconnectMovedMarker(marker,event.latLng)
-			  	
-			    drawCircle(marker);
-		            marker.setPosition(event.latLng);
-var locations = [];
-            var markerLocation = marker.getPosition();
-            locations.push(markerLocation);
-            // Create a LocationElevationRequest object using the array's one value
-            var positionalRequest = {
-                'locations': locations
-            }
-
-            elevator.getElevationForLocations(positionalRequest, function (results, status) {
-
-                if (status == google.maps.ElevationStatus.OK) {
-
-                    // Retrieve the first result
-                    if (results[0]) {
-			marker.elevation = results[0].elevation;
- } else {
-                        return -1;
-                    }
-                } else {
-                    return -1;
-                }
-            });
-							
-                        });
-}
-	function selectRouterToDraw(marker){
-	
-		
-			if(markerPair.length == 0)
+	function loadDAP(latitude, longitude, technology, reach)
+	{
+		var latLng = new google.maps.LatLng(latitude, longitude);
+		if (opMode == "Insertion")
+		{
+			var marker = new google.maps.Marker(
 			{
-				markerPair.push(marker);
-				//toggleBounce(markerPair[0]);
-			}
-			else if(markerPair.length == 1 && checkIfConnectionIsPossible(markerPair[0], marker))
+				type : "DAP",
+				position : latLng,
+				map : map,
+				draggable : true,
+				ID : ID,
+				teleTech : technology,
+				reach : reach,
+				reachCircles : [],
+				neighbours : []
+			});
+			ID++;
+			var locations = [];
+			var markerLocation = latLng;
+			locations.push(markerLocation);
+			// Create a LocationElevationRequest object using the array's one value
+			var positionalRequest =
 			{
-				markerPair.push(marker);
-				markerPair[0].neighbours.push(markerPair[1]);
-				markerPair[1].neighbours.push(markerPair[0]);	
-				markerConnections.push(markerPair);			
-				//connectRouters();
-				drawLine(markerPair[0],markerPair[1]);
-				//toggleBounce(markerPair[0]);
-				markerPair = [];
+				'locations' : locations
 			}
-			else
+			elevator.getElevationForLocations(positionalRequest, function(results, status)
 			{
-				//toggleBounce(markerPair[0]);
-				markerPair = [];
+				if (status == google.maps.ElevationStatus.OK)
+				{
+					// Retrieve the first result
+					if (results[0])
+					{
+						// Open an info window indicating the elevation at the clicked position
+						marker.elevation = results[0].elevation;
+						allMarkers.push(marker);
+						daps.push(marker);
+						prepareMarkerEvents(marker);
+					}
+					else
+					{
+						return -1;
+					}
+				}
+				else
+				{
+					return -1;
+				}
+			});
+		}
+	}
+	function connectNodesByDistance(marker)
+	{
+		for (var i = 0; i < allMarkers.length; i++)
+		{
+			var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
+			dis = dis * 1000;
+			if (dis <= marker.reach)
+			{
+				selectRouterToDraw(marker), selectRouterToDraw(allMarkers[i]);
 			}
-				
-					
-		
+		}
+	}
+	function distance(lat1, lon1, lat2, lon2, unit)
+	{
+		var radlat1 = Math.PI * lat1 / 180
+		var radlat2 = Math.PI * lat2 / 180
+		var radlon1 = Math.PI * lon1 / 180
+		var radlon2 = Math.PI * lon2 / 180
+		var theta = lon1 - lon2
+		var radtheta = Math.PI * theta / 180
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		dist = Math.acos(dist)
+		dist = dist * 180 / Math.PI
+		dist = dist * 60 * 1.1515
+		if (unit == "K")
+		{
+			dist = dist * 1.609344
+		}
+		if (unit == "N")
+		{
+			dist = dist * 0.8684
+		}
+		return dist
+	}
+	function prepareMarkerEvents(marker)
+	{
+		markerCluster.addMarker(marker);
+		google.maps.event.addListener(marker, 'click', function(event)
+		{
+			removeMarker(marker);
+			displayInfoWindow(marker);
+			if (opMode == "Connection")
+				selectRouterToDraw(marker);
+		});
+		google.maps.event.addListener(marker, 'drag', function(event)
+		{
+			infowindow.setMap(null);
+			reconnectMovedMarker(marker, event.latLng)
+			removeMarkerConnections(marker);
+			connectNodesByDistance(marker);
+			if (marker.type == "DAP")
+			{
+				marker.reachCircles[0].setVisible(false);
+				marker.reachCircles[1].setVisible(false);
+				marker.reachCircles[2].setVisible(false);
+			}
+		});
+		google.maps.event.addListener(marker, 'dragend', function(event)
+		{
+			// reconnectMovedMarker(marker,event.latLng)
+			drawCircle(marker);
+			marker.setPosition(event.latLng);
+			var locations = [];
+			var markerLocation = marker.getPosition();
+			locations.push(markerLocation);
+			// Create a LocationElevationRequest object using the array's one value
+			var positionalRequest =
+			{
+				'locations' : locations
+			}
+			elevator.getElevationForLocations(positionalRequest, function(results, status)
+			{
+				if (status == google.maps.ElevationStatus.OK)
+				{
+					// Retrieve the first result
+					if (results[0])
+					{
+						marker.elevation = results[0].elevation;
+					}
+					else
+					{
+						return -1;
+					}
+				}
+				else
+				{
+					return -1;
+				}
+			});
+		});
+	}
+	function selectRouterToDraw(marker)
+	{
+		if (markerPair.length == 0)
+		{
+			markerPair.push(marker);
+			//toggleBounce(markerPair[0]);
+		}
+		else
+		if (markerPair.length == 1 && checkIfConnectionIsPossible(markerPair[0], marker))
+		{
+			markerPair.push(marker);
+			markerPair[0].neighbours.push(markerPair[1]);
+			markerPair[1].neighbours.push(markerPair[0]);
+			markerConnections.push(markerPair);
+			//connectRouters();
+			drawLine(markerPair[0], markerPair[1]);
+			//toggleBounce(markerPair[0]);
+			markerPair = [];
+		}
+		else
+		{
+			//toggleBounce(markerPair[0]);
+			markerPair = [];
+		}
 	}
 	function checkIfConnectionIsPossible(marker1, marker2)
 	{
-		if(marker1.ID == marker2.ID)
+		if (marker1.ID == marker2.ID)
 			return false
 		else
 		{
-			for(i = 0; i< markerConnections.length; i++)
+			for ( i = 0; i < markerConnections.length; i++)
 			{
-				if((markerConnections[i][0].ID == marker1.ID && markerConnections[i][1].ID == marker2.ID) || (markerConnections[i][1].ID == marker1.ID && markerConnections[i][0].ID == marker2.ID))
+				if ((markerConnections[i][0].ID == marker1.ID && markerConnections[i][1].ID == marker2.ID) || (markerConnections[i][1].ID == marker1.ID && markerConnections[i][0].ID == marker2.ID))
 					return false
 			}
 		}
 		return true;
 	}
-
-	function drawLine(marker1,marker2)
+	function drawLine(marker1, marker2)
 	{
-			var markerPositions = [marker1.getPosition(),marker2.getPosition()];
-			var color;
-			var dis = distance(markerConnections[i][0].position.lat(),markerConnections[i][0].position.lng(),markerConnections[i][1].position.lat(),markerConnections[i][1].position.lng(),"K");
-		    dis = dis*1000;
-			if(dis < markerConnections[i][0].reach/3)
-			{
-				color = "#00FF00";
-				if(marker2.type != "router")
+		var markerPositions = [marker1.getPosition(), marker2.getPosition()];
+		var color;
+		var dis = distance(markerConnections[i][0].position.lat(), markerConnections[i][0].position.lng(), markerConnections[i][1].position.lat(), markerConnections[i][1].position.lng(), "K");
+		dis = dis * 1000;
+		if (dis < markerConnections[i][0].reach / 3)
+		{
+			color = "#00FF00";
+			if (marker2.type != "router")
 				marker2.setIcon('greenSquare.png');
-			}
-			else if(dis < markerConnections[i][0].reach*(2/3))
-			     {
-				color = "#FFFF00"
-				if(marker2.type != "router")
+		}
+		else
+		if (dis < markerConnections[i][0].reach * (2 / 3))
+		{
+			color = "#FFFF00"
+			if (marker2.type != "router")
 				marker2.setIcon('yellowSquare.png')
-			     }
-			     else
-			     {
-			        color = "#FF0000"
-				if(marker2.type != "router")
+		}
+		else
+		{
+			color = "#FF0000"
+			if (marker2.type != "router")
 				marker2.setIcon('redSquare.png')
-			     }
-			
-			var routerPath = new google.maps.Polyline({
-			path: markerPositions,
-			strokeColor: color,
-			strokeOpacity: 1.0,
-			strokeWeight: 2
-			});
-			lines.push(routerPath);
-			lines[lines.length-1].setMap(map);
-			if(radioMode == "Radius")
-			{
-				lines[lines.length-1].setVisible(false);
-			}
+		}
+		var routerPath = new google.maps.Polyline(
+		{
+			path : markerPositions,
+			strokeColor : color,
+			strokeOpacity : 1.0,
+			strokeWeight : 2
+		});
+		lines.push(routerPath);
+		lines[lines.length - 1].setMap(map);
+		if (radioMode == "Radius")
+		{
+			lines[lines.length - 1].setVisible(false);
+		}
 	}
-
-function drawCircle(marker) {
- 
-    var greenCircle;
-    var yellowCircle;
-    var redCircle;
-	
-	
-      redCircle = new google.maps.Circle({
-        center: marker.getPosition(),
-        radius: marker.reach,
-        strokeColor: "#FF0000",
-        strokeOpacity: 0.8,
-        strokeWeight: 0,
-        fillColor: "#FF0000",
-        fillOpacity: 0.35,
-        map: map
-    });
-     yellowCircle = new google.maps.Circle({
-        center: marker.getPosition(),
-        radius: marker.reach*(2/3),
-        strokeColor: "#FFFF00",
-        strokeOpacity: 0.8,
-        strokeWeight: 0,
-        fillColor: "#FFFF00",
-        fillOpacity: 0.35,
-        map: map
-    });
-    greenCircle = new google.maps.Circle({
-        center: marker.getPosition(),
-        radius: marker.reach/3,
-        strokeColor: "#00FF00",
-        strokeOpacity: 0.8,
-        strokeWeight: 0,
-        fillColor: "#00FF00",
-        fillOpacity: 0.35,
-        map: map
-    });
-    
-    marker.reachCircles = [greenCircle,yellowCircle,redCircle];
-    if(radioMode != "Radius")
-    {
-		greenCircle.setVisible(false);
-		yellowCircle.setVisible(false);
-		redCircle.setVisible(false);
-    }
-
-}
-	function reconnectMovedMarker(marker,newPosition){
-		for(var i = 0; i< markerConnections.length ; i++){
-			for(var j = 0; j < 2; j++){
-				if(markerConnections[i][j].ID == marker.ID)
+	function drawCircle(marker)
+	{
+		var greenCircle;
+		var yellowCircle;
+		var redCircle;
+		redCircle = new google.maps.Circle(
+		{
+			center : marker.getPosition(),
+			radius : marker.reach,
+			strokeColor : "#FF0000",
+			strokeOpacity : 0.8,
+			strokeWeight : 0,
+			fillColor : "#FF0000",
+			fillOpacity : 0.35,
+			map : map
+		});
+		yellowCircle = new google.maps.Circle(
+		{
+			center : marker.getPosition(),
+			radius : marker.reach * (2 / 3),
+			strokeColor : "#FFFF00",
+			strokeOpacity : 0.8,
+			strokeWeight : 0,
+			fillColor : "#FFFF00",
+			fillOpacity : 0.35,
+			map : map
+		});
+		greenCircle = new google.maps.Circle(
+		{
+			center : marker.getPosition(),
+			radius : marker.reach / 3,
+			strokeColor : "#00FF00",
+			strokeOpacity : 0.8,
+			strokeWeight : 0,
+			fillColor : "#00FF00",
+			fillOpacity : 0.35,
+			map : map
+		});
+		marker.reachCircles = [greenCircle, yellowCircle, redCircle];
+		if (radioMode != "Radius")
+		{
+			greenCircle.setVisible(false);
+			yellowCircle.setVisible(false);
+			redCircle.setVisible(false);
+		}
+	}
+	function reconnectMovedMarker(marker, newPosition)
+	{
+		for (var i = 0; i < markerConnections.length; i++)
+		{
+			for (var j = 0; j < 2; j++)
+			{
+				if (markerConnections[i][j].ID == marker.ID)
 				{
 					markerConnections[i][j].setPosition(newPosition);
 				}
 			}
 		}
-	//	connectRouters();
-		
+		//	connectRouters();
 	}
-    function refreshLocation(marker, location) {
-        mar.setPosition()
-    }
+	function refreshLocation(marker, location)
+	{
+		mar.setPosition()
+	}
 	function removeMarkerConnections(marker)
 	{
-	for(var i = 0; i< markerConnections.length ; i++){
-					if(markerConnections[i][0].ID == marker.ID || markerConnections[i][1].ID == marker.ID)
-					{
-					    //remove da lista de vizinhos
-						lines[i].setVisible(false);
-						lines.splice(i,1);
-						markerConnections[i][0].neighbours.splice(markerConnections[i][1]);
-						markerConnections[i][1].neighbours.splice(markerConnections[i][0]);
-						if(markerConnections[i][1].type != "router")
-							markerConnections[i][1].setIcon('blackSquare.png');
-						markerConnections.splice(i,1);
-						i--;
-					}
-				
+		for (var i = 0; i < markerConnections.length; i++)
+		{
+			if (markerConnections[i][0].ID == marker.ID || markerConnections[i][1].ID == marker.ID)
+			{
+				//remove da lista de vizinhos
+				lines[i].setVisible(false);
+				lines.splice(i, 1);
+				markerConnections[i][0].neighbours.splice(markerConnections[i][1]);
+				markerConnections[i][1].neighbours.splice(markerConnections[i][0]);
+				if (markerConnections[i][1].type != "router")
+					markerConnections[i][1].setIcon('blackSquare.png');
+				markerConnections.splice(i, 1);
+				i--;
 			}
-	//connectRouters();
+		}
+		//connectRouters();
 	}
-    function removeMarker(marker) {
-        if (opMode == "Removal") {
-	    infowindow.setMap(null);
-            for (var i = 0; i < allMarkers.length; i++) {
-                if (allMarkers[i].ID == marker.ID) {
-                    markerCluster.removeMarker(allMarkers[i]);
-		    allMarkers[i].setMap(null);
-                    allMarkers.splice(i, 1);
-		    
-                }
-            }
-			for(var i = 0; i< markerConnections.length ; i++){
-					if(markerConnections[i][0].ID == marker.ID || markerConnections[i][1].ID == marker.ID)
-					{
-						//remove da lista de vizinhos
-						lines[i].setVisible(false);
-						lines.splice(i,1);
-						markerConnections[i][0].neighbours.splice(markerConnections[i][1]);
-						markerConnections[i][1].neighbours.splice(markerConnections[i][0]);
-						markerConnections.splice(i,1);
-						i--;
-					}
-				
+	function removeMarker(marker)
+	{
+		if (opMode == "Removal")
+		{
+			infowindow.setMap(null);
+			for (var i = 0; i < allMarkers.length; i++)
+			{
+				if (allMarkers[i].ID == marker.ID)
+				{
+					markerCluster.removeMarker(allMarkers[i]);
+					allMarkers[i].setMap(null);
+					allMarkers.splice(i, 1);
+					
+				}
 			}
-		//	connectRouters();
-        }
-	
-
-    }
-	function toggleBounce(marker) {
-
-	  if (marker.getAnimation() != null) {
-		marker.setAnimation(null);
-	  } else {
-		marker.setAnimation(google.maps.Animation.BOUNCE);
-	  }
+			for (var i = 0; i < markerConnections.length; i++)
+			{
+				if (markerConnections[i][0].ID == marker.ID || markerConnections[i][1].ID == marker.ID)
+				{
+					//remove da lista de vizinhos
+					lines[i].setVisible(false);
+					lines.splice(i, 1);
+					markerConnections[i][0].neighbours.splice(markerConnections[i][1]);
+					markerConnections[i][1].neighbours.splice(markerConnections[i][0]);
+					markerConnections.splice(i, 1);
+					i--;
+				}
+			}
+			//	connectRouters();
+		}
 	}
-    function displayInfoWindow(marker) {
-		if(opMode == "Insertion")
-{
+	function toggleBounce(marker)
+	{
+		if (marker.getAnimation() != null)
+		{
+			marker.setAnimation(null);
+		}
+		else
+		{
+			marker.setAnimation(google.maps.Animation.BOUNCE);
+		}
+	}
+	function displayInfoWindow(marker)
+	{
+		if (opMode == "Insertion")
+		{
 			var neighboursIDs = "";
-			for(var i = 0; i < marker.neighbours.length ;i++)
+			for (var i = 0; i < marker.neighbours.length; i++)
 			{
 				neighboursIDs += marker.neighbours[i].ID + ", ";
 			}
-			var content =  'ID: ' + marker.ID + '<br>Latitude: ' + 
-			marker.position.lat() + '<br>Longitude: ' + marker.position.lng() 
-			+ '<br>Elevation: ' + marker.elevation + '<br>Neighbours IDs: ' +neighboursIDs;
-
-			if(marker.teleTech != null && marker.reach != null)
-				content += '<br>Tecnology: ' + marker.teleTech +'<br>Reach: '+ marker.reach +' meters';
-			infowindow.setContent(content);				
+			var content = 'ID: ' + marker.ID + '<br>Latitude: ' + marker.position.lat() + '<br>Longitude: ' + marker.position.lng() + '<br>Elevation: ' + marker.elevation + '<br>Neighbours IDs: ' + neighboursIDs;
+			if (marker.teleTech != null && marker.reach != null)
+				content += '<br>Tecnology: ' + marker.teleTech + '<br>Reach: ' + marker.reach + ' meters';
+			infowindow.setContent(content);
 			infowindow.open(map, marker);
-
+		}
+	}
+	//drawingManager.setMap(map);
 }
-		
-    }
-	
-   
-
-
-    //drawingManager.setMap(map);
-}
-
 google.maps.event.addDomListener(window, 'load', initialize);
-

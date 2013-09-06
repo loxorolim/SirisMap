@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<meters>
+<Nodes>
  <meter>
   <Latitude>-22.917977286809318</Latitude>
   <Longitude>-43.09169679880142</Longitude>
@@ -224,13 +224,12 @@
   <Latitude>-22.919222405125875</Latitude>
   <Longitude>-43.08998018503189</Longitude>
  </meter>
-</meters>
-<DAPs>
- <DAP>
+  <DAP>
   <Latitude>-22.919222405125875</Latitude>
   <Longitude>-43.08998018503189</Longitude>
   <Technology>TecnologiaX</Technology>
-  <Reach>30</reach> 
+  <Reach>30</Reach> 
  </DAP>
-</DAPs>
+</Nodes>
+
 
