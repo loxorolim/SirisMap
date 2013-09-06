@@ -1,6 +1,5 @@
 /// <reference path="/js/jquery-1.10.2.min.js" />
-var
-elevator;
+var elevator;
 var map;
 var allMarkers = [];
 var meters = [];
@@ -32,16 +31,7 @@ function initialize()
 			position : google.maps.ControlPosition.BOTTOM_CENTER
 		}
 	}
-	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-	// Create an ElevationService
-	elevator = new google.maps.ElevationService();
-	markerCluster = new MarkerClusterer(map);
-	markerCluster.setGridSize(10);
-	loadNodesFromXml();
-	google.maps.event.addListener(map, 'click', function(event)
-	{
-		placeMarker(event);
-	});
+	
 	$("#btnInsertion").click(function()
 	{
 		opMode = "Insertion";
@@ -118,6 +108,20 @@ function initialize()
 	{
 		$("#btnUploadXML").attr("class", "gray");
 	});
+	
+	
+	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	// Create an ElevationService
+	elevator = new google.maps.ElevationService();
+	markerCluster = new MarkerClusterer(map);
+	markerCluster.setGridSize(10);
+	loadNodesFromXml();
+	google.maps.event.addListener(map, 'click', function(event)
+	{
+		if(opMode == "Insertion")
+			placeDAP(event.latLng.lat(),event.latLng.lng(),"TecTeste",50);
+	});
+	
 	function setLinesInvisible()
 	{
 		for ( i = 0; i < lines.length; i++)
@@ -171,16 +175,17 @@ function initialize()
 					{
 						var latitude = $(this).find('Latitude').text();
 						var longitude = $(this).find('Longitude').text();
-						loadMarker(latitude, longitude);
-					});
+						placeMeter(latitude, longitude);
+					})
 					$(xml).find('DAP').each(function()
 					{
 						var latitude = $(this).find('Latitude').text();
 						var longitude = $(this).find('Longitude').text();
 						var technology = $(this).find('Technology').text();
-						var reach = $(this).find('Reach');
+						var reach = parseInt($(this).find('Reach').text(),10);
+						
 						// loadMarker(latitude,longitude);
-						loadDAP(latitude, longitude, technology, reach);
+						placeDAP(latitude, longitude, technology, reach);
 					});
 				}
 			});
@@ -189,22 +194,26 @@ function initialize()
 	function showNodesXml()
 	{
 		var nodesXml = "&lt?xml version=\"1.0\" encoding=\"utf-8\"?&gt" + "<br>&ltNodes&gt";
-		for ( i = 0; i < meters.length; i++)
+		for ( i = 0; i < allMarkers.length; i++)
 		{	
+			if(allMarkers[i].type == "meter")
+			{
 				nodesXml += "<br>&nbsp&ltmeter&gt" 
-				+ "<br>&nbsp&nbsp&ltLatitude&gt" + meters[i].position.lat() + "&lt\/Latitude&gt"
-				+ "<br>&nbsp&nbsp&ltLongitude&gt" + meters[i].position.lng() + "&lt\/Longitude&gt" 
+				+ "<br>&nbsp&nbsp&ltLatitude&gt" + allMarkers[i].position.lat() + "&lt\/Latitude&gt"
+				+ "<br>&nbsp&nbsp&ltLongitude&gt" + allMarkers[i].position.lng() + "&lt\/Longitude&gt" 
 				+ "<br>&nbsp&lt\/meter&gt";
+			}
 		
-		}
-		for(i = 0;i<daps.length;i++)
-		{
+			else 
+			if(allMarkers[i].type == "DAP")
+			{
 				nodesXml += "<br>&nbsp&ltDAP&gt" 
-				+ "<br>&nbsp&nbsp&ltLatitude&gt" + daps[i].position.lat() + "&lt\/Latitude&gt" 
-				+ "<br>&nbsp&nbsp&ltLongitude&gt" + daps[i].position.lng() + "&lt\/Longitude&gt" 
-				+ "<br>&nbsp&nbsp&ltTechnology&gt" + daps[i].teleTech + "&lt\/Technology&gt" 
-				+ "<br>&nbsp&nbsp&ltReach&gt" + daps[i].reach + "&lt\/Reach&gt" 
+				+ "<br>&nbsp&nbsp&ltLatitude&gt" + allMarkers[i].position.lat() + "&lt\/Latitude&gt" 
+				+ "<br>&nbsp&nbsp&ltLongitude&gt" + allMarkers[i].position.lng() + "&lt\/Longitude&gt" 
+				+ "<br>&nbsp&nbsp&ltTechnology&gt" + allMarkers[i].teleTech + "&lt\/Technology&gt" 
+				+ "<br>&nbsp&nbsp&ltReach&gt" + allMarkers[i].reach + "&lt\/Reach&gt" 
 				+ "<br>&nbsp&lt\/DAP&gt";
+			}
 		}
 		nodesXml += "<br>&lt\/Nodes&gt";
 		$("#topRight").html(nodesXml);
@@ -222,158 +231,8 @@ function initialize()
 		}
 		// Initiate the location request
 	}
-	function placeMarker(locationEvent)
-	{
-		if (opMode == "Insertion")
-		{
-			var marker = new google.maps.Marker(
-			{
-				type : "DAP",
-				position : locationEvent.latLng,
-				map : map,
-				draggable : true,
-				neighbours : [],
-				ID : ID,
-				teleTech : "RolimTech",
-				reach : 30,
-				reachCircles : []
-			});
-			ID++;
-			var locations = [];
-			var clickedLocation = locationEvent.latLng;
-			locations.push(clickedLocation);
-			// Create a LocationElevationRequest object using the array's one value
-			var positionalRequest =
-			{
-				'locations' : locations
-			}
-			elevator.getElevationForLocations(positionalRequest, function(results, status)
-			{
-				if (status == google.maps.ElevationStatus.OK)
-				{
-					connectNodesByDistance(marker);
-					// Retrieve the first result
-					if (results[0])
-					{
-						// Open an info window indicating the elevation at the clicked position
-						drawCircle(marker);
-						marker.elevation = results[0].elevation;
-						allMarkers.push(marker);
-						daps.push(marker);
-						prepareMarkerEvents(marker)
-					}
-					else
-					{
-						return -1;
-					}
-				}
-				else
-				{
-					return -1;
-				}
-			});
-		}
-	}
-	function loadMarker(latitude, longitude)
-	{
-		var latLng = new google.maps.LatLng(latitude, longitude);
-		if (opMode == "Insertion")
-		{
-			var marker = new google.maps.Marker(
-			{
-				type : "meter",
-				position : latLng,
-				map : map,
-				draggable : true,
-				icon : 'blackSquare.png',
-				neighbours : [],
-				ID : ID
-			});
-			ID++;
-			var locations = [];
-			var markerLocation = latLng;
-			locations.push(markerLocation);
-			// Create a LocationElevationRequest object using the array's one value
-			var positionalRequest =
-			{
-				'locations' : locations
-			}
-			elevator.getElevationForLocations(positionalRequest, function(results, status)
-			{
-				if (status == google.maps.ElevationStatus.OK)
-				{
-					// Retrieve the first result
-					if (results[0])
-					{
-						// Open an info window indicating the elevation at the clicked position
-						marker.elevation = results[0].elevation;
-						allMarkers.push(marker);
-						meters.push(marker);
-						prepareMarkerEvents(marker);
-					}
-					else
-					{
-						return -1;
-					}
-				}
-				else
-				{
-					return -1;
-				}
-			});
-		}
-	}
-	function loadDAP(latitude, longitude, technology, reach)
-	{
-		var latLng = new google.maps.LatLng(latitude, longitude);
-		if (opMode == "Insertion")
-		{
-			var marker = new google.maps.Marker(
-			{
-				type : "DAP",
-				position : latLng,
-				map : map,
-				draggable : true,
-				ID : ID,
-				teleTech : technology,
-				reach : reach,
-				reachCircles : [],
-				neighbours : []
-			});
-			ID++;
-			var locations = [];
-			var markerLocation = latLng;
-			locations.push(markerLocation);
-			// Create a LocationElevationRequest object using the array's one value
-			var positionalRequest =
-			{
-				'locations' : locations
-			}
-			elevator.getElevationForLocations(positionalRequest, function(results, status)
-			{
-				if (status == google.maps.ElevationStatus.OK)
-				{
-					// Retrieve the first result
-					if (results[0])
-					{
-						// Open an info window indicating the elevation at the clicked position
-						marker.elevation = results[0].elevation;
-						allMarkers.push(marker);
-						daps.push(marker);
-						prepareMarkerEvents(marker);
-					}
-					else
-					{
-						return -1;
-					}
-				}
-				else
-				{
-					return -1;
-				}
-			});
-		}
-	}
+
+	
 	function connectNodesByDistance(marker)
 	{
 		for (var i = 0; i < allMarkers.length; i++)
@@ -382,7 +241,7 @@ function initialize()
 			dis = dis * 1000;
 			if (dis <= marker.reach)
 			{
-				selectRouterToDraw(marker), selectRouterToDraw(allMarkers[i]);
+				selectRouterToDraw(marker,allMarkers[i]);
 			}
 		}
 	}
@@ -415,8 +274,7 @@ function initialize()
 		{
 			removeMarker(marker);
 			displayInfoWindow(marker);
-			if (opMode == "Connection")
-				selectRouterToDraw(marker);
+
 		});
 		google.maps.event.addListener(marker, 'drag', function(event)
 		{
@@ -465,29 +323,15 @@ function initialize()
 			});
 		});
 	}
-	function selectRouterToDraw(marker)
+	function selectRouterToDraw(marker,marker2)
 	{
-		if (markerPair.length == 0)
+		if (checkIfConnectionIsPossible(marker, marker2))
 		{
-			markerPair.push(marker);
-			//toggleBounce(markerPair[0]);
-		}
-		else
-		if (markerPair.length == 1 && checkIfConnectionIsPossible(markerPair[0], marker))
-		{
-			markerPair.push(marker);
-			markerPair[0].neighbours.push(markerPair[1]);
-			markerPair[1].neighbours.push(markerPair[0]);
-			markerConnections.push(markerPair);
-			//connectRouters();
-			drawLine(markerPair[0], markerPair[1]);
-			//toggleBounce(markerPair[0]);
-			markerPair = [];
-		}
-		else
-		{
-			//toggleBounce(markerPair[0]);
-			markerPair = [];
+			marker.neighbours.push(marker2);
+			marker2.neighbours.push(marker);
+			var markers = [marker,marker2];
+			markerConnections.push(markers);
+			drawLine(marker, marker2);
 		}
 	}
 	function checkIfConnectionIsPossible(marker1, marker2)
@@ -513,21 +357,21 @@ function initialize()
 		if (dis < markerConnections[i][0].reach / 3)
 		{
 			color = "#00FF00";
-			if (marker2.type != "router")
-				marker2.setIcon('greenSquare.png');
+			//if (marker2.type == "meter")
+			//	marker2.setIcon('greenSquare.png');
 		}
 		else
 		if (dis < markerConnections[i][0].reach * (2 / 3))
 		{
 			color = "#FFFF00"
-			if (marker2.type != "router")
-				marker2.setIcon('yellowSquare.png')
+			//if (marker2.type == "meter")
+			//	marker2.setIcon('yellowSquare.png')
 		}
 		else
 		{
 			color = "#FF0000"
-			if (marker2.type != "router")
-				marker2.setIcon('redSquare.png')
+			//if (marker2.type == "meter")
+			//	marker2.setIcon('redSquare.png')
 		}
 		var routerPath = new google.maps.Polyline(
 		{
@@ -618,8 +462,8 @@ function initialize()
 				lines.splice(i, 1);
 				markerConnections[i][0].neighbours.splice(markerConnections[i][1]);
 				markerConnections[i][1].neighbours.splice(markerConnections[i][0]);
-				if (markerConnections[i][1].type != "router")
-					markerConnections[i][1].setIcon('blackSquare.png');
+				if (markerConnections[i][1].type == "meter")
+					markerConnections[i][1].setIcon(markerConnections[i][1].originalIcon);
 				markerConnections.splice(i, 1);
 				i--;
 			}
@@ -654,6 +498,11 @@ function initialize()
 					i--;
 				}
 			}
+			marker.reachCircles[2].setVisible(false);
+			marker.reachCircles[1].setVisible(false);
+			marker.reachCircles[0].setVisible(false);
+
+			
 			//	connectRouters();
 		}
 	}
@@ -679,11 +528,113 @@ function initialize()
 			}
 			var content = 'ID: ' + marker.ID + '<br>Latitude: ' + marker.position.lat() + '<br>Longitude: ' + marker.position.lng() + '<br>Elevation: ' + marker.elevation + '<br>Neighbours IDs: ' + neighboursIDs;
 			if (marker.teleTech != null && marker.reach != null)
-				content += '<br>Tecnology: ' + marker.teleTech + '<br>Reach: ' + marker.reach + ' meters';
+				content += '<br>Technology: ' + marker.teleTech + '<br>Reach: ' + marker.reach + ' meters';
 			infowindow.setContent(content);
 			infowindow.open(map, marker);
 		}
 	}
+	function placeMeter(latitude,longitude)
+	{
+		var latLng = new google.maps.LatLng(latitude, longitude);
+		var marker = new google.maps.Marker(
+		{
+			type : "meter",
+			position : latLng,
+			map : map,
+			draggable : true,
+			originalIcon: 'blackSquare.png',
+			icon : 'blackSquare.png',
+			neighbours : [],
+			ID : ID
+		});
+		ID++;
+		var locations = [];
+		var markerLocation = latLng;
+		locations.push(markerLocation);
+		// Create a LocationElevationRequest object using the array's one value
+		var positionalRequest =
+		{
+			'locations' : locations
+		}
+		elevator.getElevationForLocations(positionalRequest, function(results, status)
+		{
+			if (status == google.maps.ElevationStatus.OK)
+			{
+				// Retrieve the first result
+				if (results[0])
+				{
+					// Open an info window indicating the elevation at the clicked position
+					marker.elevation = results[0].elevation;
+					allMarkers.push(marker);
+					meters.push(marker);
+					prepareMarkerEvents(marker);
+				}
+				else
+				{
+					return -1;
+				}
+			}
+			else
+			{
+				return -1;
+			}
+		});		
+	}
+	function placeDAP(latitude, longitude, technology, reach)
+	{
+		var latLng = new google.maps.LatLng(latitude, longitude);
+		var marker = new google.maps.Marker(
+		{
+			type : "DAP",
+			position : latLng,
+			map : map,
+			draggable : true,
+			ID : ID,
+			originalIcon: 'daprouter.png',
+			icon : 'daprouter.png',
+			teleTech : technology,
+			reach : reach,
+			reachCircles : [],
+			neighbours : []
+		});
+		ID++;
+		var locations = [];
+		var markerLocation = latLng;
+		locations.push(markerLocation);
+		// Create a LocationElevationRequest object using the array's one value
+		var positionalRequest =
+		{
+			'locations' : locations
+		}
+		elevator.getElevationForLocations(positionalRequest, function(results, status)
+		{
+			if (status == google.maps.ElevationStatus.OK)
+			{
+				connectNodesByDistance(marker);
+				// Retrieve the first result
+				if (results[0])
+				{
+					// Open an info window indicating the elevation at the clicked position
+					drawCircle(marker);
+					marker.elevation = results[0].elevation;
+					allMarkers.push(marker);
+					daps.push(marker);
+					prepareMarkerEvents(marker);
+				}
+				else
+				{
+					return -1;
+				}
+			}
+			else
+			{
+				return -1;
+			}
+		});		
+	}
+	
+	
+
 	//drawingManager.setMap(map);
 }
 google.maps.event.addDomListener(window, 'load', initialize);

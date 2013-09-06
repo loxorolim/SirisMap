@@ -224,12 +224,28 @@
   <Latitude>-22.919222405125875</Latitude>
   <Longitude>-43.08998018503189</Longitude>
  </meter>
-  <DAP>
-  <Latitude>-22.919222405125875</Latitude>
-  <Longitude>-43.08998018503189</Longitude>
-  <Technology>TecnologiaX</Technology>
-  <Reach>30</Reach> 
+ <DAP>
+  <Latitude>-22.91852326271762</Latitude>
+  <Longitude>-43.090251088142395</Longitude>
+  <Technology>RolimTech</Technology>
+  <Reach>30</Reach>
+ </DAP>
+ <DAP>
+  <Latitude>-22.918073635658853</Latitude>
+  <Longitude>-43.0915492773056</Longitude>
+  <Technology>RolimTech</Technology>
+  <Reach>30</Reach>
+ </DAP>
+ <DAP>
+  <Latitude>-22.91921993466435</Latitude>
+  <Longitude>-43.09133470058441</Longitude>
+  <Technology>RolimTech</Technology>
+  <Reach>30</Reach>
+ </DAP>
+ <DAP>
+  <Latitude>-22.919121116166487</Latitude>
+  <Longitude>-43.090591728687286</Longitude>
+  <Technology>RolimTech</Technology>
+  <Reach>30</Reach>
  </DAP>
 </Nodes>
-
-

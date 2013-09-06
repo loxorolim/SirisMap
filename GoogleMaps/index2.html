@@ -1,0 +1,54 @@
+
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Drawing tools</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+
+      <link href="css/default.css" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=drawing"></script>
+      <script src="js/jquery-1.10.2.min.js"></script>
+      <script src="js/maps.js"></script>
+      <script src="js/markerClusterer.js"></script>
+	  <script src="js/buttonConfig.js"></script>
+	  <script src="js/xmlHandler.js"></script>
+	  
+<script src="js/distance.js"></script>
+
+  </head>
+  <body>
+	<div id = "background">
+		<div id = "rightBackground">    
+			<div id ="controls" class="insert-router">
+				<input id="btnInsertion" class="orange" type="button" value="Insertion"/>
+				<input id="btnRemoval" class="gray" type="button" value="Removal"/>
+				<!--<input id="btnConnection" class="gray" type="button" value="Connection"/>-->			
+				<input id="btnDisplayXML" class="gray" type="button" value="DisplayXML"/>
+				<input id="btnUploadXML"  class="gray" type="button" value="UploadXML"/>
+				<div id = "radioBackground">
+					<input id ="radioLine" class = "orange" type="button" value = "Line Mode"/>
+					<input id ="radioRadius" class = "gray" type="button" value = "Radius Mode"/>
+				</div>
+				<form action="uploadXml.asp">
+				  <input type="file" name="xmlFile">
+				  <input type="submit">
+				</form>
+			</div>
+			<div id ="topRight">
+			</div>
+		</div>
+		<div id="leftBackground">
+		<div id="map-canvas" ></div>
+		</div>
+		</div>
+	</div>
+	
+   
+    
+
+  </body>
+</html>
+
