@@ -32,7 +32,48 @@ function initialize()
 		}
 	}
 	
-	$("#btnInsertion").click(function()
+	   $( "#radio" ).buttonset();
+	   $( "#radioBackground" ).buttonset();
+	   $( "#accordion" ).accordion({
+      heightStyle: "content"
+    });
+
+	
+	$("#radio1").click(function()
+	{
+		opMode = "Insertion";		
+		infowindow.setMap(null);
+	});
+	$("#radio2").click(function()
+	{
+		opMode = "Removal";
+		infowindow.setMap(null);
+	});
+	$("#radio3").click(function()
+	{
+		opMode = "DisplayXML";
+		showNodesXml();
+		infowindow.setMap(null);
+	});
+	
+	$("#lineRadio").click(function()
+	{
+		radioMode = "Line";
+		setLinesVisible();
+		setCirclesInvisible();
+	});
+	$("#radiusRadio").click(function()
+	{
+		radioMode = "Radius";
+		setLinesInvisible();
+		setCirclesVisible();
+	});
+	
+
+
+	
+	/*
+	$("#btnInsertion").button().click(function()
 	{
 		opMode = "Insertion";
 		$("#btnInsertion").attr("class", "orange");
@@ -72,17 +113,7 @@ function initialize()
 		setLinesInvisible();
 		setCirclesVisible();
 	});
-	/*	$("#btnConnection").click(function () {
-	 opMode = "Connection";
-	 $("#btnInsertion").attr("class","gray");
-	 $("#btnRemoval").attr("class","gray");
-	 $("#btnConnection").attr("class","orange");
-	 $("#btnDisplayXML").attr("class","gray");
-	 if(markerPair.length > 0)
-	 toggleBounce(markerPair[0]);
-	 markerPair = [];
-	 infowindow.setMap(null);
-	 });*/
+
 	$("#btnDisplayXML").click(function()
 	{
 		opMode = "DisplayXML";
@@ -108,9 +139,10 @@ function initialize()
 	{
 		$("#btnUploadXML").attr("class", "gray");
 	});
+	*/
 	
 	
-	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	var map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
 	// Create an ElevationService
 	elevator = new google.maps.ElevationService();
 	markerCluster = new MarkerClusterer(map);
