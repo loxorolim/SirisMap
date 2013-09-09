@@ -31,31 +31,63 @@ function initialize()
 			position : google.maps.ControlPosition.BOTTOM_CENTER
 		}
 	}
+	var map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+	// Create an ElevationService
+	elevator = new google.maps.ElevationService();
+	markerCluster = new MarkerClusterer(map);
+	markerCluster.setGridSize(10);
+	loadNodesFromXml();
 	
-	   $('#insertionBackground').buttonset();
-	   $( "#radio" ).buttonset();
-	   $( "#radioBackground" ).buttonset();
+	var insertListener = google.maps.event.addListener(map, 'click', function(event)
+	{
+		if(opMode == "Insertion")
+			placeDAP(event.latLng.lat(),event.latLng.lng(),"TecTeste",50);
+	});
+	
+	
+	
+	
+		var radioSize = 155;
+		$("#Insertion").click(function() {
+			opMode = "Insertion";		
+			infowindow.setMap(null);
+		});
+		$("#Removal").click(function() {
+			opMode = "Removal";
+			infowindow.setMap(null);
+		});
+		$("#DisplayXML").click(function() {
+			opMode = "DisplayXML";
+			//showNodesXml();
+			infowindow.setMap(null);
+		});
+	   $('#insertionBackground').buttonset().find('label').width(radioSize);
+	   $( "#radio" ).buttonset().find('label').width(radioSize);
+	   $( "#radioBackground" ).buttonset().find('label').width(radioSize);
 	   $( "#accordion" ).accordion({
-      heightStyle: "content"
+		
+			heightStyle: "content",
+			icons: false
     });
-
 	
-	$("#radio1").click(function()
-	{
-		opMode = "Insertion";		
-		infowindow.setMap(null);
-	});
-	$("#radio2").click(function()
-	{
-		opMode = "Removal";
-		infowindow.setMap(null);
-	});
-	$("#radio3").click(function()
-	{
-		opMode = "DisplayXML";
-		showNodesXml();
-		infowindow.setMap(null);
-	});
+		$("#dapRadio").click(function() {
+			insertListener.remove();
+			insertListener = google.maps.event.addListener(map, 'click', function(event)
+			{
+				if(opMode == "Insertion")
+					placeDAP(event.latLng.lat(),event.latLng.lng(),"TecTeste",50);
+			});
+		});
+		$("#meterRadio").click(function() {
+			insertListener.remove();
+			google.maps.event.removeListener(insertListener);
+			insertListener = google.maps.event.addListener(map, 'click', function(event)
+			{
+				if(opMode == "Insertion")
+					placeMeter(event.latLng.lat(),event.latLng.lng());
+			});
+		});
+
 	
 	$("#lineRadio").click(function()
 	{
@@ -72,88 +104,10 @@ function initialize()
 	
 
 
-	
-	/*
-	$("#btnInsertion").button().click(function()
-	{
-		opMode = "Insertion";
-		$("#btnInsertion").attr("class", "orange");
-		$("#btnRemoval").attr("class", "gray");
-		//		$("#btnConnection").attr("class","gray");
-		$("#btnDisplayXML").attr("class", "gray");
-		//		if(markerPair.length > 0)
-		//			toggleBounce(markerPair[0]);
-		markerPair = [];
-		infowindow.setMap(null);
-	});
-	$("#btnRemoval").click(function()
-	{
-		opMode = "Removal";
-		$("#btnInsertion").attr("class", "gray");
-		$("#btnRemoval").attr("class", "orange");
-		//		$("#btnConnection").attr("class","gray");
-		$("#btnDisplayXML").attr("class", "gray");
-		//		if(markerPair.length > 0)
-		//			toggleBounce(markerPair[0]);
-		markerPair = [];
-		infowindow.setMap(null);
-	});
-	$("#radioLine").click(function()
-	{
-		radioMode = "Line";
-		$('#radioLine').attr("class", "orange");
-		$("#radioRadius").attr("class", "gray");
-		setLinesVisible();
-		setCirclesInvisible();
-	});
-	$("#radioRadius").click(function()
-	{
-		radioMode = "Radius";
-		$("#radioRadius").attr("class", "orange");
-		$('#radioLine').attr("class", "gray");
-		setLinesInvisible();
-		setCirclesVisible();
-	});
 
-	$("#btnDisplayXML").click(function()
-	{
-		opMode = "DisplayXML";
-		showNodesXml();
-		$("#btnInsertion").attr("class", "gray");
-		$("#btnRemoval").attr("class", "gray");
-		//		$("#btnConnection").attr("class","gray");
-		$("#btnDisplayXML").attr("class", "orange");
-		//		if(markerPair.length > 0)
-		//			toggleBounce(markerPair[0]);
-		markerPair = [];
-		infowindow.setMap(null);
-	});
-	$("#btnUploadXML").click(function()
-	{
-		$("#upFile").trigger('click');
-	});
-	$("#btnUploadXML").mouseover(function()
-	{
-		$("#btnUploadXML").attr("class", "orange");
-	});
-	$("#btnUploadXML").mouseout(function()
-	{
-		$("#btnUploadXML").attr("class", "gray");
-	});
-	*/
 	
 	
-	var map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-	// Create an ElevationService
-	elevator = new google.maps.ElevationService();
-	markerCluster = new MarkerClusterer(map);
-	markerCluster.setGridSize(10);
-	loadNodesFromXml();
-	google.maps.event.addListener(map, 'click', function(event)
-	{
-		if(opMode == "Insertion")
-			placeDAP(event.latLng.lat(),event.latLng.lng(),"TecTeste",50);
-	});
+
 	
 	function setLinesInvisible()
 	{
@@ -268,15 +222,28 @@ function initialize()
 	
 	function connectNodesByDistance(marker)
 	{
-		for (var i = 0; i < allMarkers.length; i++)
-		{
-			var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
-			dis = dis * 1000;
-			if (dis <= marker.reach)
+
+			for (var i = 0; i < allMarkers.length; i++)
 			{
-				selectRouterToDraw(marker,allMarkers[i]);
+				var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
+				dis = dis * 1000;
+				if(marker.type != "meter")
+				{
+					if (dis <= marker.reach)
+					{
+						selectRouterToDraw(marker,allMarkers[i]);
+					}
+				}
+				else
+				{
+					if (dis <= allMarkers[i].reach)
+					{
+						selectRouterToDraw(allMarkers[i],marker);
+					}
+				}
 			}
-		}
+		
+
 	}
 	function distance(lat1, lon1, lat2, lon2, unit)
 	{
@@ -300,62 +267,7 @@ function initialize()
 		}
 		return dist
 	}
-	function prepareMarkerEvents(marker)
-	{
-		markerCluster.addMarker(marker);
-		google.maps.event.addListener(marker, 'click', function(event)
-		{
-			removeMarker(marker);
-			displayInfoWindow(marker);
-
-		});
-		google.maps.event.addListener(marker, 'drag', function(event)
-		{
-			infowindow.setMap(null);
-			reconnectMovedMarker(marker, event.latLng)
-			removeMarkerConnections(marker);
-			connectNodesByDistance(marker);
-			if (marker.type == "DAP")
-			{
-				marker.reachCircles[0].setVisible(false);
-				marker.reachCircles[1].setVisible(false);
-				marker.reachCircles[2].setVisible(false);
-			}
-		});
-		google.maps.event.addListener(marker, 'dragend', function(event)
-		{
-			// reconnectMovedMarker(marker,event.latLng)
-			drawCircle(marker);
-			marker.setPosition(event.latLng);
-			var locations = [];
-			var markerLocation = marker.getPosition();
-			locations.push(markerLocation);
-			// Create a LocationElevationRequest object using the array's one value
-			var positionalRequest =
-			{
-				'locations' : locations
-			}
-			elevator.getElevationForLocations(positionalRequest, function(results, status)
-			{
-				if (status == google.maps.ElevationStatus.OK)
-				{
-					// Retrieve the first result
-					if (results[0])
-					{
-						marker.elevation = results[0].elevation;
-					}
-					else
-					{
-						return -1;
-					}
-				}
-				else
-				{
-					return -1;
-				}
-			});
-		});
-	}
+	
 	function selectRouterToDraw(marker,marker2)
 	{
 		if (checkIfConnectionIsPossible(marker, marker2))
@@ -385,16 +297,16 @@ function initialize()
 	{
 		var markerPositions = [marker1.getPosition(), marker2.getPosition()];
 		var color;
-		var dis = distance(markerConnections[i][0].position.lat(), markerConnections[i][0].position.lng(), markerConnections[i][1].position.lat(), markerConnections[i][1].position.lng(), "K");
+		var dis = distance(marker1.position.lat(), marker1.position.lng(), marker2.position.lat(), marker2.position.lng(), "K");
 		dis = dis * 1000;
-		if (dis < markerConnections[i][0].reach / 3)
+		if (dis < marker1.reach / 3)
 		{
 			color = "#00FF00";
 			//if (marker2.type == "meter")
 			//	marker2.setIcon('greenSquare.png');
 		}
 		else
-		if (dis < markerConnections[i][0].reach * (2 / 3))
+		if (dis < marker1.reach * (2 / 3))
 		{
 			color = "#FFFF00"
 			//if (marker2.type == "meter")
@@ -594,6 +506,7 @@ function initialize()
 			if (status == google.maps.ElevationStatus.OK)
 			{
 				// Retrieve the first result
+				connectNodesByDistance(marker);
 				if (results[0])
 				{
 					// Open an info window indicating the elevation at the clicked position
@@ -664,6 +577,62 @@ function initialize()
 				return -1;
 			}
 		});		
+	}
+	function prepareMarkerEvents(marker)
+	{
+		markerCluster.addMarker(marker);
+		google.maps.event.addListener(marker, 'click', function(event)
+		{
+			removeMarker(marker);
+			displayInfoWindow(marker);
+
+		});
+		google.maps.event.addListener(marker, 'drag', function(event)
+		{
+			infowindow.setMap(null);
+			reconnectMovedMarker(marker, event.latLng)
+			removeMarkerConnections(marker);
+			connectNodesByDistance(marker);
+			if (marker.type == "DAP")
+			{
+				marker.reachCircles[0].setVisible(false);
+				marker.reachCircles[1].setVisible(false);
+				marker.reachCircles[2].setVisible(false);
+			}
+		});
+		google.maps.event.addListener(marker, 'dragend', function(event)
+		{
+			// reconnectMovedMarker(marker,event.latLng)
+			drawCircle(marker);
+			marker.setPosition(event.latLng);
+			var locations = [];
+			var markerLocation = marker.getPosition();
+			locations.push(markerLocation);
+			// Create a LocationElevationRequest object using the array's one value
+			var positionalRequest =
+			{
+				'locations' : locations
+			}
+			elevator.getElevationForLocations(positionalRequest, function(results, status)
+			{
+				if (status == google.maps.ElevationStatus.OK)
+				{
+					// Retrieve the first result
+					if (results[0])
+					{
+						marker.elevation = results[0].elevation;
+					}
+					else
+					{
+						return -1;
+					}
+				}
+				else
+				{
+					return -1;
+				}
+			});
+		});
 	}
 	
 	
