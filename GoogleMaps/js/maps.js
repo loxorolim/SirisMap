@@ -32,6 +32,7 @@ function initialize()
 		}
 	}
 	
+	   $('#insertionBackground').buttonset();
 	   $( "#radio" ).buttonset();
 	   $( "#radioBackground" ).buttonset();
 	   $( "#accordion" ).accordion({
