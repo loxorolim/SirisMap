@@ -242,6 +242,13 @@ function initialize()
 					}
 				}
 			}
+			if(marker.neighbours.length == 0 && marker.type != "meter" )
+			{
+				marker.setIcon(marker.offIcon);
+			}
+			if(marker.type == "meter")
+				marker.setIcon(getMeterColor(marker));
+			
 		
 
 	}
@@ -273,7 +280,13 @@ function initialize()
 		if (checkIfConnectionIsPossible(marker, marker2))
 		{
 			marker.neighbours.push(marker2);
-			marker2.neighbours.push(marker);
+			marker2.neighbours.push(marker);			
+			// Troca o ícone do marker2 para LIGADO já que acabou de acontecer uma ligação
+			if(marker2.type != "meter")
+				marker2.setIcon(marker2.onIcon);
+			else
+				marker2.setIcon(getMeterColor(marker2));
+			//
 			var markers = [marker,marker2];
 			markerConnections.push(markers);
 			drawLine(marker, marker2);
@@ -302,22 +315,23 @@ function initialize()
 		if (dis < marker1.reach / 3)
 		{
 			color = "#00FF00";
-			//if (marker2.type == "meter")
-			//	marker2.setIcon('greenSquare.png');
+//			if (marker2.type == "meter")
+//				marker2.setIcon('greenSquare.png');
 		}
 		else
 		if (dis < marker1.reach * (2 / 3))
 		{
 			color = "#FFFF00"
-			//if (marker2.type == "meter")
-			//	marker2.setIcon('yellowSquare.png')
+//			if (marker2.type == "meter")
+//				marker2.setIcon('yellowSquare.png')
 		}
 		else
 		{
 			color = "#FF0000"
-			//if (marker2.type == "meter")
-			//	marker2.setIcon('redSquare.png')
+//			if (marker2.type == "meter")
+//				marker2.setIcon('redSquare.png')
 		}
+		
 		var routerPath = new google.maps.Polyline(
 		{
 			path : markerPositions,
@@ -327,6 +341,7 @@ function initialize()
 		});
 		lines.push(routerPath);
 		lines[lines.length - 1].setMap(map);
+		
 		if (radioMode == "Radius")
 		{
 			lines[lines.length - 1].setVisible(false);
@@ -405,15 +420,39 @@ function initialize()
 				//remove da lista de vizinhos
 				lines[i].setVisible(false);
 				lines.splice(i, 1);
-				markerConnections[i][0].neighbours.splice(markerConnections[i][1]);
-				markerConnections[i][1].neighbours.splice(markerConnections[i][0]);
-				if (markerConnections[i][1].type == "meter")
-					markerConnections[i][1].setIcon(markerConnections[i][1].originalIcon);
+//				markerConnections[i][0].neighbours.splice(markerConnections[i][1]);
+//				markerConnections[i][1].neighbours.splice(markerConnections[i][0]);
+				markerConnections[i][0].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][0],markerConnections[i][1]),1);
+				markerConnections[i][1].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][1],markerConnections[i][0]),1);
+				
+//				if (markerConnections[i][1].type == "meter")
+//					markerConnections[i][1].setIcon(markerConnections[i][1].originalIcon);
+				if(markerConnections[i][1].neighbours.length == 0 && markerConnections[i][1].type != "meter")
+				{
+					markerConnections[i][1].setIcon(markerConnections[i][1].offIcon);
+					
+				}
+				if(markerConnections[i][1].type == "meter")
+				{
+						markerConnections[i][1].setIcon(getMeterColor(markerConnections[i][1]));
+				}
+				
 				markerConnections.splice(i, 1);
 				i--;
 			}
 		}
+		
+		
 		//connectRouters();
+	}
+	function getMarkerPositionFromNeighbour(marker,marker2)
+	{
+		for(i = 0; i<marker.neighbours.length;i++)
+		{
+			if(marker2.ID == marker.neighbours[i])
+				return i;
+		}
+		return -1;
 	}
 	function removeMarker(marker)
 	{
@@ -478,6 +517,45 @@ function initialize()
 			infowindow.open(map, marker);
 		}
 	}
+	function getMeterColor(meter)
+	{
+		//ESTA FUNÇÃO NÃO ESTÁ OTIMIZADA!!!!!!!!!!!!!!!!!!!
+		var color = -1
+		for(i = 0; i<meter.neighbours.length;i++)
+		{
+			var dis = distance(meter.position.lat(), meter.position.lng(), meter.neighbours[i].position.lat(), meter.neighbours[i].position.lng(), "K");
+			dis = dis * 1000;
+			if (dis < meter.neighbours[i].reach / 3)
+			{
+				if(color > 1 || color == -1)
+					color = 1;
+			}
+			else			
+			if (dis < meter.neighbours[i].reach * (2 / 3))
+			{
+				if(color > 2 || color == -1)				
+					color = 2;
+				
+			}
+			else
+				if(color == -1)
+					color = 3;
+			
+		}
+		if(color == 1)
+			return "greenSquare.png";
+		else
+		if(color == 2)
+			return "yellowSquare.png";
+		
+		else
+		if(color == 3)
+			return "redSquare.png";
+		else
+			return "blackSquare.png";
+
+		
+	}
 	function placeMeter(latitude,longitude)
 	{
 		var latLng = new google.maps.LatLng(latitude, longitude);
@@ -487,8 +565,9 @@ function initialize()
 			position : latLng,
 			map : map,
 			draggable : true,
-			originalIcon: 'blackSquare.png',
+			offIcon: 'blackSquare.png',
 			icon : 'blackSquare.png',
+			
 			neighbours : [],
 			ID : ID
 		});
@@ -507,6 +586,7 @@ function initialize()
 			{
 				// Retrieve the first result
 				connectNodesByDistance(marker);
+				
 				if (results[0])
 				{
 					// Open an info window indicating the elevation at the clicked position
@@ -514,6 +594,7 @@ function initialize()
 					allMarkers.push(marker);
 					meters.push(marker);
 					prepareMarkerEvents(marker);
+					
 				}
 				else
 				{
@@ -536,7 +617,8 @@ function initialize()
 			map : map,
 			draggable : true,
 			ID : ID,
-			originalIcon: 'daprouter.png',
+			offIcon: 'daprouteroff.png',
+			onIcon: 'daprouter.png',
 			icon : 'daprouter.png',
 			teleTech : technology,
 			reach : reach,
@@ -593,12 +675,25 @@ function initialize()
 			reconnectMovedMarker(marker, event.latLng)
 			removeMarkerConnections(marker);
 			connectNodesByDistance(marker);
+			
 			if (marker.type == "DAP")
 			{
 				marker.reachCircles[0].setVisible(false);
 				marker.reachCircles[1].setVisible(false);
 				marker.reachCircles[2].setVisible(false);
 			}
+			if(marker.type != "meter")
+			{
+				if(marker.neighbours.length == 0)
+					marker.setIcon(marker.offIcon);
+				else
+				{
+					marker.setIcon(marker.onIcon);
+					
+				}
+			}
+
+			
 		});
 		google.maps.event.addListener(marker, 'dragend', function(event)
 		{
