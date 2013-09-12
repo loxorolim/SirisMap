@@ -58,7 +58,7 @@ function initialize()
 		});
 		$("#DisplayXML").click(function() {
 			opMode = "DisplayXML";
-			//showNodesXml();
+			showNodesXml();
 			infowindow.setMap(null);
 		});
 	   $('#insertionBackground').buttonset().find('label').width(radioSize);
@@ -180,12 +180,15 @@ function initialize()
 	}
 	function showNodesXml()
 	{
-		var nodesXml = "&lt?xml version=\"1.0\" encoding=\"utf-8\"?&gt" + "<br>&ltNodes&gt";
+		var init = "&lt?xml version=\"1.0\" encoding=\"utf-8\"?&gt" + "<br>&ltNodes&gt";
+		var meters;
+		var daps;
+		var fin;
 		for ( i = 0; i < allMarkers.length; i++)
 		{	
 			if(allMarkers[i].type == "meter")
 			{
-				nodesXml += "<br>&nbsp&ltmeter&gt" 
+				meters += "<br>&nbsp&ltmeter&gt" 
 				+ "<br>&nbsp&nbsp&ltLatitude&gt" + allMarkers[i].position.lat() + "&lt\/Latitude&gt"
 				+ "<br>&nbsp&nbsp&ltLongitude&gt" + allMarkers[i].position.lng() + "&lt\/Longitude&gt" 
 				+ "<br>&nbsp&lt\/meter&gt";
@@ -194,7 +197,7 @@ function initialize()
 			else 
 			if(allMarkers[i].type == "DAP")
 			{
-				nodesXml += "<br>&nbsp&ltDAP&gt" 
+				daps += "<br>&nbsp&ltDAP&gt" 
 				+ "<br>&nbsp&nbsp&ltLatitude&gt" + allMarkers[i].position.lat() + "&lt\/Latitude&gt" 
 				+ "<br>&nbsp&nbsp&ltLongitude&gt" + allMarkers[i].position.lng() + "&lt\/Longitude&gt" 
 				+ "<br>&nbsp&nbsp&ltTechnology&gt" + allMarkers[i].teleTech + "&lt\/Technology&gt" 
@@ -202,8 +205,8 @@ function initialize()
 				+ "<br>&nbsp&lt\/DAP&gt";
 			}
 		}
-		nodesXml += "<br>&lt\/Nodes&gt";
-		$("#topRight").html(nodesXml);
+		fin += "<br>&lt\/Nodes&gt";
+		$("#xmltext").html(init+meters+daps+fin);
 	}
 	function getElevation(event)
 	{
@@ -456,8 +459,7 @@ function initialize()
 	}
 	function removeMarker(marker)
 	{
-		if (opMode == "Removal")
-		{
+
 			infowindow.setMap(null);
 			for (var i = 0; i < allMarkers.length; i++)
 			{
@@ -486,9 +488,7 @@ function initialize()
 			marker.reachCircles[1].setVisible(false);
 			marker.reachCircles[0].setVisible(false);
 
-			
-			//	connectRouters();
-		}
+
 	}
 	function toggleBounce(marker)
 	{
@@ -665,7 +665,8 @@ function initialize()
 		markerCluster.addMarker(marker);
 		google.maps.event.addListener(marker, 'click', function(event)
 		{
-			removeMarker(marker);
+			if (opMode == "Removal")		
+				removeMarker(marker);
 			displayInfoWindow(marker);
 
 		});

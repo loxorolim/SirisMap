@@ -9,6 +9,12 @@
 {
 
 }
+#xmldisplay
+{
+;
+	width: 500px;
+	height:500px;
+}
 .ui-accordion-header  {  
 
     text-align: center;  
