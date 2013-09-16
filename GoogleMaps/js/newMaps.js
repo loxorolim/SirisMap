@@ -22,21 +22,13 @@ function initialize()
 	{
 		zoom : 3,
 		minZoom : 2,
-		center : new google.maps.LatLng(-28.643387, 0.612224),
+		center : new google.maps.LatLng(-28.643387, 153.612224),
 		mapTypeId : google.maps.MapTypeId.ROADMAP,
 		mapTypeControl : true,
-		panControl: false,
-		zoomControl: true,
-		zoomControlOptions: 
-		{
-			position : google.maps.ControlPosition.TOP_RIGHT,
-			
-		},
 		mapTypeControlOptions :
 		{
 			style : google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-			position : google.maps.ControlPosition.TOP_RIGHT
-
+			position : google.maps.ControlPosition.BOTTOM_CENTER
 		}
 	}
 	var map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
@@ -189,9 +181,9 @@ function initialize()
 	function showNodesXml()
 	{
 		var init = "&lt?xml version=\"1.0\" encoding=\"utf-8\"?&gt" + "<br>&ltNodes&gt";
-		var meters = "";
-		var daps = "";
-		var fin = "";
+		var meters;
+		var daps;
+		var fin;
 		for ( i = 0; i < allMarkers.length; i++)
 		{	
 			if(allMarkers[i].type == "meter")
@@ -426,6 +418,8 @@ function initialize()
 	{
 		
 		
+		
+		
 		for (var i = 0; i < markerConnections.length; i++)
 		{
 			if (markerConnections[i][0].ID == marker.ID || markerConnections[i][1].ID == marker.ID)
@@ -433,13 +427,11 @@ function initialize()
 				//remove da lista de vizinhos
 				lines[i].setVisible(false);
 				lines.splice(i, 1);
-//				markerConnections[i][0].neighbours.splice(markerConnections[i][1]);
-//				markerConnections[i][1].neighbours.splice(markerConnections[i][0]);
+
 				markerConnections[i][0].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][0],markerConnections[i][1]),1);
 				markerConnections[i][1].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][1],markerConnections[i][0]),1);
 				
-//				if (markerConnections[i][1].type == "meter")
-//					markerConnections[i][1].setIcon(markerConnections[i][1].originalIcon);
+
 				if(markerConnections[i][1].neighbours.length == 0 && markerConnections[i][1].type != "meter")
 				{
 					markerConnections[i][1].setIcon(markerConnections[i][1].offIcon);
@@ -451,19 +443,19 @@ function initialize()
 				}
 				
 				markerConnections.splice(i, 1);
-				i--;
+				//i--;
 			}
 		}
 		
 		
-		
 		//connectRouters();
 	}
+	function 
 	function getMarkerPositionFromNeighbour(marker,marker2)
 	{
 		for(i = 0; i<marker.neighbours.length;i++)
 		{
-			if(marker2.ID == marker.neighbours[i].ID)
+			if(marker2.ID == marker.neighbours[i])
 				return i;
 		}
 		return -1;
@@ -489,8 +481,8 @@ function initialize()
 					//remove da lista de vizinhos
 					lines[i].setVisible(false);
 					lines.splice(i, 1);
-					markerConnections[i][0].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][0],markerConnections[i][1]),1);
-					markerConnections[i][1].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][1],markerConnections[i][0]),1);
+					markerConnections[i][0].neighbours.splice(markerConnections[i][1]);
+					markerConnections[i][1].neighbours.splice(markerConnections[i][0]);
 					markerConnections.splice(i, 1);
 					i--;
 				}
@@ -683,10 +675,10 @@ function initialize()
 		});
 		google.maps.event.addListener(marker, 'drag', function(event)
 		{
-			infowindow.setMap(null);
-			reconnectMovedMarker(marker, event.latLng)
-			removeMarkerConnections(marker);
-			connectNodesByDistance(marker);
+		//	infowindow.setMap(null);
+		//	reconnectMovedMarker(marker, event.latLng)
+		//	removeMarkerConnections(marker);
+		//	connectNodesByDistance(marker);
 			
 			if (marker.type == "DAP")
 			{
@@ -709,7 +701,10 @@ function initialize()
 		});
 		google.maps.event.addListener(marker, 'dragend', function(event)
 		{
-			
+			infowindow.setMap(null);
+			reconnectMovedMarker(marker, event.latLng)
+			removeMarkerConnections(marker);
+			connectNodesByDistance(marker);
 			// reconnectMovedMarker(marker,event.latLng)
 			drawCircle(marker);
 			marker.setPosition(event.latLng);
