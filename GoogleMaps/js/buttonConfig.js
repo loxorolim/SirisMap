@@ -1,82 +1,50 @@
-/// <reference path="/js/jquery-1.10.2.min.js" />
 
 function setButtons()
 {
 
-$("#btnInsertion").click(function()
+	var radioSize = 155;
+		$("#Insertion").click(function() {
+			setOpMode("Insertion");		
+			setInfoWindowNull();
+		});
+		$("#Removal").click(function() {
+			setOpMode("Removal");
+			setInfoWindowNull();
+		});
+		$("#DisplayXML").click(function() {
+			opMode = "DisplayXML";
+			showNodesXml();
+			setInfoWindowNull();
+		});
+	   $('#insertionBackground').buttonset().find('label').width(radioSize);
+	   $( "#radio" ).buttonset().find('label').width(radioSize);
+	   $( "#radioBackground" ).buttonset().find('label').width(radioSize);
+	   $( "#accordion" ).accordion({
+		
+			heightStyle: "content",
+			icons: false
+    });
+	
+		$("#dapRadio").click(function() 
+		{
+			setInsertionType("DAP")
+		});
+		$("#meterRadio").click(function()
+		{
+			setInsertionType("meter")
+		});
+
+	
+	$("#lineRadio").click(function()
 	{
-		opMode = "Insertion";
-		$("#btnInsertion").attr("class", "orange");
-		$("#btnRemoval").attr("class", "gray");
-		//		$("#btnConnection").attr("class","gray");
-		$("#btnDisplayXML").attr("class", "gray");
-		//		if(markerPair.length > 0)
-		//			toggleBounce(markerPair[0]);
-		markerPair = [];
-		infowindow.setMap(null);
-	});
-	$("#btnRemoval").click(function()
-	{
-		opMode = "Removal";
-		$("#btnInsertion").attr("class", "gray");
-		$("#btnRemoval").attr("class", "orange");
-		//		$("#btnConnection").attr("class","gray");
-		$("#btnDisplayXML").attr("class", "gray");
-		//		if(markerPair.length > 0)
-		//			toggleBounce(markerPair[0]);
-		markerPair = [];
-		infowindow.setMap(null);
-	});
-	$("#radioLine").click(function()
-	{
-		radioMode = "Line";
-		$('#radioLine').attr("class", "orange");
-		$("#radioRadius").attr("class", "gray");
+		setRadioMode("Line");
 		setLinesVisible();
 		setCirclesInvisible();
 	});
-	$("#radioRadius").click(function()
+	$("#radiusRadio").click(function()
 	{
-		radioMode = "Radius";
-		$("#radioRadius").attr("class", "orange");
-		$('#radioLine').attr("class", "gray");
+		setRadioMode("Radius");
 		setLinesInvisible();
 		setCirclesVisible();
-	});
-	/*	$("#btnConnection").click(function () {
-	 opMode = "Connection";
-	 $("#btnInsertion").attr("class","gray");
-	 $("#btnRemoval").attr("class","gray");
-	 $("#btnConnection").attr("class","orange");
-	 $("#btnDisplayXML").attr("class","gray");
-	 if(markerPair.length > 0)
-	 toggleBounce(markerPair[0]);
-	 markerPair = [];
-	 infowindow.setMap(null);
-	 });*/
-	$("#btnDisplayXML").click(function()
-	{
-		opMode = "DisplayXML";
-		showNodesXml();
-		$("#btnInsertion").attr("class", "gray");
-		$("#btnRemoval").attr("class", "gray");
-		//		$("#btnConnection").attr("class","gray");
-		$("#btnDisplayXML").attr("class", "orange");
-		//		if(markerPair.length > 0)
-		//			toggleBounce(markerPair[0]);
-		markerPair = [];
-		infowindow.setMap(null);
-	});
-	$("#btnUploadXML").click(function()
-	{
-		$("#upFile").trigger('click');
-	});
-	$("#btnUploadXML").mouseover(function()
-	{
-		$("#btnUploadXML").attr("class", "orange");
-	});
-	$("#btnUploadXML").mouseout(function()
-	{
-		$("#btnUploadXML").attr("class", "gray");
 	});
 }
