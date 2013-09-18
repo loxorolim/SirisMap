@@ -83,14 +83,14 @@ function connectNodesByDistance(marker)
 			{
 				if (dis <= marker.reach)
 				{
-					selectRouterToDraw(marker,allMarkers[i]);
+					connectMarkers(marker,allMarkers[i]);
 				}
 			}
 			else
 			{
 				if (dis <= allMarkers[i].reach)
 				{
-					selectRouterToDraw(allMarkers[i],marker);
+					connectMarkers(allMarkers[i],marker);
 				}
 			}
 		}
@@ -127,7 +127,7 @@ function distance(lat1, lon1, lat2, lon2, unit)
 	return dist
 }
 
-function selectRouterToDraw(marker,marker2)
+function connectMarkers(marker,marker2)
 {
 	if (checkIfConnectionIsPossible(marker, marker2))
 	{
@@ -332,8 +332,7 @@ function removeMarker(marker)
 
 function displayInfoWindow(marker)
 {
-	if (opMode == "Insertion")
-	{
+
 		var neighboursIDs = "";
 		for (var i = 0; i < marker.neighbours.length; i++)
 		{
@@ -344,7 +343,7 @@ function displayInfoWindow(marker)
 			content += '<br>Technology: ' + marker.teleTech + '<br>Reach: ' + marker.reach + ' meters';
 		infowindow.setContent(content);
 		infowindow.open(map, marker);
-	}
+	
 }
 function getMeterColor(meter)
 {
@@ -396,7 +395,6 @@ function placeMeter(latitude,longitude)
 		draggable : true,
 		offIcon: 'blackSquare.png',
 		icon : 'blackSquare.png',
-		
 		neighbours : [],
 		ID : ID
 	});
@@ -496,31 +494,29 @@ function prepareMarkerEvents(marker)
 	{
 		if (opMode == "Removal")		
 			removeMarker(marker);
-		displayInfoWindow(marker);
+		else
+			displayInfoWindow(marker);
 
 	});
 	google.maps.event.addListener(marker, 'drag', function(event)
 	{
 		infowindow.setMap(null);
-		reconnectMovedMarker(marker, event.latLng)
+		//reconnectMovedMarker(marker, event.latLng)
 		removeMarkerConnections(marker);
 		connectNodesByDistance(marker);
 		
-		if (marker.type == "DAP")
+
+	
+		if(marker.type != "meter")
 		{
 			marker.reachCircles[0].setVisible(false);
 			marker.reachCircles[1].setVisible(false);
 			marker.reachCircles[2].setVisible(false);
-		}
-		if(marker.type != "meter")
-		{
+			
 			if(marker.neighbours.length == 0)
 				marker.setIcon(marker.offIcon);
 			else
-			{
 				marker.setIcon(marker.onIcon);
-				
-			}
 		}
 
 		

@@ -2,7 +2,7 @@
 function setButtons()
 {
 
-	var radioSize = 155;
+		
 		$("#Insertion").click(function() {
 			setOpMode("Insertion");		
 			setInfoWindowNull();
@@ -16,6 +16,7 @@ function setButtons()
 			showNodesXml();
 			setInfoWindowNull();
 		});
+		var radioSize = 155;
 	   $('#insertionBackground').buttonset().find('label').width(radioSize);
 	   $( "#radio" ).buttonset().find('label').width(radioSize);
 	   $( "#radioBackground" ).buttonset().find('label').width(radioSize);
@@ -23,7 +24,7 @@ function setButtons()
 		
 			heightStyle: "content",
 			icons: false
-    });
+		});
 	
 		$("#dapRadio").click(function() 
 		{
