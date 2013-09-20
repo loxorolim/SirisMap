@@ -1,8 +1,10 @@
 #radioBackground
 {
-	position:relative;
-	top:20px;
+	position:absolute;
+	left: 170px;
+	top:2px;
 	height:0px;
+	
 }
 
 #radio
@@ -11,7 +13,7 @@
 }
 #xmldisplay
 {
-;
+
 	width: 500px;
 	height:500px;
 }
@@ -20,6 +22,13 @@
     text-align: center;  
 
 } 
+button
+{
+	width:158px;
+	padding:0px;
+	margin: 0px;
+	
+}
 
 
 #accordion
@@ -36,6 +45,14 @@
 
 }
 #insertionBackground
+{
+	width:158px;
+}
+#scenarioBackground
+{
+	width:158px;
+}
+#technologyBackground
 {
 	width:158px;
 }

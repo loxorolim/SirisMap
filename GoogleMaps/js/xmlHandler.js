@@ -22,7 +22,7 @@ function showNodesXml()
 			+ "<br>&nbsp&nbsp&ltLatitude&gt" + markers[i].position.lat() + "&lt\/Latitude&gt" 
 			+ "<br>&nbsp&nbsp&ltLongitude&gt" + markers[i].position.lng() + "&lt\/Longitude&gt" 
 			+ "<br>&nbsp&nbsp&ltTechnology&gt" + markers[i].teleTech + "&lt\/Technology&gt" 
-			+ "<br>&nbsp&nbsp&ltReach&gt" + markers[i].reach + "&lt\/Reach&gt" 
+			+ "<br>&nbsp&nbsp&ltsetInsertionOptions&gt" + markers[i].setInsertionOptions + "&lt\/setInsertionOptions&gt" 
 			+ "<br>&nbsp&lt\/DAP&gt";
 		}
 	}
@@ -51,10 +51,10 @@ function loadNodesFromXml()
 					var latitude = $(this).find('Latitude').text();
 					var longitude = $(this).find('Longitude').text();
 					var technology = $(this).find('Technology').text();
-					var reach = parseInt($(this).find('Reach').text(),10);
+					var setInsertionOptions = parseInt($(this).find('setInsertionOptions').text(),10);
 					
 					// loadMarker(latitude,longitude);
-					placeDAP(latitude, longitude, technology, reach);
+					placeDAP(latitude, longitude, technology, setInsertionOptions);
 				});
 			}
 		});

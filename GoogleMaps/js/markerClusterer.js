@@ -865,7 +865,7 @@ Cluster.prototype.addMarker = function(marker) {
 
   var len = this.markers_.length;
   if (len < this.minClusterSize_ && marker.getMap() != this.map_) {
-    // Min cluster size not reached so show the marker.
+    // Min cluster size not setInsertionOptionsed so show the marker.
     marker.setMap(this.map_);
   }
 
@@ -998,7 +998,7 @@ Cluster.prototype.updateIcon = function() {
   }
 
   if (this.markers_.length < this.minClusterSize_) {
-    // Min cluster size not yet reached.
+    // Min cluster size not yet setInsertionOptionsed.
     this.clusterIcon_.hide();
     return;
   }

@@ -17,6 +17,8 @@ var request;
 var markerCluster;
 var insertListener;
 var map;
+var scenario = "Urban";
+var currentTech = "ZigBee";
 
 function initialize()
 {
@@ -51,7 +53,7 @@ function initialize()
 	insertListener = google.maps.event.addListener(map, 'click', function(event)
 	{
 		if(opMode == "Insertion")
-			placeDAP(event.latLng.lat(),event.latLng.lng(),"TecTeste",50);
+			placeDAP(event.latLng.lat(),event.latLng.lng(),currentTech);
 	});
 	setButtons();
 
@@ -81,25 +83,37 @@ function connectNodesByDistance(marker)
 			dis = dis * 1000;
 			if(marker.type != "meter")
 			{
-				if (dis <= marker.reach)
+				var reach = fetchReach(marker.teleTech,scenario)
+				if (dis <= reach)
 				{
 					connectMarkers(marker,allMarkers[i]);
 				}
 			}
 			else
 			{
-				if (dis <= allMarkers[i].reach)
+				var reach = fetchReach(allMarkers[i].teleTech,scenario)
+				if (dis <= reach)
 				{
 					connectMarkers(allMarkers[i],marker);
 				}
 			}
 		}
-		if(marker.neighbours.length == 0 && marker.type != "meter" )
+		if(marker.type != "meter" )
 		{
-			marker.setIcon(marker.offIcon);
+			if(marker.neighbours.length == 0)
+			{
+				marker.setIcon(marker.offIcon);
+			}
+			else
+			{
+				marker.setIcon(marker.onIcon);
+			}
+				
 		}
-		if(marker.type == "meter")
+		else
+		{
 			marker.setIcon(getMeterColor(marker));
+		}
 		
 	
 
@@ -164,12 +178,13 @@ function drawLine(marker1, marker2)
 	var color;
 	var dis = distance(marker1.position.lat(), marker1.position.lng(), marker2.position.lat(), marker2.position.lng(), "K");
 	dis = dis * 1000;
-	if (dis < marker1.reach / 3)
+	var reach = fetchReach(marker1.teleTech,scenario)
+	if (dis < reach / 3)
 	{
 		color = "#00FF00";
 	}
 	else
-	if (dis < marker1.reach * (2 / 3))
+	if (dis < reach * (2 / 3))
 	{
 		color = "#FFFF00"
 	}
@@ -201,7 +216,7 @@ function drawCircle(marker)
 	redCircle = new google.maps.Circle(
 	{
 		center : marker.getPosition(),
-		radius : marker.reach,
+		radius : fetchReach(marker.teleTech,scenario),
 		strokeColor : "#FF0000",
 		strokeOpacity : 0.8,
 		strokeWeight : 0,
@@ -212,7 +227,7 @@ function drawCircle(marker)
 	yellowCircle = new google.maps.Circle(
 	{
 		center : marker.getPosition(),
-		radius : marker.reach * (2 / 3),
+		radius : fetchReach(marker.teleTech,scenario) * (2 / 3),
 		strokeColor : "#FFFF00",
 		strokeOpacity : 0.8,
 		strokeWeight : 0,
@@ -223,7 +238,7 @@ function drawCircle(marker)
 	greenCircle = new google.maps.Circle(
 	{
 		center : marker.getPosition(),
-		radius : marker.reach / 3,
+		radius : fetchReach(marker.teleTech,scenario) / 3,
 		strokeColor : "#00FF00",
 		strokeOpacity : 0.8,
 		strokeWeight : 0,
@@ -280,6 +295,7 @@ function removeMarkerConnections(marker)
 			{
 					markerConnections[i][1].setIcon(getMeterColor(markerConnections[i][1]));
 			}
+			
 			
 			markerConnections.splice(i, 1);
 			i--;
@@ -339,8 +355,8 @@ function displayInfoWindow(marker)
 			neighboursIDs += marker.neighbours[i].ID + ", ";
 		}
 		var content = 'ID: ' + marker.ID + '<br>Latitude: ' + marker.position.lat() + '<br>Longitude: ' + marker.position.lng() + '<br>Elevation: ' + marker.elevation + '<br>Neighbours IDs: ' + neighboursIDs;
-		if (marker.teleTech != null && marker.reach != null)
-			content += '<br>Technology: ' + marker.teleTech + '<br>Reach: ' + marker.reach + ' meters';
+		if (marker.teleTech != null )
+			content += '<br>Technology: ' + marker.teleTech + '<br>Reach: ' + fetchReach(marker.teleTech,scenario) + ' meters';
 		infowindow.setContent(content);
 		infowindow.open(map, marker);
 	
@@ -353,13 +369,13 @@ function getMeterColor(meter)
 	{
 		var dis = distance(meter.position.lat(), meter.position.lng(), meter.neighbours[i].position.lat(), meter.neighbours[i].position.lng(), "K");
 		dis = dis * 1000;
-		if (dis < meter.neighbours[i].reach / 3)
+		if (dis < fetchReach(meter.neighbours[i].teleTech,scenario) / 3)
 		{
 			if(color > 1 || color == -1)
 				color = 1;
 		}
 		else			
-		if (dis < meter.neighbours[i].reach * (2 / 3))
+		if (dis < fetchReach(meter.neighbours[i].teleTech,scenario) * (2 / 3))
 		{
 			if(color > 2 || color == -1)				
 				color = 2;
@@ -434,7 +450,7 @@ function placeMeter(latitude,longitude)
 		}
 	});		
 }
-function placeDAP(latitude, longitude, technology, reach)
+function placeDAP(latitude, longitude, technology)
 {
 	var latLng = new google.maps.LatLng(latitude, longitude);
 	var marker = new google.maps.Marker(
@@ -448,7 +464,6 @@ function placeDAP(latitude, longitude, technology, reach)
 		onIcon: 'daprouter.png',
 		icon : 'daprouter.png',
 		teleTech : technology,
-		reach : reach,
 		reachCircles : [],
 		neighbours : []
 	});
@@ -608,7 +623,7 @@ function setCirclesVisible()
 	}
 }
 
-function setInsertionType(type)
+function setInsertionOptions(type)
 {
 	insertListener.remove();
 	google.maps.event.removeListener(insertListener);
@@ -617,12 +632,43 @@ function setInsertionType(type)
 		if(getOpMode() == "Insertion")
 		{
 			if(type == "DAP")
-				placeDAP(event.latLng.lat(),event.latLng.lng(),"TecTeste",50);
+			{
+				placeDAP(event.latLng.lat(),event.latLng.lng(),currentTech);
+			}
 			if(type == "meter")
 				placeMeter(event.latLng.lat(),event.latLng.lng());
 		}
 	});
 }
+function fetchReach(tech,scenario)
+{
+	if(scenario == "Urban")
+	{
+		if(tech == "ZigBee")
+			return 30;
+		if(tech == "80211")
+			return 50;
+	}
+	else 
+	if(scenario == "DenseUrban")
+	{
+		if(tech == "ZigBee")
+			return 20;
+		if(tech == "80211")
+			return 40;
+	}
+	else
+	if(scenario == "Rural")
+	{
+		if(tech == "ZigBee")
+			return 50;
+		if(tech == "80211")
+			return 70;
+	}
+
+	
+}
+
 function setInfoWindowNull()
 {
 	infowindow.setMap(null);
@@ -630,5 +676,54 @@ function setInfoWindowNull()
 function getAllMarkers()
 {
 	return allMarkers;
+}
+function setDapsToTechnology(mode)
+{
+	for(i = 0 ; i< daps.length;i++)
+	{
+		if(mode == "ZigBee")
+		{
+			daps[i].teleTech = "ZigBee";
+		}
+		if(mode == "80211")
+		{
+			daps[i].teleTech = "80211";
+		}
+	}	
+	drawRefresh();
+}
+function removeMarkerCircles(marker)
+{
+	marker.reachCircles[0].setVisible(false);
+	marker.reachCircles[1].setVisible(false);
+	marker.reachCircles[2].setVisible(false);
+}
+function setScenario(sce)
+{
+	scenario = sce;
+	drawRefresh();
+}
+
+
+function drawRefresh()
+{
+	infowindow.setMap(null);
+	for(j = 0; j< allMarkers.length; j++)
+	{
+
+		removeMarkerConnections(allMarkers[j]);
+		connectNodesByDistance(allMarkers[j]);
+		if(allMarkers[j].type != "meter")
+			removeMarkerCircles(allMarkers[j]);
+		drawCircle(allMarkers[j]);
+	}
+}
+function getCurrentTech()
+{
+	return currentTech;
+}
+function setCurrentTech(tech)
+{
+	currentTech = tech;
 }
 google.maps.event.addDomListener(window, 'load', initialize);

@@ -18,6 +18,7 @@
 	  <script src="js/buttonConfig.js"></script>
 	  <script src="js/xmlHandler.js"></script>
 	  
+	  
 <script src="js/distance.js"></script>
 
   </head>
@@ -43,10 +44,22 @@
 				  <h3 id = "Removal">Removal</h3>
 				  <div> 
 				  </div>
+				  <h3 id = "Technology"> Technology</h3>
+				  <div id="technologyBackground">
+								<input type="radio" id="zigBeeButton" name="tech" checked = "checked" /><label for="zigBeeButton">ZigBee</label>
+								<input type="radio" id="80211Button" name="tech"  /><label for="80211Button">802.11</label>
+							</div>
+							<h3 id = "Scenario">Scenario</h3>
+				  <div id="scenarioBackground">
+								<input type="radio" id="urbanRadio" name="radio1" checked = "checked" /><label for="urbanRadio">Urban</label>
+								<input type="radio" id="denseUrbanRadio" name="radio1"  /><label for="denseUrbanRadio">Dense Urban</label>
+								<input type="radio" id="ruralRadio" name="radio1"  /><label for="ruralRadio">Rural</label>
+							</div>
 				  <h3 id = "DisplayXML">DisplayXML</h3>
 				  <div id = "xmldisplay">	
 						<p id="xmltext"></p>
-				  </div>	
+				  </div>
+				  
 				  
 				</div>	
 				<div id="radioBackground">
