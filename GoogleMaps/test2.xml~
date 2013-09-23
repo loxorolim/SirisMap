@@ -227,25 +227,25 @@
  <DAP>
   <Latitude>-22.91852326271762</Latitude>
   <Longitude>-43.090251088142395</Longitude>
-  <Technology>ZigBee</Technology>
+  <Technology>RolimTech</Technology>
   <setInsertionOptions>30</setInsertionOptions>
  </DAP>
  <DAP>
   <Latitude>-22.918073635658853</Latitude>
   <Longitude>-43.0915492773056</Longitude>
-  <Technology>ZigBee</Technology>
+  <Technology>RolimTech</Technology>
   <setInsertionOptions>30</setInsertionOptions>
  </DAP>
  <DAP>
   <Latitude>-22.91921993466435</Latitude>
   <Longitude>-43.09133470058441</Longitude>
-  <Technology>ZigBee</Technology>
+  <Technology>RolimTech</Technology>
   <setInsertionOptions>30</setInsertionOptions>
  </DAP>
  <DAP>
   <Latitude>-22.919121116166487</Latitude>
   <Longitude>-43.090591728687286</Longitude>
-  <Technology>ZigBee</Technology>
+  <Technology>RolimTech</Technology>
   <setInsertionOptions>30</setInsertionOptions>
  </DAP>
 </Nodes>
