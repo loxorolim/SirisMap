@@ -32,40 +32,55 @@
 
    <div id="over_map">
 
-		<div id="controls">	
-
-			
-				<div id="accordion">
-				  <h3 id = "Insertion"> Insertion</h3>
-				  <div id="insertionBackground">
-								<input type="radio" id="dapRadio" name="radio3" checked = "checked" /><label for="dapRadio">DAP</label>
-								<input type="radio" id="meterRadio" name="radio3"  /><label for="meterRadio">Meter</label>
-							</div>
-				  <h3 id = "Removal">Removal</h3>
-				  <div> 
-				  </div>
-				  <h3 id = "Technology"> Technology</h3>
-				  <div id="technologyBackground">
-								<input type="radio" id="zigBeeButton" name="tech" checked = "checked" /><label for="zigBeeButton">ZigBee</label>
-								<input type="radio" id="80211Button" name="tech"  /><label for="80211Button">802.11</label>
-							</div>
-							<h3 id = "Scenario">Scenario</h3>
-				  <div id="scenarioBackground">
-								<input type="radio" id="urbanRadio" name="radio1" checked = "checked" /><label for="urbanRadio">Urban</label>
-								<input type="radio" id="denseUrbanRadio" name="radio1"  /><label for="denseUrbanRadio">Dense Urban</label>
-								<input type="radio" id="ruralRadio" name="radio1"  /><label for="ruralRadio">Rural</label>
-							</div>
-				  <h3 id = "DisplayXML">DisplayXML</h3>
-				  <div id = "xmldisplay">	
-						<p id="xmltext"></p>
-				  </div>
-				  
-				  
-				</div>	
-				<div id="radioBackground">
-				<input type="radio" id="lineRadio" name="radio2" checked = "checked" /><label for="lineRadio">Line Mode</label>
-				<input type="radio" id="radiusRadio" name="radio2"  /><label for="radiusRadio">Radius Mode</label>
-				</div>						
+		<div id="controls">			
+			<div id="accordion">
+			  <h3 id = "Insertion"> Insertion</h3>
+			  <div id="insertionBackground">
+							<input type="radio" id="dapRadio" name="radio3" checked = "checked" /><label for="dapRadio">DAP</label>
+							<input type="radio" id="meterRadio" name="radio3"  /><label for="meterRadio">Meter</label>
+						</div>
+			  <h3 id = "Removal">Removal</h3>
+			  <div> 
+			  </div>
+			  <h3 id = "Technology"> Technology</h3>
+			  <div id="techAccordion">
+					<h3 id = "ZigBee"> ZigBee</h3>
+					<div id="dbBackgroundZigBee">
+						<input type="radio" id="z0db" name="dbradio" checked = "checked" /><label for="z0db">0db</label>
+						<input type="radio" id="z6db" name="dbradio"  /><label for="z6db">6db</label>
+						<input type="radio" id="z12db" name="dbradio" /><label for="z12db">12db</label>
+						<input type="radio" id="z18db" name="dbradio" /><label for="z18db">18db</label>
+						<input type="radio" id="z24db" name="dbradio" /><label for="z24db">24db</label>
+						<input type="radio" id="z30db" name="dbradio" /><label for="z30db">30db</label>
+					</div>
+					<h3 id = "80211">802.11</h3>
+					<div id="dbBackground80211">
+						<input type="radio" id="w0db" name="dbradio2" checked = "checked" /><label for="w0db">0db</label>
+						<input type="radio" id="w6db" name="dbradio2"  /><label for="w6db">6db</label>
+						<input type="radio" id="w12db" name="dbradio2" /><label for="w12db">12db</label>
+						<input type="radio" id="w18db" name="dbradio2" /><label for="w18db">18db</label>
+						<input type="radio" id="w24db" name="dbradio2" /><label for="w24db">24db</label>
+						<input type="radio" id="w30db" name="dbradio2" /><label for="w30db">30db</label>
+					</div>		  
+							  
+			  </div>	
+			  <h3 id = "Scenario">Scenario</h3>
+			  <div id="scenarioBackground">
+							<input type="radio" id="urbanRadio" name="radio1" checked = "checked" /><label for="urbanRadio">Urban</label>
+							<input type="radio" id="denseUrbanRadio" name="radio1"  /><label for="denseUrbanRadio">Dense Urban</label>
+							<input type="radio" id="ruralRadio" name="radio1"  /><label for="ruralRadio">Rural</label>
+						</div>
+			  <h3 id = "DisplayXML">DisplayXML</h3>
+			  <div id = "xmldisplay">	
+					<p id="xmltext"></p>
+			  </div>
+			  
+			  
+			</div>	
+			<div id="radioBackground">
+			<input type="radio" id="lineRadio" name="radio2" checked = "checked" /><label for="lineRadio">Line Mode</label>
+			<input type="radio" id="radiusRadio" name="radio2"  /><label for="radiusRadio">Radius Mode</label>
+			</div>						
 		</div>
 		
 

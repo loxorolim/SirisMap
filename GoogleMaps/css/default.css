@@ -48,6 +48,16 @@ button
 {
 	width:158px;
 }
+#dbBackgroundZigBee
+{
+	width:156px;
+	overflow: hidden;
+}
+#dbBackground80211
+{
+	width:156px;
+	overflow: hidden;
+}
 #scenarioBackground
 {
 	width:158px;
@@ -56,6 +66,7 @@ button
 {
 	width:158px;
 }
+
 
 
 

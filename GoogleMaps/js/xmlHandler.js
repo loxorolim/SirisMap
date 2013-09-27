@@ -60,3 +60,30 @@ function loadNodesFromXml()
 		});
 	});
 }
+function loadReachFromTable(tech, db)
+{
+	var ret;
+	$(document).ready(function()
+	{
+		$.ajax(
+		{
+			async: false,
+			type : "GET",
+			url : "table.xml",
+			dataType : "xml",
+			success : function(xml)
+			{
+				$(xml).find(tech).each(function()
+				{   
+					$(this).find(db).each(function()
+					{
+						ret = parseInt($(this).find('Reach').text(),10);
+						
+					})
+				})
+			}
+		});
+	});
+	return ret;
+
+}

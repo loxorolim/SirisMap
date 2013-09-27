@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Technologies>
+	<ZigBee>
+		<db0>
+			<Reach>10</Reach>
+		</db0>
+		<db6>
+			<Reach>15</Reach>
+		</db6>
+		<db12>
+			<Reach>20</Reach>
+		</db12>
+		<db18>
+			<Reach>25</Reach>
+		</db18>
+		<db24>
+			<Reach>30</Reach>
+		</db24>
+		<db30>
+			<Reach>35</Reach>
+		</db30>
+	</ZigBee>
+	
+	<w80211>
+		<db0>
+			<Reach>20</Reach>
+		</db0>
+		<db6>
+			<Reach>25</Reach>
+		</db6>
+		<db12>
+			<Reach>30</Reach>
+		</db12>
+		<db18>
+			<Reach>35</Reach>
+		</db18>
+		<db24>
+			<Reach>40</Reach>
+		</db24>
+		<db30>
+			<Reach>45</Reach>
+		</db30>
+	</w80211>
+
+</Technologies>

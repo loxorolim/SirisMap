@@ -26,18 +26,22 @@ function setButtons()
 		});
 		var radioSize = 155;
 	   $('#insertionBackground').buttonset().find('label').width(radioSize);
+	   $('#dbBackgroundZigBee').buttonset().find('label').width(76);
+	   $('#dbBackground80211').buttonset().find('label').width(76);
 	   $('#scenarioBackground').buttonset().find('label').width(radioSize);
 	   $('#technologyBackground').buttonset().find('label').width(radioSize);
 	   $( "#radio" ).buttonset().find('label').width(radioSize);
+
 	   $( "#radioBackground" ).buttonset().find('label').width(radioSize);
-	   $( "#accordion" ).accordion({
+	   $( "#accordion,#techAccordion" ).accordion({
 		
 			collapsible: true,
 			heightStyle: "content",
-			icons: false,
+			icons: false
 			
 			
 		});
+
 		
 
 		
@@ -65,14 +69,14 @@ function setButtons()
 		});
 
 		
-		$("#zigBeeButton").click(function() 
+		$("#ZigBee").click(function() 
 		{
 			setCurrentTech("ZigBee");
 			setInsertionOptions("DAP")
 			setDapsToTechnology("ZigBee");
 			
 		});
-		$("#80211Button").click(function()
+		$("#80211").click(function()
 		{		
 			setCurrentTech("80211");
 			setInsertionOptions("DAP")
