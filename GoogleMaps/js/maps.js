@@ -8,6 +8,7 @@ var routers = [];
 var infowindow = new google.maps.InfoWindow();
 var opMode = "Insertion";
 var radioMode = "Line";
+var dbm = "dbm0";
 var markerPair = [];
 var markerConnections = [];
 var ID = 0;
@@ -17,8 +18,9 @@ var request;
 var markerCluster;
 var insertListener;
 var map;
-var scenario = "Urban";
+var scenario = "Metropolitan";
 var currentTech = "ZigBee";
+var currentIns = "DAP";
 
 function initialize()
 {
@@ -81,9 +83,10 @@ function connectNodesByDistance(marker)
 		{
 			var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
 			dis = dis * 1000;
-			if(marker.type != "meter")
+			if(marker.type != "Meter")
 			{
-				var reach = fetchReach(marker.teleTech,scenario)
+				//var reach = fetchReach(marker.teleTech,scenario,dbm)
+				var reach = marker.reach;
 				if (dis <= reach)
 				{
 					connectMarkers(marker,allMarkers[i]);
@@ -91,14 +94,15 @@ function connectNodesByDistance(marker)
 			}
 			else
 			{
-				var reach = fetchReach(allMarkers[i].teleTech,scenario)
+				//var reach = fetchReach(allMarkers[i].teleTech,scenario,dbm)
+				var reach = allMarkers[i].reach;
 				if (dis <= reach)
 				{
 					connectMarkers(allMarkers[i],marker);
 				}
 			}
 		}
-		if(marker.type != "meter" )
+		if(marker.type != "Meter" )
 		{
 			if(marker.neighbours.length == 0)
 			{
@@ -148,7 +152,7 @@ function connectMarkers(marker,marker2)
 		marker.neighbours.push(marker2);
 		marker2.neighbours.push(marker);			
 		// Troca o ícone do marker2 para LIGADO já que acabou de acontecer uma ligação
-		if(marker2.type != "meter")
+		if(marker2.type != "Meter")
 			marker2.setIcon(marker2.onIcon);
 		else
 			marker2.setIcon(getMeterColor(marker2));
@@ -178,7 +182,8 @@ function drawLine(marker1, marker2)
 	var color;
 	var dis = distance(marker1.position.lat(), marker1.position.lng(), marker2.position.lat(), marker2.position.lng(), "K");
 	dis = dis * 1000;
-	var reach = fetchReach(marker1.teleTech,scenario)
+	//var reach = fetchReach(marker1.teleTech,scenario,dbm)
+	var reach = marker1.reach;
 	if (dis < reach / 3)
 	{
 		color = "#00FF00";
@@ -216,7 +221,7 @@ function drawCircle(marker)
 	redCircle = new google.maps.Circle(
 	{
 		center : marker.getPosition(),
-		radius : fetchReach(marker.teleTech,scenario),
+		radius : marker.reach,
 		strokeColor : "#FF0000",
 		strokeOpacity : 0.8,
 		strokeWeight : 0,
@@ -227,7 +232,7 @@ function drawCircle(marker)
 	yellowCircle = new google.maps.Circle(
 	{
 		center : marker.getPosition(),
-		radius : fetchReach(marker.teleTech,scenario) * (2 / 3),
+		radius : marker.reach* (2 / 3),
 		strokeColor : "#FFFF00",
 		strokeOpacity : 0.8,
 		strokeWeight : 0,
@@ -238,7 +243,7 @@ function drawCircle(marker)
 	greenCircle = new google.maps.Circle(
 	{
 		center : marker.getPosition(),
-		radius : fetchReach(marker.teleTech,scenario) / 3,
+		radius : marker.reach / 3,
 		strokeColor : "#00FF00",
 		strokeOpacity : 0.8,
 		strokeWeight : 0,
@@ -286,12 +291,12 @@ function removeMarkerConnections(marker)
 			markerConnections[i][0].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][0],markerConnections[i][1]),1);
 			markerConnections[i][1].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][1],markerConnections[i][0]),1);
 
-			if(markerConnections[i][1].neighbours.length == 0 && markerConnections[i][1].type != "meter")
+			if(markerConnections[i][1].neighbours.length == 0 && markerConnections[i][1].type != "Meter")
 			{
 				markerConnections[i][1].setIcon(markerConnections[i][1].offIcon);
 				
 			}
-			if(markerConnections[i][1].type == "meter")
+			if(markerConnections[i][1].type == "Meter")
 			{
 					markerConnections[i][1].setIcon(getMeterColor(markerConnections[i][1]));
 			}
@@ -314,7 +319,7 @@ function getMarkerPositionFromNeighbour(marker,marker2)
 }
 function removeMarker(marker)
 {
-
+		removeMarkerConnections(marker);
 		infowindow.setMap(null);
 		for (var i = 0; i < allMarkers.length; i++)
 		{
@@ -356,7 +361,7 @@ function displayInfoWindow(marker)
 		}
 		var content = 'ID: ' + marker.ID + '<br>Latitude: ' + marker.position.lat() + '<br>Longitude: ' + marker.position.lng() + '<br>Elevation: ' + marker.elevation + '<br>Neighbours IDs: ' + neighboursIDs;
 		if (marker.teleTech != null )
-			content += '<br>Technology: ' + marker.teleTech + '<br>Reach: ' + fetchReach(marker.teleTech,scenario) + ' meters';
+			content += '<br>Technology: ' + marker.teleTech + '<br>Reach: ' + marker.reach + ' meters';
 		infowindow.setContent(content);
 		infowindow.open(map, marker);
 	
@@ -369,13 +374,13 @@ function getMeterColor(meter)
 	{
 		var dis = distance(meter.position.lat(), meter.position.lng(), meter.neighbours[i].position.lat(), meter.neighbours[i].position.lng(), "K");
 		dis = dis * 1000;
-		if (dis < fetchReach(meter.neighbours[i].teleTech,scenario) / 3)
+		if (dis < meter.neighbours[i].reach / 3)
 		{
 			if(color > 1 || color == -1)
 				color = 1;
 		}
 		else			
-		if (dis < fetchReach(meter.neighbours[i].teleTech,scenario) * (2 / 3))
+		if (dis < meter.neighbours[i].reach * (2 / 3))
 		{
 			if(color > 2 || color == -1)				
 				color = 2;
@@ -405,7 +410,7 @@ function placeMeter(latitude,longitude)
 	var latLng = new google.maps.LatLng(latitude, longitude);
 	var marker = new google.maps.Marker(
 	{
-		type : "meter",
+		type : "Meter",
 		position : latLng,
 		map : map,
 		draggable : true,
@@ -463,6 +468,7 @@ function placeDAP(latitude, longitude, technology)
 		offIcon: 'daprouteroff.png',
 		onIcon: 'daprouter.png',
 		icon : 'daprouter.png',
+		reach: fetchReach(currentTech,scenario,dbm),
 		teleTech : technology,
 		reachCircles : [],
 		neighbours : []
@@ -522,7 +528,7 @@ function prepareMarkerEvents(marker)
 		
 
 	
-		if(marker.type != "meter")
+		if(marker.type != "Meter")
 		{
 			marker.reachCircles[0].setVisible(false);
 			marker.reachCircles[1].setVisible(false);
@@ -571,7 +577,7 @@ function prepareMarkerEvents(marker)
 		});
 	});
 }
-//GETTERS AND SETTERS
+//GETTERS AND SETTERS-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function setOpMode(mode)
 {
 	opMode = mode;
@@ -625,6 +631,7 @@ function setCirclesVisible()
 
 function setInsertionOptions(type)
 {
+	currentIns = type;
 	insertListener.remove();
 	google.maps.event.removeListener(insertListener);
 	insertListener = google.maps.event.addListener(map, 'click', function(event)
@@ -635,36 +642,14 @@ function setInsertionOptions(type)
 			{
 				placeDAP(event.latLng.lat(),event.latLng.lng(),currentTech);
 			}
-			if(type == "meter")
+			if(type == "Meter")
 				placeMeter(event.latLng.lat(),event.latLng.lng());
 		}
 	});
 }
-function fetchReach(tech,scenario)
+function fetchReach(tech,scenario,dbm)
 {
-	if(scenario == "Urban")
-	{
-		if(tech == "ZigBee")
-			return 30;
-		if(tech == "80211")
-			return 50;
-	}
-	else 
-	if(scenario == "DenseUrban")
-	{
-		if(tech == "ZigBee")
-			return 20;
-		if(tech == "80211")
-			return 40;
-	}
-	else
-	if(scenario == "Rural")
-	{
-		if(tech == "ZigBee")
-			return 50;
-		if(tech == "80211")
-			return 70;
-	}
+	return loadReachFromTable(tech,scenario, dbm)
 
 	
 }
@@ -677,18 +662,21 @@ function getAllMarkers()
 {
 	return allMarkers;
 }
-function setDapsToTechnology(mode)
+function setDapsToTechnology()
 {
 	for(i = 0 ; i< daps.length;i++)
 	{
-		if(mode == "ZigBee")
+		/*if(mode == "ZigBee")
 		{
 			daps[i].teleTech = "ZigBee";
+
 		}
 		if(mode == "80211")
 		{
 			daps[i].teleTech = "80211";
-		}
+		}*/
+		daps[i].teleTech = currentTech;
+		daps[i].reach = fetchReach(currentTech,scenario,dbm);
 	}	
 	drawRefresh();
 }
@@ -701,7 +689,7 @@ function removeMarkerCircles(marker)
 function setScenario(sce)
 {
 	scenario = sce;
-	drawRefresh();
+	setDapsToTechnology();
 }
 
 
@@ -713,7 +701,7 @@ function drawRefresh()
 
 		removeMarkerConnections(allMarkers[j]);
 		connectNodesByDistance(allMarkers[j]);
-		if(allMarkers[j].type != "meter")
+		if(allMarkers[j].type != "Meter")
 			removeMarkerCircles(allMarkers[j]);
 		drawCircle(allMarkers[j]);
 	}
@@ -725,5 +713,62 @@ function getCurrentTech()
 function setCurrentTech(tech)
 {
 	currentTech = tech;
+}
+function setdbm(d)
+{
+	dbm = d;
+	setDapsToTechnology();
+
+}
+function getConfigurations()
+{
+	if(opMode == "Removal")
+		var mode = "Mode: "+ opMode;
+	else
+		var mode = "Mode: " + currentIns +" "+ opMode;
+	if(currentTech == "w80211")
+		var tech = "<br>Technology: " + 802.11;
+	else
+		var tech = "<br>Technology: " + currentTech;
+	var power;
+	switch(dbm)
+	{
+		case "dbm0":
+		{
+			power = "0 dbm";
+			break;
+		}
+		case "dbm6":
+		{
+			power = "6 dbm";
+			break;
+		}
+		case "dbm12":
+		{
+			power = "12 dbm";
+			break;
+		}
+		case "dbm18":
+		{
+			power = "18 dbm";
+			break;
+		}
+		case "dbm24":
+		{
+			power = "24 dbm";
+			break;
+		}
+		case "dbm30":
+		{
+			power = "30 dbm";
+			break;
+		}
+		default:
+		break;
+	}
+	var power = "<br>Power: " + power ;
+	var sce = "<br>Scenario: " + scenario;
+	
+	return mode + tech + power + sce;		
 }
 google.maps.event.addDomListener(window, 'load', initialize);

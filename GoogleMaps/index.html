@@ -45,29 +45,26 @@
 			  <h3 id = "Technology"> Technology</h3>
 			  <div id="techAccordion">
 					<h3 id = "ZigBee"> ZigBee</h3>
-					<div id="dbBackgroundZigBee">
-						<input type="radio" id="z0db" name="dbradio" checked = "checked" /><label for="z0db">0db</label>
-						<input type="radio" id="z6db" name="dbradio"  /><label for="z6db">6db</label>
-						<input type="radio" id="z12db" name="dbradio" /><label for="z12db">12db</label>
-						<input type="radio" id="z18db" name="dbradio" /><label for="z18db">18db</label>
-						<input type="radio" id="z24db" name="dbradio" /><label for="z24db">24db</label>
-						<input type="radio" id="z30db" name="dbradio" /><label for="z30db">30db</label>
+					<div id="dbmBackgroundZigBee">
 					</div>
 					<h3 id = "80211">802.11</h3>
-					<div id="dbBackground80211">
-						<input type="radio" id="w0db" name="dbradio2" checked = "checked" /><label for="w0db">0db</label>
-						<input type="radio" id="w6db" name="dbradio2"  /><label for="w6db">6db</label>
-						<input type="radio" id="w12db" name="dbradio2" /><label for="w12db">12db</label>
-						<input type="radio" id="w18db" name="dbradio2" /><label for="w18db">18db</label>
-						<input type="radio" id="w24db" name="dbradio2" /><label for="w24db">24db</label>
-						<input type="radio" id="w30db" name="dbradio2" /><label for="w30db">30db</label>
-					</div>		  
+					<div id="dbmBackground80211">
+					</div>		
+					<h3 id = "power"> Power</h3>
+					<div id="powerbackground">
+						<input type="radio" id="z0dbm" name="dbmradio" checked = "checked" /><label for="z0dbm">0dbm</label>
+						<input type="radio" id="z6dbm" name="dbmradio"  /><label for="z6dbm">6dbm</label>
+						<input type="radio" id="z12dbm" name="dbmradio" /><label for="z12dbm">12dbm</label>
+						<input type="radio" id="z18dbm" name="dbmradio" /><label for="z18dbm">18dbm</label>
+						<input type="radio" id="z24dbm" name="dbmradio" /><label for="z24dbm">24dbm</label>
+						<input type="radio" id="z30dbm" name="dbmradio" /><label for="z30dbm">30dbm</label>
+					</div>
 							  
 			  </div>	
 			  <h3 id = "Scenario">Scenario</h3>
 			  <div id="scenarioBackground">
-							<input type="radio" id="urbanRadio" name="radio1" checked = "checked" /><label for="urbanRadio">Urban</label>
-							<input type="radio" id="denseUrbanRadio" name="radio1"  /><label for="denseUrbanRadio">Dense Urban</label>
+							<input type="radio" id="metropolitanRadio" name="radio1" checked = "checked" /><label for="metropolitanRadio">Metropolitan</label>
+							<input type="radio" id="urbanRadio" name="radio1"  /><label for="urbanRadio">Urban</label>
 							<input type="radio" id="ruralRadio" name="radio1"  /><label for="ruralRadio">Rural</label>
 						</div>
 			  <h3 id = "DisplayXML">DisplayXML</h3>
@@ -80,7 +77,14 @@
 			<div id="radioBackground">
 			<input type="radio" id="lineRadio" name="radio2" checked = "checked" /><label for="lineRadio">Line Mode</label>
 			<input type="radio" id="radiusRadio" name="radio2"  /><label for="radiusRadio">Radius Mode</label>
-			</div>						
+			</div>	
+			<div id="dialog" title="Current Configurations">
+
+			  <p id = "configMessage"></p>
+
+			</div>
+
+			
 		</div>
 		
 
@@ -89,7 +93,7 @@
 
 
 </div>
-
+</div>
 	
    
     

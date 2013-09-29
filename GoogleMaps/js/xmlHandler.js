@@ -60,7 +60,7 @@ function loadNodesFromXml()
 		});
 	});
 }
-function loadReachFromTable(tech, db)
+function loadReachFromTable(tech,scenario, dbm)
 {
 	var ret;
 	$(document).ready(function()
@@ -74,10 +74,14 @@ function loadReachFromTable(tech, db)
 			success : function(xml)
 			{
 				$(xml).find(tech).each(function()
-				{   
-					$(this).find(db).each(function()
+				{   				
+					$(this).find(scenario).each(function()
 					{
-						ret = parseInt($(this).find('Reach').text(),10);
+						$(this).find(dbm).each(function()
+						{
+							ret = parseInt($(this).find('Reach').text(),10);
+							
+						})
 						
 					})
 				})

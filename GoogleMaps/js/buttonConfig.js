@@ -4,37 +4,55 @@ function setButtons()
 
 		
 		$("#Insertion").click(function() {
-			setOpMode("Insertion");		
-			setInfoWindowNull();
+			//setOpMode("Insertion");		
+			//setInfoWindowNull();
+			//$('#configMessage').html(getConfigurations());
 		});
 		$("#Removal").click(function() {
+			
+			//event.preventDefault(); // the magic
+
 			setOpMode("Removal");
 			setInfoWindowNull();
+			$('#configMessage').html(getConfigurations());
+			event.stopPropagation();
+			event.stopImmediatePropagation(); 
+			event.preventDefault();
 		});
 		$("#DisplayXML").click(function() {
-			setOpMode("DisplayXML");
 			showNodesXml();
 			setInfoWindowNull();
 		});
 		$("#Technology").click(function() {
-			setOpMode("Technology");
 			setInfoWindowNull();
 		});
 		$("#Scenario").click(function() {
-			setOpMode("Technology");
 			setInfoWindowNull();
 		});
 		var radioSize = 155;
 	   $('#insertionBackground').buttonset().find('label').width(radioSize);
-	   $('#dbBackgroundZigBee').buttonset().find('label').width(76);
-	   $('#dbBackground80211').buttonset().find('label').width(76);
+	   $('#powerbackground').buttonset().find('label').width(76);
 	   $('#scenarioBackground').buttonset().find('label').width(radioSize);
 	   $('#technologyBackground').buttonset().find('label').width(radioSize);
 	   $( "#radio" ).buttonset().find('label').width(radioSize);
+	   $('#configMessage').html(getConfigurations());
+	
+	$('#dialog').dialog({
+	closeOnEscape: false,
+	resizable: false,
+	position: { 
+    
+    my: 'top',
+    at: 'top',
+    of: $('#dialogBackground')
+  }
+});
+
 
 	   $( "#radioBackground" ).buttonset().find('label').width(radioSize);
 	   $( "#accordion,#techAccordion" ).accordion({
-		
+			
+			active: false,
 			collapsible: true,
 			heightStyle: "content",
 			icons: false
@@ -48,24 +66,33 @@ function setButtons()
 	
 		$("#dapRadio").click(function() 
 		{
+			setOpMode("Insertion");		
+			setInfoWindowNull();
 			setInsertionOptions("DAP")
+			$('#configMessage').html(getConfigurations());
 		});
 		$("#meterRadio").click(function()
 		{
-			setInsertionOptions("meter")
+			setOpMode("Insertion");		
+			setInfoWindowNull();
+			setInsertionOptions("Meter")
+			$('#configMessage').html(getConfigurations());
 		});
 		
-		$("#urbanRadio").click(function() 
+		$("#metropolitanRadio").click(function() 
+		{
+			setScenario("Metropolitan")
+			$('#configMessage').html(getConfigurations());
+		});
+		$("#urbanRadio").click(function()
 		{
 			setScenario("Urban")
-		});
-		$("#denseUrbanRadio").click(function()
-		{
-			setScenario("DenseUrban")
+			$('#configMessage').html(getConfigurations());
 		});
 		$("#ruralRadio").click(function() 
 		{
 			setScenario("Rural")
+			$('#configMessage').html(getConfigurations());
 		});
 
 		
@@ -73,16 +100,52 @@ function setButtons()
 		{
 			setCurrentTech("ZigBee");
 			setInsertionOptions("DAP")
-			setDapsToTechnology("ZigBee");
+			setDapsToTechnology();
+			$('#configMessage').html(getConfigurations());
 			
 		});
 		$("#80211").click(function()
 		{		
-			setCurrentTech("80211");
+			setCurrentTech("w80211");
 			setInsertionOptions("DAP")
-			setDapsToTechnology("80211");
+			setDapsToTechnology();
+			$('#configMessage').html(getConfigurations());
 		});
 
+		$("#z0dbm").click(function() 
+		{
+			setdbm("dbm0");
+			$('#configMessage').html(getConfigurations());
+		});
+		$("#z6dbm").click(function() 
+		{
+			setdbm("dbm6");
+			$('#configMessage').html(getConfigurations());
+		});
+		$("#z12dbm").click(function() 
+		{
+			setdbm("dbm12");
+			$('#configMessage').html(getConfigurations());
+		});
+		$("#z18dbm").click(function() 
+		{
+			setdbm("dbm18");
+			$('#configMessage').html(getConfigurations());
+		});
+		$("#z24dbm").click(function() 
+		{
+			setdbm("dbm24");
+			$('#configMessage').html(getConfigurations());
+		});
+		$("#z30dbm").click(function() 
+		{
+			setdbm("dbm30");
+			$('#configMessage').html(getConfigurations());
+		});		
+		
+			
+	
+		
 	
 	$("#lineRadio").click(function()
 	{

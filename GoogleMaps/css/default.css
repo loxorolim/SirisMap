@@ -6,6 +6,22 @@
 	height:0px;
 	
 }
+#dialogBackground {
+    position:absolute;
+	left: 490px;
+	top:2px;
+	height:0px;
+}
+.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+.dialogHeader
+{
+font: bold 14px
+ "helvetica", sans-serif;
+ color: #FFFFFF;
+	
+}
 
 #radio
 {
@@ -29,13 +45,25 @@ button
 	margin: 0px;
 	
 }
-
+.dbButtons
+{
+	width:80px;
+	padding:0px;
+	margin: 0px;
+}
 
 #accordion
 {
 	
 	float:right;
 	width: 160px;
+}
+#techAccordion
+{
+	
+	float:right;
+	width: 160px;
+	overflow: hidden;
 }
 #controls
 {
@@ -48,16 +76,12 @@ button
 {
 	width:158px;
 }
-#dbBackgroundZigBee
+#powerbackground
 {
-	width:156px;
+	width:158px;
 	overflow: hidden;
 }
-#dbBackground80211
-{
-	width:156px;
-	overflow: hidden;
-}
+
 #scenarioBackground
 {
 	width:158px;

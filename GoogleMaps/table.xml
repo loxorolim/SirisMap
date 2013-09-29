@@ -1,45 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Technologies>
 	<ZigBee>
-		<db0>
-			<Reach>10</Reach>
-		</db0>
-		<db6>
-			<Reach>15</Reach>
-		</db6>
-		<db12>
+		<Metropolitan>
+		<dbm0>
 			<Reach>20</Reach>
-		</db12>
-		<db18>
+		</dbm0>
+		<dbm6>
 			<Reach>25</Reach>
-		</db18>
-		<db24>
+		</dbm6>
+		<dbm12>
 			<Reach>30</Reach>
-		</db24>
-		<db30>
+		</dbm12>
+		<dbm18>
 			<Reach>35</Reach>
-		</db30>
+		</dbm18>
+		<dbm24>
+			<Reach>40</Reach>
+		</dbm24>
+		<dbm30>
+			<Reach>45</Reach>
+		</dbm30>
+		</Metropolitan>
+		<Urban>
+		<dbm0>
+			<Reach>10</Reach>
+		</dbm0>
+		<dbm6>
+			<Reach>15</Reach>
+		</dbm6>
+		<dbm12>
+			<Reach>20</Reach>
+		</dbm12>
+		<dbm18>
+			<Reach>25</Reach>
+		</dbm18>
+		<dbm24>
+			<Reach>30</Reach>
+		</dbm24>
+		<dbm30>
+			<Reach>35</Reach>
+		</dbm30>
+		</Urban>
+		<Rural>
+		<dbm0>
+			<Reach>30</Reach>
+		</dbm0>
+		<dbm6>
+			<Reach>35</Reach>
+		</dbm6>
+		<dbm12>
+			<Reach>40</Reach>
+		</dbm12>
+		<dbm18>
+			<Reach>45</Reach>
+		</dbm18>
+		<dbm24>
+			<Reach>50</Reach>
+		</dbm24>
+		<dbm30>
+			<Reach>55</Reach>
+		</dbm30>
+		</Rural>
 	</ZigBee>
 	
 	<w80211>
-		<db0>
-			<Reach>20</Reach>
-		</db0>
-		<db6>
-			<Reach>25</Reach>
-		</db6>
-		<db12>
+		<Metropolitan>
+		<dbm0>
 			<Reach>30</Reach>
-		</db12>
-		<db18>
+		</dbm0>
+		<dbm6>
 			<Reach>35</Reach>
-		</db18>
-		<db24>
+		</dbm6>
+		<dbm12>
 			<Reach>40</Reach>
-		</db24>
-		<db30>
+		</dbm12>
+		<dbm18>
 			<Reach>45</Reach>
-		</db30>
+		</dbm18>
+		<dbm24>
+			<Reach>50</Reach>
+		</dbm24>
+		<dbm30>
+			<Reach>55</Reach>
+		</dbm30>
+		</Metropolitan>
+		<Urban>
+		<dbm0>
+			<Reach>20</Reach>
+		</dbm0>
+		<dbm6>
+			<Reach>25</Reach>
+		</dbm6>
+		<dbm12>
+			<Reach>30</Reach>
+		</dbm12>
+		<dbm18>
+			<Reach>35</Reach>
+		</dbm18>
+		<dbm24>
+			<Reach>40</Reach>
+		</dbm24>
+		<dbm30>
+			<Reach>45</Reach>
+		</dbm30>
+		</Urban>
+		<Rural>
+		<dbm0>
+			<Reach>40</Reach>
+		</dbm0>
+		<dbm6>
+			<Reach>45</Reach>
+		</dbm6>
+		<dbm12>
+			<Reach>50</Reach>
+		</dbm12>
+		<dbm18>
+			<Reach>55</Reach>
+		</dbm18>
+		<dbm24>
+			<Reach>60</Reach>
+		</dbm24>
+		<dbm30>
+			<Reach>65</Reach>
+		</dbm30>
+		</Rural>
 	</w80211>
 
 </Technologies>
