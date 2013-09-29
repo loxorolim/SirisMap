@@ -8,14 +8,16 @@ function setButtons()
 			//setInfoWindowNull();
 			//$('#configMessage').html(getConfigurations());
 		});
-		$("#Removal").click(function() {
+		$("#Removal").click(function(event) {
 			
 			//event.preventDefault(); // the magic
 
 			setOpMode("Removal");
 			setInfoWindowNull();
 			$('#configMessage').html(getConfigurations());
-			event.stopPropagation();
+		//	event.stopPropagation();
+		
+			$("#Removal").removeClass("ui-state-focus");
 			event.stopImmediatePropagation(); 
 			event.preventDefault();
 		});
@@ -60,7 +62,15 @@ function setButtons()
 			
 		});
 
-		
+		//Faz com que os botoes nao permaneçam pressionados em alguns browsers tipo IE10
+		$("#over_map").find("button").click(function () {
+			$(this).removeClass("ui-state-focus");
+			
+		});
+		$("#over_map").find("h3").click(function () {
+			$(this).removeClass("ui-state-focus");
+			
+		});
 
 		
 	
