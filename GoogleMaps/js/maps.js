@@ -152,10 +152,12 @@ function connectMarkers(marker,marker2)
 		marker.neighbours.push(marker2);
 		marker2.neighbours.push(marker);			
 		// Troca o ícone do marker2 para LIGADO já que acabou de acontecer uma ligação
-		if(marker2.type != "Meter")
-			marker2.setIcon(marker2.onIcon);
-		else
+			
+		if(marker2.type == "Meter")
 			marker2.setIcon(getMeterColor(marker2));
+		else
+			marker2.setIcon(marker2.onIcon);
+		marker.setIcon(marker.onIcon);
 		//
 		var markers = [marker,marker2];
 		markerConnections.push(markers);
@@ -296,9 +298,18 @@ function removeMarkerConnections(marker)
 				markerConnections[i][1].setIcon(markerConnections[i][1].offIcon);
 				
 			}
+			if(markerConnections[i][0].neighbours.length == 0 && markerConnections[i][0].type != "Meter")
+			{
+				markerConnections[i][0].setIcon(markerConnections[i][0].offIcon);
+				
+			}
 			if(markerConnections[i][1].type == "Meter")
 			{
 					markerConnections[i][1].setIcon(getMeterColor(markerConnections[i][1]));
+			}
+			if(markerConnections[i][0].type == "Meter")
+			{
+					markerConnections[i][0].setIcon(getMeterColor(markerConnections[i][0]));
 			}
 			
 			

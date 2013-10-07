@@ -83,8 +83,8 @@
 				 <p id = "configMessage" class = "dialogHeader"> </p>
 
 				 <div id="radioBackground">
-			<input type="radio" id="lineRadio" name="radio2" checked = "checked" /><label for="lineRadio" style="font-size:14px">Line Mode</label>
-			<input type="radio" id="radiusRadio" name="radio2"  /><label for="radiusRadio" style="font-size:14px">Radius Mode</label>
+			<input type="radio" id="lineRadio" name="radio2" checked = "checked" style="font-size:15px"/><label for="lineRadio">Line Mode</label>
+			<input type="radio" id="radiusRadio" name="radio2"  /><label for="radiusRadio" style="font-size:15px">Radius Mode</label>
 			</div>	
 				 
 

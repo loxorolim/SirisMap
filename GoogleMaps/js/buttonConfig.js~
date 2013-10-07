@@ -50,7 +50,7 @@ function setButtons()
 });
 
 
-	   $( "#radioBackground" ).buttonset().find('label').width(122);
+	   $( "#radioBackground" ).buttonset().find('label').width(120);
 	   $( "#accordion,#techAccordion" ).accordion({
 			
 			active: false,

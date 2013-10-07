@@ -1,14 +1,12 @@
 #radioBackground
 {
-	position:absolute;
-	left: 170px;
-	top:2px;
-	height:0px;
+
 	
 }
+
 #dialogBackground {
     position:absolute;
-	left: 490px;
+	left: 320px;
 	top:2px;
 	height:0px;
 }
