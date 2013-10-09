@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Table>
+	<Technology type = "ZigBee">
+		<Scenario type = "Metropolitan">
+			<Power dbm = "0">
+				<Distance Range = "0-10">
+					<TS>0.98</TS>
+					<Color>GREEN</Color>
+				</Distance>
+				<Distance Range = "11-20">
+					<TS>0.95</TS>
+					<Color>GREEN</Color>
+				</Distance>
+				<Distance Range = "21-30">
+					<TS>0.90</TS>
+					<Color>YELLOW</Color>
+				</Distance>
+				<Distance Range = "31-40">
+					<TS>0.80</TS>
+					<Color>RED</Color>
+				</Distance>
+			</Power>
+		</Scenario>
+	</Technology>
+	
+	
+
+</Table>
