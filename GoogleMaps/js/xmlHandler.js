@@ -40,6 +40,7 @@ function loadNodesFromXml()
 			dataType : "xml",
 			success : function(xml)
 			{
+				//$("node[name='x']");
 				$(xml).find('meter').each(function()
 				{
 					var latitude = $(this).find('Latitude').text();
