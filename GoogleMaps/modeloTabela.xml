@@ -3,19 +3,19 @@
 	<Technology type = "ZigBee">
 		<Scenario type = "Metropolitan">
 			<Power dbm = "0">
-				<Distance Range = "0-10">
+				<Distance range = "0-9">
 					<TS>0.98</TS>
 					<Color>GREEN</Color>
 				</Distance>
-				<Distance Range = "11-20">
+				<Distance range = "10-19">
 					<TS>0.95</TS>
 					<Color>GREEN</Color>
 				</Distance>
-				<Distance Range = "21-30">
+				<Distance range = "20-29">
 					<TS>0.90</TS>
 					<Color>YELLOW</Color>
 				</Distance>
-				<Distance Range = "31-40">
+				<Distance range = "30-39">
 					<TS>0.80</TS>
 					<Color>RED</Color>
 				</Distance>

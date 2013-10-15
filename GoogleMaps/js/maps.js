@@ -58,6 +58,10 @@ function initialize()
 			placeDAP(event.latLng.lat(),event.latLng.lng(),currentTech);
 	});
 	setButtons();
+	var x = [];
+	x = loadInfoFromTable("ZigBee","Metropolitan","0",15);
+	alert(x[0]);
+	alert(x[1]);
 
 }
 
@@ -587,6 +591,11 @@ function prepareMarkerEvents(marker)
 			}
 		});
 	});
+}
+function roundDistance(dist)
+{
+
+	
 }
 //GETTERS AND SETTERS-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function setOpMode(mode)

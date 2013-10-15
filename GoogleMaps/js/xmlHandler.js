@@ -92,3 +92,55 @@ function loadReachFromTable(tech,scenario, dbm)
 	return ret;
 
 }
+function loadInfoFromTable(tech,scenario,power,dst)
+{
+	var ret = [];
+	$(document).ready(function()
+	{
+		$.ajax(
+		{
+			async: false,
+			type : "GET",
+			url : "modeloTabela.xml",
+			dataType : "xml",
+			success : function(xml)
+			{
+				
+			
+				$(xml).find("Technology[type = " +tech+ "]").each(function()
+				{   				
+
+					$(this).find("Scenario[type = "+scenario+"]").each(function()
+					{
+						$(this).find("Power[dbm = "+power+"]").each(function()
+						{
+							$(this).find("Distance").each(function()
+							{
+								var split = $(this).attr("range").split("-");
+								var val1 = parseFloat(split[0],10);
+								var val2 = parseFloat(split[1],10);
+								if(val1 <= dst && dst < val2)
+								{
+									//alert(parseFloat($(this).find('TS').text(),10));
+									//alert($(this).find('Color').text());
+
+									ret.push(parseFloat($(this).find('TS').text(),10));
+									ret.push($(this).find('Color').text());
+									return ret;
+									
+								}
+								//alert(parseFloat($(this).find('TS').text(),10));
+								//alert($(this).find('Color').text());
+							
+							})
+							
+						})
+						
+					})
+				})
+			}
+		});
+	});
+	return ret;
+
+}
