@@ -36,36 +36,38 @@
 			<div id="accordion">
 			  <h3 id = "Insertion"> Insertion</h3>
 			  <div id="insertionBackground">
-							<input type="radio" id="dapRadio" name="radio3" checked = "checked" /><label for="dapRadio">DAP</label>
-							<input type="radio" id="meterRadio" name="radio3"  /><label for="meterRadio">Meter</label>
+							<button id="dapRadio">DAP</button>
+							<button id="meterRadio">Meter</button>
 						</div>
-			  <h3 id = "Removal">Removal</h3>
+						
+			  <button id = "Removal">Removal</button>
+
 			  <div> 
 			  </div>
 			  <h3 id = "Technology"> Technology</h3>
-			  <div id="techAccordion">
-					<h3 id = "ZigBee"> ZigBee</h3>
-					<div id="dbmBackgroundZigBee">
+			  <div id = tech>
+					 <div id="technologyBackground">
+					<button id="ZigBee">ZigBee</button>
+					<button id="80211">802.11</button>
 					</div>
-					<h3 id = "80211">802.11</h3>
-					<div id="dbmBackground80211">
-					</div>		
-					<h3 id = "power"> Power</h3>
-					<div id="powerbackground">
-						<input type="radio" id="z0dbm" name="dbmradio" checked = "checked" /><label for="z0dbm">0dbm</label>
-						<input type="radio" id="z6dbm" name="dbmradio"  /><label for="z6dbm">6dbm</label>
-						<input type="radio" id="z12dbm" name="dbmradio" /><label for="z12dbm">12dbm</label>
-						<input type="radio" id="z18dbm" name="dbmradio" /><label for="z18dbm">18dbm</label>
-						<input type="radio" id="z24dbm" name="dbmradio" /><label for="z24dbm">24dbm</label>
-						<input type="radio" id="z30dbm" name="dbmradio" /><label for="z30dbm">30dbm</label>
-					</div>
-							  
-			  </div>	
+					<div id="techAccordion">	
+						<h3 id = "power"> Power</h3>
+						<div id="powerbackground">
+							<button id="z0dbm" class="dbButtons">0dbm</button>
+							<button id="z6dbm" class="dbButtons">6dbm</button>
+							<button id="z12dbm" class="dbButtons">12dbm</button>
+							<button id="z18dbm" class="dbButtons">18dbm</button>
+							<button id="z24dbm" class="dbButtons">24dbm</button>
+							<button id="z30dbm" class="dbButtons">30dbm</button>
+						</div>
+								  
+				  </div>	
+			  </div>
 			  <h3 id = "Scenario">Scenario</h3>
 			  <div id="scenarioBackground">
-							<input type="radio" id="metropolitanRadio" name="radio1" checked = "checked" /><label for="metropolitanRadio">Metropolitan</label>
-							<input type="radio" id="urbanRadio" name="radio1"  /><label for="urbanRadio">Urban</label>
-							<input type="radio" id="ruralRadio" name="radio1"  /><label for="ruralRadio">Rural</label>
+							<button id="metropolitanRadio">Metropolitan</button>
+							<button id="urbanRadio">Urban</button>
+							<button id="ruralRadio">Rural</button>
 						</div>
 			  <h3 id = "DisplayXML">DisplayXML</h3>
 			  <div id = "xmldisplay">	
@@ -74,16 +76,22 @@
 			  
 			  
 			</div>	
-			<div id="radioBackground">
-			<input type="radio" id="lineRadio" name="radio2" checked = "checked" /><label for="lineRadio">Line Mode</label>
-			<input type="radio" id="radiusRadio" name="radio2"  /><label for="radiusRadio">Radius Mode</label>
+			
+			<div id = "dialogBackground">
+				<div id="dialog" title="Current Configurations">
+				 
+				 <p id = "configMessage" class = "dialogHeader"> </p>
+
+				 <div id="radioBackground">
+			<input type="radio" id="lineRadio" name="radio2" checked = "checked" /><label for="lineRadio" style="font-size:14px">Line Mode</label>
+			<input type="radio" id="radiusRadio" name="radio2"  /><label for="radiusRadio" style="font-size:14px">Radius Mode</label>
 			</div>	
-			<div id="dialog" title="Current Configurations">
+				 
 
-			  <p id = "configMessage"></p>
 
+				</div>
 			</div>
-
+			
 			
 		</div>
 		

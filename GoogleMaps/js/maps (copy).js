@@ -87,27 +87,22 @@ function connectNodesByDistance(marker)
 		{
 			var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
 			dis = dis * 1000;
-			var values = loadInfoFromTable(currentTech,scenario,dbm,dis);
-			if (values != null)
+			if(marker.type != "Meter")
 			{
-				if(marker.type != "Meter")
+				//var reach = fetchReach(marker.teleTech,scenario,dbm)
+				var reach = marker.reach;
+				if (dis <= reach)
 				{
-					//var reach = fetchReach(marker.teleTech,scenario,dbm)
-				
-
-					//var reach = marker.reach;
-				
-						connectMarkers(marker,allMarkers[i],values[1]);
-					
+					connectMarkers(marker,allMarkers[i]);
 				}
-				else
+			}
+			else
+			{
+				//var reach = fetchReach(allMarkers[i].teleTech,scenario,dbm)
+				var reach = allMarkers[i].reach;
+				if (dis <= reach)
 				{
-					//var reach = fetchReach(allMarkers[i].teleTech,scenario,dbm)
-					var reach = allMarkers[i].reach;
-					if (dis <= reach)
-					{
-						connectMarkers(allMarkers[i],marker);
-					}
+					connectMarkers(allMarkers[i],marker);
 				}
 			}
 		}
@@ -154,7 +149,7 @@ function distance(lat1, lon1, lat2, lon2, unit)
 	return dist
 }
 
-function connectMarkers(marker,marker2, color)
+function connectMarkers(marker,marker2)
 {
 	if (checkIfConnectionIsPossible(marker, marker2))
 	{
@@ -170,7 +165,7 @@ function connectMarkers(marker,marker2, color)
 		//
 		var markers = [marker,marker2];
 		markerConnections.push(markers);
-		drawLine(marker, marker2,color);
+		drawLine(marker, marker2);
 	}
 }
 function checkIfConnectionIsPossible(marker1, marker2)
@@ -187,7 +182,7 @@ function checkIfConnectionIsPossible(marker1, marker2)
 	}
 	return true;
 }
-/*function drawLine(marker1, marker2)
+function drawLine(marker1, marker2)
 {
 	var markerPositions = [marker1.getPosition(), marker2.getPosition()];
 	var color;
@@ -223,43 +218,6 @@ function checkIfConnectionIsPossible(marker1, marker2)
 	{
 		lines[lines.length - 1].setVisible(false);
 	}
-}
-*/
-function drawLine(marker1, marker2, colorname)
-{
-	var markerPositions = [marker1.getPosition(), marker2.getPosition()];
-	var color;
-	//var reach = fetchReach(marker1.teleTech,scenario,dbm)
-	var reach = marker1.reach;
-	if (color == "GREEN")
-	{
-		color = "#00FF00";
-	}
-	else
-	if (color == "YELLOW")
-	{
-		color = "#FFFF00"
-	}
-	else
-	{
-		color = "#FF0000"
-	}
-	
-	var routerPath = new google.maps.Polyline(
-	{
-		path : markerPositions,
-		strokeColor : color,
-		strokeOpacity : 1.0,
-		strokeWeight : 2
-	});
-	lines.push(routerPath);
-	lines[lines.length - 1].setMap(map);
-	
-	if (radioMode == "Radius")
-	{
-		lines[lines.length - 1].setVisible(false);
-	}
-
 }
 function drawCircle(marker)
 {

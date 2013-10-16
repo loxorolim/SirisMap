@@ -2,7 +2,7 @@
 <Table>
 	<Technology type = "ZigBee">
 		<Scenario type = "Metropolitan">
-			<Power dbm = "dbm0">
+			<Power dbm = "0">
 				<Distance range = "0-9">
 					<TS>0.98</TS>
 					<Color>GREEN</Color>

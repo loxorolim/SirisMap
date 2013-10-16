@@ -58,6 +58,10 @@ function initialize()
 			placeDAP(event.latLng.lat(),event.latLng.lng(),currentTech);
 	});
 	setButtons();
+	var x = [];
+	x = loadInfoFromTable("ZigBee","Metropolitan","0",15);
+	alert(x[0]);
+	alert(x[1]);
 
 }
 
@@ -83,22 +87,27 @@ function connectNodesByDistance(marker)
 		{
 			var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
 			dis = dis * 1000;
-			if(marker.type != "Meter")
+			var values = loadInfoFromTable(currentTech,scenario,dbm,dis);
+			if (values != null)
 			{
-				//var reach = fetchReach(marker.teleTech,scenario,dbm)
-				var reach = marker.reach;
-				if (dis <= reach)
+				if(marker.type != "Meter")
 				{
-					connectMarkers(marker,allMarkers[i]);
+					//var reach = fetchReach(marker.teleTech,scenario,dbm)
+				
+
+					//var reach = marker.reach;
+				
+						connectMarkers(marker,allMarkers[i],values[1]);
+					
 				}
-			}
-			else
-			{
-				//var reach = fetchReach(allMarkers[i].teleTech,scenario,dbm)
-				var reach = allMarkers[i].reach;
-				if (dis <= reach)
+				else
 				{
-					connectMarkers(allMarkers[i],marker);
+					//var reach = fetchReach(allMarkers[i].teleTech,scenario,dbm)
+					var reach = allMarkers[i].reach;
+					if (dis <= reach)
+					{
+						connectMarkers(allMarkers[i],marker);
+					}
 				}
 			}
 		}
@@ -145,7 +154,7 @@ function distance(lat1, lon1, lat2, lon2, unit)
 	return dist
 }
 
-function connectMarkers(marker,marker2)
+function connectMarkers(marker,marker2, color)
 {
 	if (checkIfConnectionIsPossible(marker, marker2))
 	{
@@ -161,7 +170,7 @@ function connectMarkers(marker,marker2)
 		//
 		var markers = [marker,marker2];
 		markerConnections.push(markers);
-		drawLine(marker, marker2);
+		drawLine(marker, marker2,color);
 	}
 }
 function checkIfConnectionIsPossible(marker1, marker2)
@@ -178,7 +187,7 @@ function checkIfConnectionIsPossible(marker1, marker2)
 	}
 	return true;
 }
-function drawLine(marker1, marker2)
+/*function drawLine(marker1, marker2)
 {
 	var markerPositions = [marker1.getPosition(), marker2.getPosition()];
 	var color;
@@ -214,6 +223,43 @@ function drawLine(marker1, marker2)
 	{
 		lines[lines.length - 1].setVisible(false);
 	}
+}
+*/
+function drawLine(marker1, marker2, colorname)
+{
+	var markerPositions = [marker1.getPosition(), marker2.getPosition()];
+	var color;
+	//var reach = fetchReach(marker1.teleTech,scenario,dbm)
+	var reach = marker1.reach;
+	if (color == "GREEN")
+	{
+		color = "#00FF00";
+	}
+	else
+	if (color == "YELLOW")
+	{
+		color = "#FFFF00"
+	}
+	else
+	{
+		color = "#FF0000"
+	}
+	
+	var routerPath = new google.maps.Polyline(
+	{
+		path : markerPositions,
+		strokeColor : color,
+		strokeOpacity : 1.0,
+		strokeWeight : 2
+	});
+	lines.push(routerPath);
+	lines[lines.length - 1].setMap(map);
+	
+	if (radioMode == "Radius")
+	{
+		lines[lines.length - 1].setVisible(false);
+	}
+
 }
 function drawCircle(marker)
 {
@@ -587,6 +633,11 @@ function prepareMarkerEvents(marker)
 			}
 		});
 	});
+}
+function roundDistance(dist)
+{
+
+	
 }
 //GETTERS AND SETTERS-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function setOpMode(mode)
