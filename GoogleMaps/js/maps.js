@@ -58,10 +58,8 @@ function initialize()
 			placeDAP(event.latLng.lat(),event.latLng.lng(),currentTech);
 	});
 	setButtons();
-	var x = [];
-	x = loadInfoFromTable("ZigBee","Metropolitan","0",15);
-	alert(x[0]);
-	alert(x[1]);
+
+
 
 }
 
@@ -83,50 +81,48 @@ function getElevation(event)
 function connectNodesByDistance(marker)
 {
 
-		for (var i = 0; i < allMarkers.length; i++)
-		{
-			var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
-			dis = dis * 1000;
-			var values = loadInfoFromTable(currentTech,scenario,dbm,dis);
-			if (values != null)
+			for (var i = 0; i < allMarkers.length; i++)
 			{
-				if(marker.type != "Meter")
+				var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
+				dis = dis*1000;
+				var values = loadInfoFromTable(currentTech,scenario,dbm,dis);
+				if (values.length > 0)
 				{
-					//var reach = fetchReach(marker.teleTech,scenario,dbm)
-				
-
-					//var reach = marker.reach;
-				
-						connectMarkers(marker,allMarkers[i],values[1]);
-					
-				}
-				else
-				{
-					//var reach = fetchReach(allMarkers[i].teleTech,scenario,dbm)
-					var reach = allMarkers[i].reach;
-					if (dis <= reach)
+					if(marker.type != "Meter")
 					{
-						connectMarkers(allMarkers[i],marker);
+						//var reach = fetchReach(marker.teleTech,scenario,dbm)
+					
+
+						//var reach = marker.reach;
+					
+							connectMarkers(marker,allMarkers[i],values[1]);
+						
+					}
+					else
+					{
+
+							connectMarkers(allMarkers[i],marker,values[1]);
+						
 					}
 				}
 			}
-		}
-		if(marker.type != "Meter" )
-		{
-			if(marker.neighbours.length == 0)
+			if(marker.type != "Meter" )
 			{
-				marker.setIcon(marker.offIcon);
+				if(marker.neighbours.length == 0)
+				{
+					marker.setIcon(marker.offIcon);
+				}
+				else
+				{
+					marker.setIcon(marker.onIcon);
+				}
+					
 			}
 			else
 			{
-				marker.setIcon(marker.onIcon);
+				marker.setIcon(getMeterColor(marker));
 			}
-				
-		}
-		else
-		{
-			marker.setIcon(getMeterColor(marker));
-		}
+		
 		
 	
 
@@ -151,6 +147,10 @@ function distance(lat1, lon1, lat2, lon2, unit)
 	{
 		dist = dist * 0.8684
 	}
+	
+	//var latLngA = new google.maps.LatLng(lat1, lon1);
+	//var latLngB = new google.maps.LatLng(lat2, lon2);
+	//var dist = google.maps.geometry.spherical.computeDistanceBetween (latLngA, latLngB);
 	return dist
 }
 
@@ -231,12 +231,12 @@ function drawLine(marker1, marker2, colorname)
 	var color;
 	//var reach = fetchReach(marker1.teleTech,scenario,dbm)
 	var reach = marker1.reach;
-	if (color == "GREEN")
+	if (colorname == "GREEN")
 	{
 		color = "#00FF00";
 	}
 	else
-	if (color == "YELLOW")
+	if (colorname == "YELLOW")
 	{
 		color = "#FFFF00"
 	}
