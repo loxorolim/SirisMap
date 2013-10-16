@@ -144,3 +144,80 @@ function loadInfoFromTable(tech,scenario,power,dst)
 	return ret;
 
 }
+function loadTable()
+{
+	var ret = [];
+	var table =[]
+	
+	
+	$(document).ready(function()
+	{
+		$.ajax(
+		{
+			async: false,
+			type : "GET",
+			url : "modeloTabela.xml",
+			dataType : "xml",
+			success : function(xml)
+			{
+				
+				var tech = [];
+				$(xml).find("Technology").each(function()
+				{   				
+					//var sce = [];
+					//sce.push($(this).attr("type"));
+					//tech.push(sce);
+					var x = {
+						name: $(this).attr("type"),
+						children: []
+					}
+					
+					
+					$(this).find("Scenario").each(function()
+					{
+					
+						var y = {
+							name: $(this).attr("type"),
+							children: []
+						}
+						x.children.push(y);
+						
+						$(this).find("Power").each(function()
+						{
+							var z = {
+								name: $(this).attr("dbm"),
+								children: []
+							}
+							y.children.push(z);
+								
+							$(this).find("Distance").each(function()
+							{
+								var a = {
+								name: $(this).attr("range"),
+								children: []
+								}
+								var split = $(this).attr("range").split("-");
+								var val1 = parseFloat($(this).find('TS').text(),10);
+								var val2 = $(this).find('Color').text();
+								a.children.push(val1);
+								a.children.push(val2);							
+								z.children.push(a);
+								
+								
+
+							
+							})
+							
+						})
+						
+					})
+					table.push(x);
+				})
+				
+			}
+		});
+	});
+	return table;
+
+}
+

@@ -21,6 +21,7 @@ var map;
 var scenario = "Metropolitan";
 var currentTech = "ZigBee";
 var currentIns = "DAP";
+var table = [];
 
 function initialize()
 {
@@ -58,6 +59,9 @@ function initialize()
 			placeDAP(event.latLng.lat(),event.latLng.lng(),currentTech);
 	});
 	setButtons();
+	table = loadTable();
+	getValuesFromTable("ZigBee","Metropolitan","dbm0",15);
+
 
 
 
@@ -85,8 +89,9 @@ function connectNodesByDistance(marker)
 			{
 				var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
 				dis = dis*1000;
-				var values = loadInfoFromTable(currentTech,scenario,dbm,dis);
-				if (values.length > 0)
+				var values = getValuesFromTable(currentTech,scenario,dbm,dis);
+
+				if (values != null)
 				{
 					if(marker.type != "Meter")
 					{
@@ -100,8 +105,8 @@ function connectNodesByDistance(marker)
 					}
 					else
 					{
-
-							connectMarkers(allMarkers[i],marker,values[1]);
+							if(allMarkers[i].type != "Meter")
+								connectMarkers(allMarkers[i],marker,values[1]);
 						
 					}
 				}
@@ -640,6 +645,43 @@ function roundDistance(dist)
 	
 }
 //GETTERS AND SETTERS-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+function getValuesFromTable(tech,scenario,power,dist)
+{
+	for(var i = 0; i < table.length ; i ++)
+	{
+		if(table[i].name == tech)
+		{
+			for( var j = 0 ; j < table[i].children.length ; j ++)
+			{
+				if(table[i].children[j].name == scenario)
+				{
+					for( var k = 0 ; k < table[i].children[j].children.length ; k ++)
+					{
+						if(table[i].children[j].children[k].name == power)
+						{
+							for( var l = 0 ; l < table[i].children[j].children[k].children.length ; l ++)
+							{
+								var split = table[i].children[j].children[k].children[l].name.split("-");
+								var val1 = parseFloat(split[0],10);
+								var val2 = parseFloat(split[1],10);
+								
+								if(val1 <= dist && dist < val2)
+								{
+									var ret = [];
+									ret.push(table[i].children[j].children[k].children[l].children[0])
+									ret.push(table[i].children[j].children[k].children[l].children[1])
+									return ret;
+
+
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
 function setOpMode(mode)
 {
 	opMode = mode;
