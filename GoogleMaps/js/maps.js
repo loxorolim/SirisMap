@@ -130,7 +130,7 @@ function connectNodesByDistance(marker)
 }
 function distance(lat1, lon1, lat2, lon2, unit)
 {
-	var radlat1 = Math.PI * lat1 / 180
+/*	var radlat1 = Math.PI * lat1 / 180
 	var radlat2 = Math.PI * lat2 / 180
 	var radlon1 = Math.PI * lon1 / 180
 	var radlon2 = Math.PI * lon2 / 180
@@ -148,7 +148,7 @@ function distance(lat1, lon1, lat2, lon2, unit)
 	{
 		dist = dist * 0.8684
 	}
-	
+	*/
 	var latLngA = new google.maps.LatLng(lat1, lon1);
 	var latLngB = new google.maps.LatLng(lat2, lon2);
 	var dist = google.maps.geometry.spherical.computeDistanceBetween (latLngA, latLngB);
@@ -271,11 +271,13 @@ function getCircleColorPositions()
 	{
 		if(table[i].color == "GREEN" && table[i+1].color == "YELLOW")
 		{
-			medPos1 = (table[i].distance + table[i+1].distance)/2; 
+			//medPos1 = (table[i].distance + table[i+1].distance)/2; 
+			medPos1 = table[i].distance ; 
 		}
 		if(table[i].color == "YELLOW" && table[i+1].color == "RED")
 		{
-			medPos2 = (table[i].distance + table[i+1].distance)/2;
+			//medPos2 = (table[i].distance + table[i+1].distance)/2;
+			medPos2 = table[i].distance;
 		}
 	}
 	var positions =
@@ -458,14 +460,15 @@ function getMeterColor(meter)
 	for(i = 0; i<meter.neighbours.length;i++)
 	{
 		var dis = distance(meter.position.lat(), meter.position.lng(), meter.neighbours[i].position.lat(), meter.neighbours[i].position.lng(), "K");
-		dis = dis * 1000;
-		if (dis < meter.neighbours[i].reach / 3)
+		dis = dis;
+		var positions = getCircleColorPositions();
+		if (dis < positions.med1)
 		{
 			if(color > 1 || color == -1)
-				color = 1;
+				color = 1; 
 		}
 		else			
-		if (dis < meter.neighbours[i].reach * (2 / 3))
+		if (dis <positions.med2)
 		{
 			if(color > 2 || color == -1)				
 				color = 2;
@@ -676,7 +679,7 @@ function getValuesFromTable(dist)
 	{	
 		if(table[i].distance <= dist && dist < table[i+1].distance)
 		{
-			return table[i];
+			return table[i+1];
 		}
 	}
 	return -1;
