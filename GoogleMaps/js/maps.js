@@ -19,7 +19,7 @@ var markerCluster;
 var insertListener;
 var map;
 var scenario = "Metropolitan";
-var currentTech = "ZigBee";
+var currentTech = "w80211";
 var currentIns = "DAP";
 var table = [];
 
@@ -59,9 +59,10 @@ function initialize()
 			placeDAP(event.latLng.lat(),event.latLng.lng(),currentTech);
 	});
 	setButtons();
-	table = loadTable();
-	getValuesFromTable("ZigBee","Metropolitan","dbm0",15);
-	alert(shadowingPropagation(70));
+	//table = loadTable();
+	//getValuesFromTable("ZigBee","Metropolitan","dbm0",15);
+	createTableFromOptions();
+	//alert(shadowingPropagation(70));
 
 
 
@@ -89,25 +90,19 @@ function connectNodesByDistance(marker)
 			for (var i = 0; i < allMarkers.length; i++)
 			{
 				var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
-				dis = dis*1000;
-				var values = getValuesFromTable(currentTech,scenario,dbm,dis);
+				//dis = dis*1000;
+				var values = getValuesFromTable(dis);
 
-				if (values != null)
+				if (values != -1)
 				{
 					if(marker.type != "Meter")
-					{
-						//var reach = fetchReach(marker.teleTech,scenario,dbm)
-					
-
-						//var reach = marker.reach;
-					
-							connectMarkers(marker,allMarkers[i],values[1]);
-						
+					{					
+							connectMarkers(marker,allMarkers[i],values.color);
 					}
 					else
 					{
 							if(allMarkers[i].type != "Meter")
-								connectMarkers(allMarkers[i],marker,values[1]);
+								connectMarkers(allMarkers[i],marker,values.color);
 						
 					}
 				}
@@ -154,9 +149,9 @@ function distance(lat1, lon1, lat2, lon2, unit)
 		dist = dist * 0.8684
 	}
 	
-	//var latLngA = new google.maps.LatLng(lat1, lon1);
-	//var latLngB = new google.maps.LatLng(lat2, lon2);
-	//var dist = google.maps.geometry.spherical.computeDistanceBetween (latLngA, latLngB);
+	var latLngA = new google.maps.LatLng(lat1, lon1);
+	var latLngB = new google.maps.LatLng(lat2, lon2);
+	var dist = google.maps.geometry.spherical.computeDistanceBetween (latLngA, latLngB);
 	return dist
 }
 
@@ -267,15 +262,42 @@ function drawLine(marker1, marker2, colorname)
 	}
 
 }
+function getCircleColorPositions()
+{
+	var medPos1;
+	var medPos2;
+	var endPos = table[table.length-1].distance;
+	for(var i = 0; i < table.length-1 ;i++)
+	{
+		if(table[i].color == "GREEN" && table[i+1].color == "YELLOW")
+		{
+			medPos1 = (table[i].distance + table[i+1].distance)/2; 
+		}
+		if(table[i].color == "YELLOW" && table[i+1].color == "RED")
+		{
+			medPos2 = (table[i].distance + table[i+1].distance)/2;
+		}
+	}
+	var positions =
+	{
+		ini : 0,
+		med1 : medPos1,
+		med2 : medPos2,
+		end : endPos
+	}
+	return positions;
+}
 function drawCircle(marker)
 {
+	var positions = getCircleColorPositions();
+	
 	var greenCircle;
 	var yellowCircle;
 	var redCircle;
 	redCircle = new google.maps.Circle(
 	{
 		center : marker.getPosition(),
-		radius : marker.reach,
+		radius : positions.end,
 		strokeColor : "#FF0000",
 		strokeOpacity : 0.8,
 		strokeWeight : 0,
@@ -286,7 +308,7 @@ function drawCircle(marker)
 	yellowCircle = new google.maps.Circle(
 	{
 		center : marker.getPosition(),
-		radius : marker.reach* (2 / 3),
+		radius : positions.med2,
 		strokeColor : "#FFFF00",
 		strokeOpacity : 0.8,
 		strokeWeight : 0,
@@ -297,7 +319,7 @@ function drawCircle(marker)
 	greenCircle = new google.maps.Circle(
 	{
 		center : marker.getPosition(),
-		radius : marker.reach / 3,
+		radius : positions.med1,
 		strokeColor : "#00FF00",
 		strokeOpacity : 0.8,
 		strokeWeight : 0,
@@ -640,15 +662,26 @@ function prepareMarkerEvents(marker)
 		});
 	});
 }
-function roundDistance(dist)
-{
 
-	
-}
 //GETTERS AND SETTERS-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-function getValuesFromTable(tech,scenario,power,dist)
+function getValuesFromTable(dist)
 {
-	for(var i = 0; i < table.length ; i ++)
+	//var rounddist = Math.round(dist);
+	if(dist > table[table.length - 1])
+	{
+			return -1;
+	}
+
+	for(var i = 0;i<table.length-1 ; i++)
+	{	
+		if(table[i].distance <= dist && dist < table[i+1].distance)
+		{
+			return table[i];
+		}
+	}
+	return -1;
+	
+	/*for(var i = 0; i < table.length ; i ++)
 	{
 		if(table[i].name == tech)
 		{
@@ -682,9 +715,50 @@ function getValuesFromTable(tech,scenario,power,dist)
 			}
 		}
 	}
+	*/
 }
+
 function createTableFromOptions()
 {
+	if(currentTech == "w80211")
+	{
+		var wifitable = [];
+		//de 0 a 100 metros
+		for(var i = 0; i <= 100 ; i+= 5)
+		{
+			var dist = i;
+			var sp = shadowingPropagation(i);
+			var c ;
+			if(sp >= 0.98)
+				c = "GREEN";
+			else if (0.95<=sp && sp < 0.98)
+				c = "YELLOW";
+				else
+					c = "RED";
+				
+			
+			if(sp >= 0.9)
+			{
+				var value = 
+				{
+					distance : dist,
+					efficiency : sp,
+					color : c
+					
+				}
+				wifitable.push(value);
+			}
+			else
+			{
+				break;
+			}
+		}
+		table = wifitable;
+	}
+	if(currentTech == "ZigBee")
+	{
+	
+	}
 }
 function calculateValue()
 {
