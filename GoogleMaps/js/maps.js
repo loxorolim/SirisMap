@@ -2,6 +2,7 @@
 var elevator;
 var map;
 var allMarkers = [];
+var disconnectedMeters = [];
 var meters = [];
 var daps = [];
 var routers = [];
@@ -154,7 +155,16 @@ function distance(lat1, lon1, lat2, lon2, unit)
 	var dist = google.maps.geometry.spherical.computeDistanceBetween (latLngA, latLngB);
 	return dist
 }
-
+function findAndRemove(list, obj)
+{
+	for(var i = 0; i < list.length;i++)
+	{
+		if(list[i] == obj)
+		{
+			list.splice(i,1);
+		}
+	}
+}
 function connectMarkers(marker,marker2, color)
 {
 	if (checkIfConnectionIsPossible(marker, marker2))
@@ -162,9 +172,14 @@ function connectMarkers(marker,marker2, color)
 		marker.neighbours.push(marker2);
 		marker2.neighbours.push(marker);			
 		// Troca o ícone do marker2 para LIGADO já que acabou de acontecer uma ligação
-			
-		if(marker2.type == "Meter")
+		marker2.connected = true;
+		marker.connected = true;
+		if(marker2.type == "Meter")	
+		{		
 			marker2.setIcon(getMeterColor(marker2));
+			findAndRemove(disconnectedMeters,marker2);
+			
+		}
 		else
 			marker2.setIcon(marker2.onIcon);
 		marker.setIcon(marker.onIcon);
@@ -251,6 +266,52 @@ function drawLine(marker1, marker2, colorname)
 		path : markerPositions,
 		strokeColor : color,
 		strokeOpacity : 1.0,
+		strokeWeight : 2
+	});
+	lines.push(routerPath);
+	lines[lines.length - 1].setMap(map);
+	
+	if (radioMode == "Radius")
+	{
+		lines[lines.length - 1].setVisible(false);
+	}
+
+}
+function drawDashedLine(marker1, marker2, colorname)
+{
+	 var lineSymbol = {
+		path: 'M 0,-1 0,1',
+		strokeOpacity: 1,
+		scale: 4
+	  };
+	var markerPositions = [marker1.getPosition(), marker2.getPosition()];
+	var color;
+	//var reach = fetchReach(marker1.teleTech,scenario,dbm)
+	var reach = marker1.reach;
+	if (colorname == "GREEN")
+	{
+		color = "#00FF00";
+	}
+	else
+	if (colorname == "YELLOW")
+	{
+		color = "#FFFF00"
+	}
+	else
+	{
+		color = "#FF0000"
+	}
+	
+	var routerPath = new google.maps.Polyline(
+	{
+		path : markerPositions,
+		strokeColor : color,
+		strokeOpacity : 0,
+		icons: [{
+      icon: lineSymbol,
+      offset: '0',
+      repeat: '20px'
+    }],
 		strokeWeight : 2
 	});
 	lines.push(routerPath);
@@ -368,7 +429,8 @@ function removeMarkerConnections(marker)
 			lines.splice(i, 1);
 			markerConnections[i][0].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][0],markerConnections[i][1]),1);
 			markerConnections[i][1].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][1],markerConnections[i][0]),1);
-
+			markerConnections[i][0].connected = false;
+			markerConnections[i][1].connected = false;
 			if(markerConnections[i][1].neighbours.length == 0 && markerConnections[i][1].type != "Meter")
 			{
 				markerConnections[i][1].setIcon(markerConnections[i][1].offIcon);
@@ -382,10 +444,13 @@ function removeMarkerConnections(marker)
 			if(markerConnections[i][1].type == "Meter")
 			{
 					markerConnections[i][1].setIcon(getMeterColor(markerConnections[i][1]));
+					disconnectedMeters.push(markerConnections[i][1]);
 			}
 			if(markerConnections[i][0].type == "Meter")
 			{
 					markerConnections[i][0].setIcon(getMeterColor(markerConnections[i][0]));
+					disconnectedMeters.push(markerConnections[i][0]);
+
 			}
 			
 			
@@ -446,7 +511,7 @@ function displayInfoWindow(marker)
 		{
 			neighboursIDs += marker.neighbours[i].ID + ", ";
 		}
-		var content = 'ID: ' + marker.ID + '<br>Latitude: ' + marker.position.lat() + '<br>Longitude: ' + marker.position.lng() + '<br>Elevation: ' + marker.elevation + '<br>Neighbours IDs: ' + neighboursIDs;
+		var content = 'ID: ' + marker.ID + '<br>Latitude: ' + marker.position.lat() + '<br>Longitude: ' + marker.position.lng() + '<br>Elevation: ' + marker.elevation + '<br>Neighbours IDs: ' + neighboursIDs + '<br>Connected: '+marker.connected;
 		if (marker.teleTech != null )
 			content += '<br>Technology: ' + marker.teleTech + '<br>Reach: ' + marker.reach + ' meters';
 		infowindow.setContent(content);
@@ -505,7 +570,8 @@ function placeMeter(latitude,longitude)
 		offIcon: 'blackSquare.png',
 		icon : 'blackSquare.png',
 		neighbours : [],
-		ID : ID
+		ID : ID,
+		connected: false
 	});
 	ID++;
 	var locations = [];
@@ -528,6 +594,7 @@ function placeMeter(latitude,longitude)
 				// Open an info window indicating the elevation at the clicked position
 				marker.elevation = results[0].elevation;
 				allMarkers.push(marker);
+				disconnectedMeters.push(marker);
 				meters.push(marker);
 				prepareMarkerEvents(marker);
 				
@@ -556,10 +623,10 @@ function placeDAP(latitude, longitude, technology)
 		offIcon: 'daprouteroff.png',
 		onIcon: 'daprouter.png',
 		icon : 'daprouter.png',
-		reach: fetchReach(currentTech,scenario,dbm),
 		teleTech : technology,
 		reachCircles : [],
-		neighbours : []
+		neighbours : [],
+		connected : false
 	});
 	ID++;
 	var locations = [];
@@ -889,6 +956,49 @@ function fetchReach(tech,scenario,dbm)
 	return loadReachFromTable(tech,scenario, dbm)
 
 	
+}
+function setRFMesh()
+{
+
+}
+function connectViaMesh()
+{
+	//PARA CADA METER DESCONECTADO
+	var disMeters = disconnectedMeters.slice();
+	for(var i = 0; i < disMeters.length ; i++)
+	{
+		//PEGA O METER MAIS PRÓXIMO QUE ESTÁ CONECTADO A UM DAP E FAZ UMA LIGAÇÃO MESH SE POSSÍVEL
+		var meterToConnect;
+		var finalDis = -1;
+		for(var j = 0; j < allMarkers.length ; j++)
+		{
+			if(allMarkers[j].type == "Meter" && allMarkers[j].connected == true)
+			{
+				if(finalDis == -1)
+				{	
+					finalDis = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), allMarkers[j].position.lat(), allMarkers[j].position.lng(), "K");
+					meterToConnect = allMarkers[j]	;
+				}
+				else
+				{
+					var dist = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), allMarkers[j].position.lat(), allMarkers[j].position.lng(), "K");
+					if(dist < finalDis)
+					{
+						finalDis = dist;
+						meterToConnect = allMarkers[j];
+					}
+					
+				}					
+			}			
+		}
+		var values = getValuesFromTable(finalDis);
+		if(values != -1)
+		{
+			drawDashedLine(disMeters[i], meterToConnect, values.color)
+			findAndRemove(disconnectedMeters,disMeters[i]);
+		}
+		
+	}
 }
 
 function setInfoWindowNull()

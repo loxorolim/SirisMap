@@ -31,12 +31,19 @@ function setButtons()
 		$("#Scenario").click(function() {
 			setInfoWindowNull();
 		});
+		$( "#RFMesh" ).click(function() {
+			setInfoWindowNull();
+			connectViaMesh();
+		});
 		var radioSize = 155;
 	   $('#insertionBackground').buttonset().find('label').width(radioSize);
 	   $('#powerbackground').buttonset().find('label').width(76);
 	   $('#scenarioBackground').buttonset().find('label').width(radioSize);
 	   $('#technologyBackground').buttonset().find('label').width(radioSize);
 	   $('#configMessage').html(getConfigurations());
+	   $('#RFMesh').button();
+	    
+		
 	
 	$('#dialog').dialog({
 	closeOnEscape: false,
