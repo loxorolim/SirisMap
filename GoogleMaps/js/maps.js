@@ -3,6 +3,7 @@ var elevator;
 var map;
 var allMarkers = [];
 var disconnectedMeters = [];
+var oneHopMeters = [];
 var meters = [];
 var daps = [];
 var routers = [];
@@ -14,6 +15,7 @@ var markerPair = [];
 var markerConnections = [];
 var ID = 0;
 var lines = [];
+var dashedLines = [];
 var circles = [];
 var request;
 var markerCluster;
@@ -314,12 +316,12 @@ function drawDashedLine(marker1, marker2, colorname)
     }],
 		strokeWeight : 2
 	});
-	lines.push(routerPath);
-	lines[lines.length - 1].setMap(map);
-	
+	dashedLines.push(routerPath);
+	dashedLines[dashedLines.length - 1].setMap(map);
+	routerPath.setMap(map);
 	if (radioMode == "Radius")
 	{
-		lines[lines.length - 1].setVisible(false);
+		dashedLines[dashedLines.length - 1].setVisible(false);
 	}
 
 }
@@ -429,8 +431,12 @@ function removeMarkerConnections(marker)
 			lines.splice(i, 1);
 			markerConnections[i][0].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][0],markerConnections[i][1]),1);
 			markerConnections[i][1].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][1],markerConnections[i][0]),1);
-			markerConnections[i][0].connected = false;
-			markerConnections[i][1].connected = false;
+			
+			if(markerConnections[i][0].neighbours.length == 0)
+				markerConnections[i][0].connected = false;
+			if(markerConnections[i][1].neighbours.length == 0)
+				markerConnections[i][1].connected = false;
+			
 			if(markerConnections[i][1].neighbours.length == 0 && markerConnections[i][1].type != "Meter")
 			{
 				markerConnections[i][1].setIcon(markerConnections[i][1].offIcon);
@@ -512,6 +518,8 @@ function displayInfoWindow(marker)
 			neighboursIDs += marker.neighbours[i].ID + ", ";
 		}
 		var content = 'ID: ' + marker.ID + '<br>Latitude: ' + marker.position.lat() + '<br>Longitude: ' + marker.position.lng() + '<br>Elevation: ' + marker.elevation + '<br>Neighbours IDs: ' + neighboursIDs + '<br>Connected: '+marker.connected;
+		if(marker.type == "Meter")
+			content += '<br>Hop: '+marker.meshHop;
 		if (marker.teleTech != null )
 			content += '<br>Technology: ' + marker.teleTech + '<br>Reach: ' + marker.reach + ' meters';
 		infowindow.setContent(content);
@@ -571,7 +579,8 @@ function placeMeter(latitude,longitude)
 		icon : 'blackSquare.png',
 		neighbours : [],
 		ID : ID,
-		connected: false
+		connected: false,
+		meshHop : 0
 	});
 	ID++;
 	var locations = [];
@@ -674,12 +683,18 @@ function prepareMarkerEvents(marker)
 			displayInfoWindow(marker);
 
 	});
-	google.maps.event.addListener(marker, 'drag', function(event)
+	google.maps.event.addListener(marker, 'dragstart', function(event)
 	{
 		infowindow.setMap(null);
+		removeMesh();
+	});
+	google.maps.event.addListener(marker, 'drag', function(event)
+	{
+		
 		//reconnectMovedMarker(marker, event.latLng)
 		removeMarkerConnections(marker);
 		connectNodesByDistance(marker);
+		
 		
 
 	
@@ -701,6 +716,7 @@ function prepareMarkerEvents(marker)
 	{
 		
 		// reconnectMovedMarker(marker,event.latLng)
+		connectViaMesh();
 		drawCircle(marker);
 		marker.setPosition(event.latLng);
 		var locations = [];
@@ -961,10 +977,29 @@ function setRFMesh()
 {
 
 }
+function removeMesh()
+{
+	disconnectedMeters = [];
+	for(var i = 0; i < dashedLines.length; i++)
+	{
+		dashedLines[i].setMap(null);
+	}
+	for(var i = 0; i < allMarkers.length;i++)
+	{
+		if(allMarkers[i].type == "Meter")		
+			allMarkers[i].meshHop = 0;
+		if(!allMarkers[i].connected )
+			disconnectedMeters.push(allMarkers[i]);
+	}
+	dashedLines =[];
+}
 function connectViaMesh()
 {
+
+	//ALTERAR PARA 3 'FOR' UM DENTRO DO OUTRO!!!
 	//PARA CADA METER DESCONECTADO
 	var disMeters = disconnectedMeters.slice();
+	var hopMeters = [];
 	for(var i = 0; i < disMeters.length ; i++)
 	{
 		//PEGA O METER MAIS PRÓXIMO QUE ESTÁ CONECTADO A UM DAP E FAZ UMA LIGAÇÃO MESH SE POSSÍVEL
@@ -996,8 +1031,83 @@ function connectViaMesh()
 		{
 			drawDashedLine(disMeters[i], meterToConnect, values.color)
 			findAndRemove(disconnectedMeters,disMeters[i]);
+			disMeters[i].meshHop = 1;
+			hopMeters.push(disMeters[i]);
+		}	
+	}
+	//SEGUNDA PASSADA, PARA OS NÓS QUE NÃO SE CONECTARAM AOS OUTROS COM APENAS 1 SALTO
+	disMeters = disconnectedMeters.slice();
+	var newHopMeters = [];
+	for(var i = 0; i < disMeters.length; i++)
+	{
+		var meterToConnect;
+		var finalDis = -1;
+		for(j = 0; j < hopMeters.length; j++)
+		{
+			if(hopMeters[j].meshHop == 1)
+			{
+				if(finalDis == -1)
+				{	
+					finalDis = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), hopMeters[j].position.lat(), hopMeters[j].position.lng(), "K");
+					meterToConnect = hopMeters[j]	;
+				}
+				else
+				{
+					var dist = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), hopMeters[j].position.lat(), hopMeters[j].position.lng(), "K");
+					if(dist < finalDis)
+					{
+						finalDis = dist;
+						meterToConnect = hopMeters[j];
+					}
+					
+				}					
+			}		
 		}
-		
+		var values = getValuesFromTable(finalDis);
+		if(values != -1)
+		{
+			drawDashedLine(disMeters[i], meterToConnect, values.color)
+			findAndRemove(disconnectedMeters,disMeters[i]);
+			disMeters[i].meshHop = 2;
+			newHopMeters.push(disMeters[i]);	
+		}		
+	}
+	hopMeters = newHopMeters;
+	disMeters = disconnectedMeters.slice();
+	//var newHopMeters = [];
+	for(var i = 0; i < disMeters.length; i++)
+	{
+		var meterToConnect;
+		var finalDis = -1;
+		for(j = 0; j < hopMeters.length; j++)
+		{
+			if(hopMeters[j].meshHop == 2)
+			{
+				if(finalDis == -1)
+				{	
+					finalDis = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), hopMeters[j].position.lat(), hopMeters[j].position.lng(), "K");
+					meterToConnect = hopMeters[j]	;
+				}
+				else
+				{
+					var dist = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), hopMeters[j].position.lat(), hopMeters[j].position.lng(), "K");
+					if(dist < finalDis)
+					{
+						finalDis = dist;
+						meterToConnect = hopMeters[j];
+					}
+					
+				}					
+			}		
+		}
+		var values = getValuesFromTable(finalDis);
+		if(values != -1)
+		{
+			drawDashedLine(disMeters[i], meterToConnect, values.color)
+			findAndRemove(disconnectedMeters,disMeters[i]);
+			disMeters[i].meshHop = 3;
+			//newHopMeters.push(disMeters[i]);	
+		}		
 	}
 }
 
