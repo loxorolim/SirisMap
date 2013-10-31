@@ -33,7 +33,7 @@ function setButtons()
 		});
 		$( "#RFMesh" ).click(function() {
 			setInfoWindowNull();
-			connectViaMesh();
+			setRFMesh();
 		});
 		var radioSize = 155;
 	   $('#insertionBackground').buttonset().find('label').width(radioSize);

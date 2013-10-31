@@ -11,6 +11,7 @@ var infowindow = new google.maps.InfoWindow();
 var opMode = "Insertion";
 var radioMode = "Line";
 var dbm = "dbm0";
+var meshEnabled = false;
 var markerPair = [];
 var markerConnections = [];
 var ID = 0;
@@ -59,7 +60,10 @@ function initialize()
 	insertListener = google.maps.event.addListener(map, 'click', function(event)
 	{
 		if(opMode == "Insertion")
+		{
 			placeDAP(event.latLng.lat(),event.latLng.lng(),currentTech);
+		
+		}
 	});
 	setButtons();
 	//table = loadTable();
@@ -606,6 +610,8 @@ function placeMeter(latitude,longitude)
 				disconnectedMeters.push(marker);
 				meters.push(marker);
 				prepareMarkerEvents(marker);
+				if(meshEnabled)
+					executeRFMesh();
 				
 			}
 			else
@@ -660,6 +666,8 @@ function placeDAP(latitude, longitude, technology)
 				allMarkers.push(marker);
 				daps.push(marker);
 				prepareMarkerEvents(marker);
+				if(meshEnabled)
+					executeRFMesh();
 			}
 			else
 			{
@@ -678,7 +686,13 @@ function prepareMarkerEvents(marker)
 	google.maps.event.addListener(marker, 'click', function(event)
 	{
 		if (opMode == "Removal")		
+		{
 			removeMarker(marker);
+			if(meshEnabled)
+			{
+				executeRFMesh()
+			}
+		}
 		else
 			displayInfoWindow(marker);
 
@@ -716,7 +730,8 @@ function prepareMarkerEvents(marker)
 	{
 		
 		// reconnectMovedMarker(marker,event.latLng)
-		connectViaMesh();
+		if(meshEnabled)
+			connectViaMesh();
 		drawCircle(marker);
 		marker.setPosition(event.latLng);
 		var locations = [];
@@ -964,7 +979,10 @@ function setInsertionOptions(type)
 			}
 			if(type == "Meter")
 				placeMeter(event.latLng.lat(),event.latLng.lng());
+			
+		
 		}
+		
 	});
 }
 function fetchReach(tech,scenario,dbm)
@@ -973,9 +991,18 @@ function fetchReach(tech,scenario,dbm)
 
 	
 }
+function executeRFMesh()
+{
+	removeMesh();
+	connectViaMesh();
+}
 function setRFMesh()
 {
-
+	meshEnabled = !meshEnabled;
+	if(meshEnabled)
+		executeRFMesh();
+	else
+		removeMesh();
 }
 function removeMesh()
 {
