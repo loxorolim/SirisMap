@@ -323,10 +323,10 @@ function drawDashedLine(marker1, marker2, colorname)
 	dashedLines.push(routerPath);
 	dashedLines[dashedLines.length - 1].setMap(map);
 	routerPath.setMap(map);
-	if (radioMode == "Radius")
-	{
-		dashedLines[dashedLines.length - 1].setVisible(false);
-	}
+	//if (radioMode == "Radius")
+	//{
+	//	dashedLines[dashedLines.length - 1].setVisible(false);
+	//}
 
 }
 function getCircleColorPositions()
@@ -732,7 +732,8 @@ function prepareMarkerEvents(marker)
 		// reconnectMovedMarker(marker,event.latLng)
 		if(meshEnabled)
 			connectViaMesh();
-		drawCircle(marker);
+		if(marker.type != "Meter")
+			drawCircle(marker);
 		marker.setPosition(event.latLng);
 		var locations = [];
 		var markerLocation = marker.getPosition();
