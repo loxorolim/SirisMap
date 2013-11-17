@@ -55,15 +55,18 @@ function setButtons()
     of: $('#dialogBackground')
   }
 });
+
 	$('#legendaDialog').dialog({
 	closeOnEscape: false,
 	resizable: false,
+	width: 277,
 		position: { 
     
     my: 'top',
     at: 'top',
     of: $('#legenda')
 	}
+
 
 });
 
