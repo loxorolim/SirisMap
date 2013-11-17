@@ -55,6 +55,17 @@ function setButtons()
     of: $('#dialogBackground')
   }
 });
+	$('#legendaDialog').dialog({
+	closeOnEscape: false,
+	resizable: false,
+		position: { 
+    
+    my: 'top',
+    at: 'top',
+    of: $('#legenda')
+	}
+
+});
 
 
 	   $( "#radioBackground" ).buttonset().find('label').width(122);

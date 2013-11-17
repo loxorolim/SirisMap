@@ -1,9 +1,38 @@
-#radioBackground
+#legenda
+{
+    position:absolute;
+	left: 640px;
+	top:2px;
+	height:0px;
+	
+}
+#TextoCor
+{
+	margin-right: 25px;
+	margin-left: 10px;
+}
+.legendaImagem
+{
+	float:left;
+	height: 30px;
+	margin-right: 20px;
+	margin-top: 10px;
+
+}
+.legendas
 {
 
 	
+	width: 260px;
+	height: 30px;
 }
+.escritaLegenda
+{
 
+	font: bold 14px
+ "helvetica", sans-serif;
+ color: #FFFFFF;
+}
 #dialogBackground {
     position:absolute;
 	left: 320px;

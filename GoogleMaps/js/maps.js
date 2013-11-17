@@ -264,7 +264,7 @@ function drawLine(marker1, marker2, colorname)
 	}
 	else
 	{
-		color = "#FF0000"
+		color = "#0000FF"
 	}
 	
 	var routerPath = new google.maps.Polyline(
@@ -305,7 +305,7 @@ function drawDashedLine(marker1, marker2, colorname)
 	}
 	else
 	{
-		color = "#FF0000"
+		color = "#0000FF"
 	}
 	
 	var routerPath = new google.maps.Polyline(
@@ -367,10 +367,10 @@ function drawCircle(marker)
 	{
 		center : marker.getPosition(),
 		radius : positions.end,
-		strokeColor : "#FF0000",
+		strokeColor : "#0000FF",
 		strokeOpacity : 0.8,
 		strokeWeight : 0,
-		fillColor : "#FF0000",
+		fillColor : "#0000FF",
 		fillOpacity : 0.35,
 		map : map
 	});
