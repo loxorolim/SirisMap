@@ -7,7 +7,7 @@ function showNodesXml()
 	var markers = getAllMarkers();
 	for ( i = 0; i < markers.length; i++)
 	{	
-		if(markers[i].type == "meter")
+		if(markers[i].type == "Meter")
 		{
 			meters += "<br>&nbsp&ltmeter&gt" 
 			+ "<br>&nbsp&nbsp&ltLatitude&gt" + markers[i].position.lat() + "&lt\/Latitude&gt"
