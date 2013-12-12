@@ -19,7 +19,7 @@ var markerConnections = [];
 var circles = [];
 var request;
 
-var insertListener;
+
 var scenario = "Metropolitan";
 var currentTech = "w80211";
 var currentIns = "DAP";
@@ -32,16 +32,20 @@ var table = [];
 
 function connectNodesByDistance(marker) {
 
-    for (var i = 0; i < allMarkers.length; i++) {
+    for (var i = 0; i < allMarkers.length; i++)
+    {
         var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
         //dis = dis*1000;
         var values = getValuesFromTable(dis);
 
-        if (values != -1) {
-            if (marker.type != "Meter") {
+        if (values != -1)
+        {
+            if (marker.type != "Meter")
+            {
                 connectMarkers(marker, allMarkers[i], values.color);
             }
-            else {
+            else
+            {
                 if (allMarkers[i].type != "Meter")
                     connectMarkers(allMarkers[i], marker, values.color);
 
