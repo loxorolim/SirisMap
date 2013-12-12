@@ -1,4 +1,6 @@
-﻿function placeMeter(latitude, longitude) {
+﻿var ID = 0;
+
+function placeMeter(latitude, longitude) {
     var latLng = new google.maps.LatLng(latitude, longitude);
     var marker = new google.maps.Marker(
 	{
@@ -22,12 +24,15 @@
 	{
 	    'locations': locations
 	}
-    elevator.getElevationForLocations(positionalRequest, function (results, status) {
-        if (status == google.maps.ElevationStatus.OK) {
+    elevator.getElevationForLocations(positionalRequest, function (results, status)
+    {
+        if (status == google.maps.ElevationStatus.OK)
+        {
             // Retrieve the first result
             connectNodesByDistance(marker);
 
-            if (results[0]) {
+            if (results[0])
+            {
                 // Open an info window indicating the elevation at the clicked position
                 marker.elevation = results[0].elevation;
                 allMarkers.push(marker);
@@ -38,13 +43,12 @@
                     executeRFMesh();
 
             }
-            else {
-                return -1;
-            }
+            else 
+                return -1;           
         }
-        else {
+        else 
             return -1;
-        }
+        
     });
 }
 function placeDAP(latitude, longitude, technology) {
@@ -164,4 +168,16 @@ function prepareMarkerEvents(marker) {
             }
         });
     });
+}
+function getElevation(event) {
+    var locations = [];
+    // Retrieve the clicked location and push it on the array
+    var clickedLocation = event.latLng;
+    locations.push(clickedLocation);
+    // Create a LocationElevationRequest object using the array's one value
+    var positionalRequest =
+	{
+	    'locations': locations
+	}
+    // Initiate the location request
 }

@@ -14,7 +14,7 @@ var dbm = "dbm0";
 var meshEnabled = false;
 var markerPair = [];
 var markerConnections = [];
-var ID = 0;
+
 
 var circles = [];
 var request;
@@ -27,18 +27,7 @@ var table = [];
 
 
 
-function getElevation(event) {
-    var locations = [];
-    // Retrieve the clicked location and push it on the array
-    var clickedLocation = event.latLng;
-    locations.push(clickedLocation);
-    // Create a LocationElevationRequest object using the array's one value
-    var positionalRequest =
-	{
-	    'locations': locations
-	}
-    // Initiate the location request
-}
+
 
 
 function connectNodesByDistance(marker) {
@@ -469,13 +458,16 @@ function connectViaMesh() {
         var finalDis = -1;
         for (j = 0; j < hopMeters.length; j++) {
             if (hopMeters[j].meshHop == 2) {
-                if (finalDis == -1) {
+                if (finalDis == -1)
+                {
                     finalDis = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), hopMeters[j].position.lat(), hopMeters[j].position.lng(), "K");
                     meterToConnect = hopMeters[j];
                 }
-                else {
+                else
+                {
                     var dist = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), hopMeters[j].position.lat(), hopMeters[j].position.lng(), "K");
-                    if (dist < finalDis) {
+                    if (dist < finalDis)
+                    {
                         finalDis = dist;
                         meterToConnect = hopMeters[j];
                     }
