@@ -1,6 +1,6 @@
 /// <reference path="/js/jquery-1.10.2.min.js" />
-var elevator;
-var map;
+
+
 var allMarkers = [];
 var disconnectedMeters = [];
 var oneHopMeters = [];
@@ -15,66 +15,64 @@ var meshEnabled = false;
 var markerPair = [];
 var markerConnections = [];
 var ID = 0;
-var lines = [];
-var dashedLines = [];
+
 var circles = [];
 var request;
-var markerCluster;
+
 var insertListener;
-var map;
 var scenario = "Metropolitan";
 var currentTech = "w80211";
 var currentIns = "DAP";
 var table = [];
 
-function initialize()
-{
-	var mapOptions =
-	{
-		zoom : 3,
-		minZoom : 2,
-		center : new google.maps.LatLng(-28.643387, 0.612224),
-		mapTypeId : google.maps.MapTypeId.ROADMAP,
-		mapTypeControl : true,
-		panControl: false,
-		zoomControl: true,
-		zoomControlOptions: 
-		{
-			position : google.maps.ControlPosition.TOP_RIGHT
+//function initialize()
+//{
+//	var mapOptions =
+//	{
+//		zoom : 3,
+//		minZoom : 2,
+//		center : new google.maps.LatLng(-28.643387, 0.612224),
+//		mapTypeId : google.maps.MapTypeId.ROADMAP,
+//		mapTypeControl : true,
+//		panControl: false,
+//		zoomControl: true,
+//		zoomControlOptions: 
+//		{
+//			position : google.maps.ControlPosition.TOP_RIGHT
 			
-		},
-		mapTypeControlOptions :
-		{
-			style : google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-			position : google.maps.ControlPosition.TOP_RIGHT
+//		},
+//		mapTypeControlOptions :
+//		{
+//			style : google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+//			position : google.maps.ControlPosition.TOP_RIGHT
 
-		}
-	}
-	map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-	// Create an ElevationService
-	elevator = new google.maps.ElevationService();
-	markerCluster = new MarkerClusterer(map);
-	markerCluster.setGridSize(10);
-	loadNodesFromXml();
+//		}
+//	}
+//	map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+//	// Create an ElevationService
+//	elevator = new google.maps.ElevationService();
+//	markerCluster = new MarkerClusterer(map);
+//	markerCluster.setGridSize(10);
+//	loadNodesFromXml();
 	
-	insertListener = google.maps.event.addListener(map, 'click', function(event)
-	{
-		if(opMode == "Insertion")
-		{
-			placeDAP(event.latLng.lat(),event.latLng.lng(),currentTech);
+//	insertListener = google.maps.event.addListener(map, 'click', function(event)
+//	{
+//		if(opMode == "Insertion")
+//		{
+//			placeDAP(event.latLng.lat(),event.latLng.lng(),currentTech);
 		
-		}
-	});
-	setButtons();
-	//table = loadTable();
-	//getValuesFromTable("ZigBee","Metropolitan","dbm0",15);
-	createTableFromOptions();
-	//alert(shadowingPropagation(70));
+//		}
+//	});
+//	setButtons();
+//	//table = loadTable();
+//	//getValuesFromTable("ZigBee","Metropolitan","dbm0",15);
+//	createTableFromOptions();
+//	//alert(shadowingPropagation(70));
 
 
 
 
-}
+//}
 
 function getElevation(event)
 {
@@ -247,163 +245,7 @@ function checkIfConnectionIsPossible(marker1, marker2)
 	}
 }
 */
-function drawLine(marker1, marker2, colorname)
-{
-	var markerPositions = [marker1.getPosition(), marker2.getPosition()];
-	var color;
-	//var reach = fetchReach(marker1.teleTech,scenario,dbm)
-	var reach = marker1.reach;
-	if (colorname == "GREEN")
-	{
-		color = "#00FF00";
-	}
-	else
-	if (colorname == "YELLOW")
-	{
-		color = "#FFFF00"
-	}
-	else
-	{
-		color = "#0000FF"
-	}
-	
-	var routerPath = new google.maps.Polyline(
-	{
-		path : markerPositions,
-		strokeColor : color,
-		strokeOpacity : 1.0,
-		strokeWeight : 2
-	});
-	lines.push(routerPath);
-	lines[lines.length - 1].setMap(map);
-	
-	if (radioMode == "Radius")
-	{
-		lines[lines.length - 1].setVisible(false);
-	}
 
-}
-function drawDashedLine(marker1, marker2, colorname)
-{
-	 var lineSymbol = {
-		path: 'M 0,-1 0,1',
-		strokeOpacity: 1,
-		scale: 4
-	  };
-	var markerPositions = [marker1.getPosition(), marker2.getPosition()];
-	var color;
-	//var reach = fetchReach(marker1.teleTech,scenario,dbm)
-	var reach = marker1.reach;
-	if (colorname == "GREEN")
-	{
-		color = "#00FF00";
-	}
-	else
-	if (colorname == "YELLOW")
-	{
-		color = "#FFFF00"
-	}
-	else
-	{
-		color = "#0000FF"
-	}
-	
-	var routerPath = new google.maps.Polyline(
-	{
-		path : markerPositions,
-		strokeColor : color,
-		strokeOpacity : 0,
-		icons: [{
-      icon: lineSymbol,
-      offset: '0',
-      repeat: '20px'
-    }],
-		strokeWeight : 2
-	});
-	dashedLines.push(routerPath);
-	dashedLines[dashedLines.length - 1].setMap(map);
-	routerPath.setMap(map);
-	//if (radioMode == "Radius")
-	//{
-	//	dashedLines[dashedLines.length - 1].setVisible(false);
-	//}
-
-}
-function getCircleColorPositions()
-{
-	var medPos1;
-	var medPos2;
-	var endPos = table[table.length-1].distance;
-	for(var i = 0; i < table.length-1 ;i++)
-	{
-		if(table[i].color == "GREEN" && table[i+1].color == "YELLOW")
-		{
-			//medPos1 = (table[i].distance + table[i+1].distance)/2; 
-			medPos1 = table[i].distance ; 
-		}
-		if(table[i].color == "YELLOW" && table[i+1].color == "RED")
-		{
-			//medPos2 = (table[i].distance + table[i+1].distance)/2;
-			medPos2 = table[i].distance;
-		}
-	}
-	var positions =
-	{
-		ini : 0,
-		med1 : medPos1,
-		med2 : medPos2,
-		end : endPos
-	}
-	return positions;
-}
-function drawCircle(marker)
-{
-	var positions = getCircleColorPositions();
-	
-	var greenCircle;
-	var yellowCircle;
-	var redCircle;
-	redCircle = new google.maps.Circle(
-	{
-		center : marker.getPosition(),
-		radius : positions.end,
-		strokeColor : "#0000FF",
-		strokeOpacity : 0.8,
-		strokeWeight : 0,
-		fillColor : "#0000FF",
-		fillOpacity : 0.35,
-		map : map
-	});
-	yellowCircle = new google.maps.Circle(
-	{
-		center : marker.getPosition(),
-		radius : positions.med2,
-		strokeColor : "#FFFF00",
-		strokeOpacity : 0.8,
-		strokeWeight : 0,
-		fillColor : "#FFFF00",
-		fillOpacity : 0.35,
-		map : map
-	});
-	greenCircle = new google.maps.Circle(
-	{
-		center : marker.getPosition(),
-		radius : positions.med1,
-		strokeColor : "#00FF00",
-		strokeOpacity : 0.8,
-		strokeWeight : 0,
-		fillColor : "#00FF00",
-		fillOpacity : 0.35,
-		map : map
-	});
-	marker.reachCircles = [greenCircle, yellowCircle, redCircle];
-	if (radioMode != "Radius")
-	{
-		greenCircle.setVisible(false);
-		yellowCircle.setVisible(false);
-		redCircle.setVisible(false);
-	}
-}
 function reconnectMovedMarker(marker, newPosition)
 {
 	for (var i = 0; i < markerConnections.length; i++)
@@ -1213,4 +1055,4 @@ function getConfigurations()
 	
 	return mode + tech + power + sce;		
 }
-google.maps.event.addDomListener(window, 'load', initialize);
+//google.maps.event.addDomListener(window, 'load', initialize);
