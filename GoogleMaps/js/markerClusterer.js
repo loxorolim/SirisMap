@@ -104,7 +104,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    * @private
    */
   this.minClusterSize_ = options['minimumClusterSize'] || 2;
-
+    
 
   /**
    * @type {?number}

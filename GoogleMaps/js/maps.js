@@ -1142,8 +1142,10 @@ function drawRefresh()
 		removeMarkerConnections(allMarkers[j]);
 		connectNodesByDistance(allMarkers[j]);
 		if(allMarkers[j].type != "Meter")
+		{
 			removeMarkerCircles(allMarkers[j]);
-		drawCircle(allMarkers[j]);
+			drawCircle(allMarkers[j]);
+		}
 	}
 }
 function getCurrentTech()
