@@ -26,50 +26,38 @@ var currentIns = "DAP";
 var table = [];
 
 
-
-
-
-
 function connectNodesByDistance(marker) {
 
     for (var i = 0; i < allMarkers.length; i++)
     {
-        var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
+       // var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
+        var dis = distance(marker, allMarkers[i]);
         //dis = dis*1000;
         var values = getValuesFromTable(dis);
 
         if (values != -1)
         {
-            if (marker.type != "Meter")
-            {
+            //Se o marker é um DAP ele pode se conectar a DAPs e a medidores
+            if (marker.type == "DAP")
                 connectMarkers(marker, allMarkers[i], values.color);
-            }
             else
-            {
-                if (allMarkers[i].type != "Meter")
+            //Se o marker é um medidor ele só pode conectar a DAPs
+                if (allMarkers[i].type == "DAP")
                     connectMarkers(allMarkers[i], marker, values.color);
-
-            }
         }
     }
-    if (marker.type != "Meter") {
-        if (marker.neighbours.length == 0) {
-            marker.setIcon(marker.offIcon);
-        }
-        else {
-            marker.setIcon(marker.onIcon);
-        }
-
+    if (marker.type == "DAP")
+    {
+        if (marker.neighbours.length == 0) 
+            marker.setIcon(marker.offIcon);       
+        else 
+            marker.setIcon(marker.onIcon);      
     }
-    else {
+    else 
         marker.setIcon(getMeterColor(marker));
-    }
-
-
-
-
 }
-function distance(lat1, lon1, lat2, lon2, unit) {
+function distance(marker1, marker2)
+{
     /*	var radlat1 = Math.PI * lat1 / 180
         var radlat2 = Math.PI * lat2 / 180
         var radlon1 = Math.PI * lon1 / 180
@@ -89,12 +77,13 @@ function distance(lat1, lon1, lat2, lon2, unit) {
             dist = dist * 0.8684
         }
         */
-    var latLngA = new google.maps.LatLng(lat1, lon1);
-    var latLngB = new google.maps.LatLng(lat2, lon2);
+    
+    var latLngA = new google.maps.LatLng(marker1.position.lat(), marker1.position.lng());
+    var latLngB = new google.maps.LatLng(marker2.position.lat(), marker2.position.lng());
     var dist = google.maps.geometry.spherical.computeDistanceBetween(latLngA, latLngB);
     return dist
 }
-function findAndRemove(list, obj) {
+function removeFromList(list, obj) {
     for (var i = 0; i < list.length; i++) {
         if (list[i] == obj) {
             list.splice(i, 1);
@@ -102,7 +91,8 @@ function findAndRemove(list, obj) {
     }
 }
 function connectMarkers(marker, marker2, color) {
-    if (checkIfConnectionIsPossible(marker, marker2)) {
+    if (checkIfConnectionIsPossible(marker, marker2))
+    {
         marker.neighbours.push(marker2);
         marker2.neighbours.push(marker);
         // Troca o ícone do marker2 para LIGADO já que acabou de acontecer uma ligação
@@ -110,7 +100,7 @@ function connectMarkers(marker, marker2, color) {
         marker.connected = true;
         if (marker2.type == "Meter") {
             marker2.setIcon(getMeterColor(marker2));
-            findAndRemove(disconnectedMeters, marker2);
+            removeFromList(disconnectedMeters, marker2);
 
         }
         else
@@ -122,29 +112,35 @@ function connectMarkers(marker, marker2, color) {
         drawLine(marker, marker2, color);
     }
 }
-function checkIfConnectionIsPossible(marker1, marker2) {
+function checkIfConnectionIsPossible(marker1, marker2)
+{
     if (marker1.ID == marker2.ID)
         return false
-    else {
-        for (i = 0; i < markerConnections.length; i++) {
-            if ((markerConnections[i][0].ID == marker1.ID && markerConnections[i][1].ID == marker2.ID) || (markerConnections[i][1].ID == marker1.ID && markerConnections[i][0].ID == marker2.ID))
-                return false
-        }
+    else
+    {
+       // alert(marker1.neighbours.length);
+       // if (marker1.neighbours.indexOf(marker2) != -1)
+       //     return false;
+       // for (i = 0; i < markerConnections.length; i++)
+       // {
+       //     if ((markerConnections[i][0].ID == marker1.ID && markerConnections[i][1].ID == marker2.ID) || (markerConnections[i][1].ID == marker1.ID && markerConnections[i][0].ID == marker2.ID))
+       //         return false
+       // }
     }
     return true;
 }
 
 
-function reconnectMovedMarker(marker, newPosition) {
-    for (var i = 0; i < markerConnections.length; i++) {
-        for (var j = 0; j < 2; j++) {
-            if (markerConnections[i][j].ID == marker.ID) {
-                markerConnections[i][j].setPosition(newPosition);
-            }
-        }
-    }
+//function reconnectMovedMarker(marker, newPosition) {
+//    for (var i = 0; i < markerConnections.length; i++) {
+//        for (var j = 0; j < 2; j++) {
+//            if (markerConnections[i][j].ID == marker.ID) {
+//                markerConnections[i][j].setPosition(newPosition);
+//            }
+//        }
+//    }
 
-}
+//}
 function refreshLocation(marker, location) {
     mar.setPosition()
 }
@@ -181,8 +177,6 @@ function removeMarkerConnections(marker) {
                 disconnectedMeters.push(markerConnections[i][0]);
 
             }
-
-
             markerConnections.splice(i, 1);
             i--;
         }
@@ -241,7 +235,7 @@ function getMeterColor(meter) {
     //ESTA FUNÇÃO NÃO ESTÁ OTIMIZADA!!!!!!!!!!!!!!!!!!!
     var color = -1
     for (i = 0; i < meter.neighbours.length; i++) {
-        var dis = distance(meter.position.lat(), meter.position.lng(), meter.neighbours[i].position.lat(), meter.neighbours[i].position.lng(), "K");
+        var dis = distance(meter,meter.neighbours[i]);
         dis = dis;
         var positions = getCircleColorPositions();
         if (dis < positions.med1) {
@@ -403,11 +397,11 @@ function connectViaMesh() {
         for (var j = 0; j < allMarkers.length ; j++) {
             if (allMarkers[j].type == "Meter" && allMarkers[j].connected == true) {
                 if (finalDis == -1) {
-                    finalDis = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), allMarkers[j].position.lat(), allMarkers[j].position.lng(), "K");
+                    finalDis = distance(disMeters[i],allMarkers[j]);
                     meterToConnect = allMarkers[j];
                 }
                 else {
-                    var dist = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), allMarkers[j].position.lat(), allMarkers[j].position.lng(), "K");
+                    var dist = distance(disMeters[i], allMarkers[j]);
                     if (dist < finalDis) {
                         finalDis = dist;
                         meterToConnect = allMarkers[j];
@@ -419,7 +413,7 @@ function connectViaMesh() {
         var values = getValuesFromTable(finalDis);
         if (values != -1) {
             drawDashedLine(disMeters[i], meterToConnect, values.color)
-            findAndRemove(disconnectedMeters, disMeters[i]);
+            removeFromList(disconnectedMeters, disMeters[i]);
             disMeters[i].meshHop = 1;
             hopMeters.push(disMeters[i]);
         }
@@ -433,11 +427,11 @@ function connectViaMesh() {
         for (j = 0; j < hopMeters.length; j++) {
             if (hopMeters[j].meshHop == 1) {
                 if (finalDis == -1) {
-                    finalDis = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), hopMeters[j].position.lat(), hopMeters[j].position.lng(), "K");
+                    finalDis = distance(disMeters[i], hopMeters[j]);
                     meterToConnect = hopMeters[j];
                 }
                 else {
-                    var dist = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), hopMeters[j].position.lat(), hopMeters[j].position.lng(), "K");
+                    var dist = distance(disMeters[i], hopMeters[j]);
                     if (dist < finalDis) {
                         finalDis = dist;
                         meterToConnect = hopMeters[j];
@@ -449,7 +443,7 @@ function connectViaMesh() {
         var values = getValuesFromTable(finalDis);
         if (values != -1) {
             drawDashedLine(disMeters[i], meterToConnect, values.color)
-            findAndRemove(disconnectedMeters, disMeters[i]);
+            removeFromList(disconnectedMeters, disMeters[i]);
             disMeters[i].meshHop = 2;
             newHopMeters.push(disMeters[i]);
         }
@@ -464,12 +458,12 @@ function connectViaMesh() {
             if (hopMeters[j].meshHop == 2) {
                 if (finalDis == -1)
                 {
-                    finalDis = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), hopMeters[j].position.lat(), hopMeters[j].position.lng(), "K");
+                    finalDis = distance(disMeters[i], hopMeters[j]);
                     meterToConnect = hopMeters[j];
                 }
                 else
                 {
-                    var dist = distance(disMeters[i].position.lat(), disMeters[i].position.lng(), hopMeters[j].position.lat(), hopMeters[j].position.lng(), "K");
+                    var dist = distance(disMeters[i], hopMeters[j]);
                     if (dist < finalDis)
                     {
                         finalDis = dist;
@@ -482,7 +476,7 @@ function connectViaMesh() {
         var values = getValuesFromTable(finalDis);
         if (values != -1) {
             drawDashedLine(disMeters[i], meterToConnect, values.color)
-            findAndRemove(disconnectedMeters, disMeters[i]);
+            removeFromList(disconnectedMeters, disMeters[i]);
             disMeters[i].meshHop = 3;
             //newHopMeters.push(disMeters[i]);	
         }
