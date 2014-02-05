@@ -317,20 +317,20 @@ function initialize()
 		dis = dis * 1000;
 		if (dis < marker1.reach / 3)
 		{
-			color = "#00FF00";
+			color = "#00FFFF";
 //			if (marker2.type == "meter")
 //				marker2.setIcon('greenSquare.png');
 		}
 		else
 		if (dis < marker1.reach * (2 / 3))
 		{
-			color = "#FFFF00"
+			color = "#FFFFFF"
 //			if (marker2.type == "meter")
 //				marker2.setIcon('yellowSquare.png')
 		}
 		else
 		{
-			color = "#FF0000"
+			color = "#FFFFFF"
 //			if (marker2.type == "meter")
 //				marker2.setIcon('redSquare.png')
 		}

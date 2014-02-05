@@ -126,13 +126,13 @@ function prepareMarkerEvents(marker) {
 
 
 
-        if (marker.type != "Meter") {
+        if (marker.type == "DAP") {
             removeMarkerCircles(marker);
 
-            if (marker.neighbours.length == 0)
-                marker.setIcon(marker.offIcon);
-            else
-                marker.setIcon(marker.onIcon);
+          //  if (marker.neighbours.length == 0)
+          //      marker.setIcon(marker.offIcon);
+          //  else
+          //      marker.setIcon(marker.onIcon);
         }
 
 

@@ -26,7 +26,8 @@ var currentIns = "DAP";
 var table = [];
 
 
-function connectNodesByDistance(marker) {
+function connectNodesByDistance(marker) 
+{
 
     for (var i = 0; i < allMarkers.length; i++)
     {
@@ -46,6 +47,7 @@ function connectNodesByDistance(marker) {
                     connectMarkers(allMarkers[i], marker, values.color);
         }
     }
+
     if (marker.type == "DAP")
     {
         if (marker.neighbours.length == 0) 
@@ -109,6 +111,7 @@ function connectMarkers(marker, marker2, color) {
         //
         var markers = [marker, marker2];
         markerConnections.push(markers);
+
         drawLine(marker, marker2, color);
     }
 }
@@ -116,84 +119,69 @@ function checkIfConnectionIsPossible(marker1, marker2)
 {
     if (marker1.ID == marker2.ID)
         return false
-    else
-    {
-       // alert(marker1.neighbours.length);
-       // if (marker1.neighbours.indexOf(marker2) != -1)
-       //     return false;
-       // for (i = 0; i < markerConnections.length; i++)
-       // {
-       //     if ((markerConnections[i][0].ID == marker1.ID && markerConnections[i][1].ID == marker2.ID) || (markerConnections[i][1].ID == marker1.ID && markerConnections[i][0].ID == marker2.ID))
-       //         return false
-       // }
-    }
     return true;
 }
 
 
-//function reconnectMovedMarker(marker, newPosition) {
-//    for (var i = 0; i < markerConnections.length; i++) {
-//        for (var j = 0; j < 2; j++) {
-//            if (markerConnections[i][j].ID == marker.ID) {
-//                markerConnections[i][j].setPosition(newPosition);
-//            }
-//        }
-//    }
-
-//}
-function refreshLocation(marker, location) {
-    mar.setPosition()
-}
-function removeMarkerConnections(marker) {
-
-
-    for (var i = 0; i < markerConnections.length; i++) {
-        if (markerConnections[i][0].ID == marker.ID || markerConnections[i][1].ID == marker.ID) {
-            //remove da lista de vizinhos
-            lines[i].setVisible(false);
-            lines.splice(i, 1);
-            markerConnections[i][0].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][0], markerConnections[i][1]), 1);
-            markerConnections[i][1].neighbours.splice(getMarkerPositionFromNeighbour(markerConnections[i][1], markerConnections[i][0]), 1);
-
-            if (markerConnections[i][0].neighbours.length == 0)
-                markerConnections[i][0].connected = false;
-            if (markerConnections[i][1].neighbours.length == 0)
-                markerConnections[i][1].connected = false;
-
-            if (markerConnections[i][1].neighbours.length == 0 && markerConnections[i][1].type != "Meter") {
-                markerConnections[i][1].setIcon(markerConnections[i][1].offIcon);
-
-            }
-            if (markerConnections[i][0].neighbours.length == 0 && markerConnections[i][0].type != "Meter") {
-                markerConnections[i][0].setIcon(markerConnections[i][0].offIcon);
-
-            }
-            if (markerConnections[i][1].type == "Meter") {
-                markerConnections[i][1].setIcon(getMeterColor(markerConnections[i][1]));
-                disconnectedMeters.push(markerConnections[i][1]);
-            }
-            if (markerConnections[i][0].type == "Meter") {
-                markerConnections[i][0].setIcon(getMeterColor(markerConnections[i][0]));
-                disconnectedMeters.push(markerConnections[i][0]);
-
-            }
-            markerConnections.splice(i, 1);
+function removeMarkerConnections(marker) 
+{
+    for (var i = 0; i < markerConnections.length; i++) 
+    {
+        if (markerConnections[i][0].ID == marker.ID || markerConnections[i][1].ID == marker.ID)
+        {
+            //Remove a conexão entre os nós
+            clearConnection(markerConnections[i][0], markerConnections[i][1], i);
+            // i-- é necessário pois voce remove uma posição e deve retornar uma unidade, para continuar da posição correta!
             i--;
         }
+            
+            
     }
 
 }
-function getMarkerPositionFromNeighbour(marker, marker2) {
-    for (i = 0; i < marker.neighbours.length; i++) {
+function clearConnection(marker1,marker2,i)
+{
+    //Apaga a linha da conexão
+    lines[i].setVisible(false);
+    //Remove a conexão das listas de linhas para desenhar
+    lines.splice(i, 1);
+    //Ambos os nós deixam de ser vizinhos
+    marker1.neighbours.splice(getMarkerPositionFromNeighbour(marker1,marker2), 1);
+    marker2.neighbours.splice(getMarkerPositionFromNeighbour(marker2,marker1), 1);
+
+    //Se não possuem vizinhos não estão conectados
+    //Se for um DAP e não tiver vizinho 
+    if (marker1.neighbours.length == 0)
+    {
+        marker1.connected = false;
+        marker1.setIcon(marker1.offIcon);
+        if (marker1.type == "Meter") 
+            disconnectedMeters.push(marker1);       
+    }
+    if (marker2.neighbours.length == 0)
+    {
+        marker2.connected = false;
+        marker2.setIcon(marker2.offIcon);
+        if (marker2.type == "Meter")
+            disconnectedMeters.push(marker2);       
+    }
+    markerConnections.splice(i, 1);
+}
+function getMarkerPositionFromNeighbour(marker, marker2)
+{
+    for (i = 0; i < marker.neighbours.length; i++)
+    {
         if (marker2.ID == marker.neighbours[i].ID)
             return i;
     }
     return -1;
 }
-function removeMarker(marker) {
+function removeMarker(marker)
+{
     removeMarkerConnections(marker);
     infowindow.setMap(null);
-    for (var i = 0; i < allMarkers.length; i++) {
+    for (var i = 0; i < allMarkers.length; i++)
+    {
         if (allMarkers[i].ID == marker.ID) {
             markerCluster.removeMarker(allMarkers[i]);
             allMarkers[i].setMap(null);
@@ -201,7 +189,8 @@ function removeMarker(marker) {
 
         }
     }
-    for (var i = 0; i < markerConnections.length; i++) {
+    for (var i = 0; i < markerConnections.length; i++)
+    {
         if (markerConnections[i][0].ID == marker.ID || markerConnections[i][1].ID == marker.ID) {
             //remove da lista de vizinhos
             lines[i].setVisible(false);
@@ -216,7 +205,8 @@ function removeMarker(marker) {
 }
 
 
-function displayInfoWindow(marker) {
+function displayInfoWindow(marker)
+{
 
     var neighboursIDs = "";
     for (var i = 0; i < marker.neighbours.length; i++) {
@@ -231,7 +221,8 @@ function displayInfoWindow(marker) {
     infowindow.open(map, marker);
 
 }
-function getMeterColor(meter) {
+function getMeterColor(meter)
+{
     //ESTA FUNÇÃO NÃO ESTÁ OTIMIZADA!!!!!!!!!!!!!!!!!!!
     var color = -1
     for (i = 0; i < meter.neighbours.length; i++) {
