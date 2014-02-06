@@ -1,4 +1,4 @@
-﻿var ID = 0;
+﻿
 
 function placeMeter(latitude, longitude) {
     var latLng = new google.maps.LatLng(latitude, longitude);

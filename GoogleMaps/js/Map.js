@@ -1,8 +1,5 @@
 ﻿
-var map;
-var markerCluster;
-var elevator;
-var insertListener;
+
 function initialize() {
     var mapOptions =
 	{
