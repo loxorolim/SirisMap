@@ -1,15 +1,14 @@
-﻿
-
-function placeMeter(latitude, longitude) {
-    var latLng = new google.maps.LatLng(latitude, longitude);
+﻿function placeMeter(latitude, longitude)
+{
+    var latLng = new google.maps.LatLng(latitude+1, longitude-1);
     var marker = new google.maps.Marker(
 	{
 	    type: "Meter",
 	    position: latLng,
 	    map: map,
 	    draggable: true,
-	    offIcon: 'blackSquare.png',
-	    icon: 'blackSquare.png',
+	    offIcon: meterOffIconImage,
+	    icon: meterOffIconImage,
 	    neighbours: [],
 	    ID: ID,
 	    connected: false,
@@ -17,8 +16,8 @@ function placeMeter(latitude, longitude) {
 	});
     ID++;
     var locations = [];
-    var markerLocation = latLng;
-    locations.push(markerLocation);
+   // var markerLocation = latLng;
+    locations.push(latLng);
     // Create a LocationElevationRequest object using the array's one value
     var positionalRequest =
 	{
@@ -51,8 +50,10 @@ function placeMeter(latitude, longitude) {
         
     });
 }
-function placeDAP(latitude, longitude, technology) {
-    var latLng = new google.maps.LatLng(latitude, longitude);
+function placeDAP(latitude, longitude, technology)
+{
+   
+    var latLng = new google.maps.LatLng(latitude+1, longitude-1);
     var marker = new google.maps.Marker(
 	{
 	    type: "DAP",
@@ -60,9 +61,9 @@ function placeDAP(latitude, longitude, technology) {
 	    map: map,
 	    draggable: true,
 	    ID: ID,
-	    offIcon: 'daprouteroff.png',
-	    onIcon: 'daprouter.png',
-	    icon: 'daprouter.png',
+	    offIcon: dapOffIconImage,
+	    onIcon: dapOnIconImage,
+	    icon: dapOnIconImage,
 	    teleTech: technology,
 	    reachCircles: [],
 	    neighbours: [],
@@ -78,7 +79,8 @@ function placeDAP(latitude, longitude, technology) {
 	    'locations': locations
 	}
     elevator.getElevationForLocations(positionalRequest, function (results, status) {
-        if (status == google.maps.ElevationStatus.OK) {
+        if (status == google.maps.ElevationStatus.OK)
+        {
             connectNodesByDistance(marker);
             // Retrieve the first result
             if (results[0]) {
@@ -91,53 +93,51 @@ function placeDAP(latitude, longitude, technology) {
                 if (meshEnabled)
                     executeRFMesh();
             }
-            else {
+            else
+            {
                 return -1;
             }
         }
-        else {
+        else
+        {
             return -1;
         }
     });
 }
-function prepareMarkerEvents(marker) {
+function prepareMarkerEvents(marker)
+{
     markerCluster.addMarker(marker);
-    google.maps.event.addListener(marker, 'click', function (event) {
-        if (opMode == "Removal") {
+    google.maps.event.addListener(marker, 'click', function (event)
+    {
+        if (opMode == "Removal")
+        {
             removeMarker(marker);
-            if (meshEnabled) {
-                executeRFMesh()
-            }
+            if (meshEnabled) 
+                executeRFMesh()           
         }
         else
             displayInfoWindow(marker);
 
     });
-    google.maps.event.addListener(marker, 'dragstart', function (event) {
+    google.maps.event.addListener(marker, 'dragstart', function (event)
+    {
         infowindow.setMap(null);
         removeMesh();
     });
-    google.maps.event.addListener(marker, 'drag', function (event) {
+    google.maps.event.addListener(marker, 'drag', function (event)
+    {
 
         //reconnectMovedMarker(marker, event.latLng)
         removeMarkerConnections(marker);
         connectNodesByDistance(marker);
-
-
-
-
-        if (marker.type == "DAP") {
+        if (marker.type == "DAP")
             removeMarkerCircles(marker);
-
-          //  if (marker.neighbours.length == 0)
-          //      marker.setIcon(marker.offIcon);
-          //  else
-          //      marker.setIcon(marker.onIcon);
-        }
+        
 
 
     });
-    google.maps.event.addListener(marker, 'dragend', function (event) {
+    google.maps.event.addListener(marker, 'dragend', function (event)
+    {
 
         // reconnectMovedMarker(marker,event.latLng)
         if (meshEnabled)
@@ -153,23 +153,29 @@ function prepareMarkerEvents(marker) {
 		{
 		    'locations': locations
 		}
-        elevator.getElevationForLocations(positionalRequest, function (results, status) {
-            if (status == google.maps.ElevationStatus.OK) {
+        elevator.getElevationForLocations(positionalRequest, function (results, status)
+        {
+            if (status == google.maps.ElevationStatus.OK)
+            {
                 // Retrieve the first result
-                if (results[0]) {
+                if (results[0])
+                {
                     marker.elevation = results[0].elevation;
                 }
-                else {
+                else
+                {
                     return -1;
                 }
             }
-            else {
+            else
+            {
                 return -1;
             }
         });
     });
 }
-function getElevation(event) {
+function getElevation(event)
+{
     var locations = [];
     // Retrieve the clicked location and push it on the array
     var clickedLocation = event.latLng;

@@ -3,8 +3,6 @@ function drawLine(marker1, marker2, colorname)
 {
     var markerPositions = [marker1.getPosition(), marker2.getPosition()];
     var color;
-    //var reach = fetchReach(marker1.teleTech,scenario,dbm)
-    var reach = marker1.reach;
     if (colorname == "GREEN") 
         color = "#00FF00";   
     else
@@ -35,12 +33,10 @@ function drawDashedLine(marker1, marker2, colorname)
     {
         path: 'M 0,-1 0,1',
         strokeOpacity: 1,
-        scale: 4
+        scale: 3
     };
     var markerPositions = [marker1.getPosition(), marker2.getPosition()];
     var color;
-    //var reach = fetchReach(marker1.teleTech,scenario,dbm)
-    var reach = marker1.reach;
     if (colorname == "GREEN") 
         color = "#00FF00";   
     else
@@ -57,17 +53,14 @@ function drawDashedLine(marker1, marker2, colorname)
 	    icons: [{
 	        icon: lineSymbol,
 	        offset: '0',
-	        repeat: '20px'
+	        repeat: '15px'
 	    }],
 	    strokeWeight: 2
 	});
     dashedLines.push(routerPath);
     dashedLines[dashedLines.length - 1].setMap(map);
     routerPath.setMap(map);
-    //if (radioMode == "Radius")
-    //{
-    //	dashedLines[dashedLines.length - 1].setVisible(false);
-    //}
+
 
 }
 function getCircleColorPositions() {
@@ -165,27 +158,36 @@ function drawRefresh()
         }
     }
 }
-function setLinesInvisible() {
-    for (i = 0; i < lines.length; i++) {
+function setLinesInvisible()
+{
+    for (i = 0; i < lines.length; i++)
+    {
         lines[i].setVisible(false);
     }
 }
-function setCirclesInvisible() {
-    for (i = 0; i < allMarkers.length; i++) {
-        if (allMarkers[i].reachCircles != null) {
+function setCirclesInvisible()
+{
+    for (i = 0; i < allMarkers.length; i++)
+    {
+        if (allMarkers[i].reachCircles != null)
+        {
             allMarkers[i].reachCircles[2].setVisible(false);
             allMarkers[i].reachCircles[1].setVisible(false);
             allMarkers[i].reachCircles[0].setVisible(false);
         }
     }
 }
-function setLinesVisible() {
-    for (i = 0; i < lines.length; i++) {
+function setLinesVisible()
+{
+    for (i = 0; i < lines.length; i++)
+    {
         lines[i].setVisible(true);
     }
 }
-function setCirclesVisible() {
-    for (i = 0; i < allMarkers.length; i++) {
+function setCirclesVisible()
+{
+    for (i = 0; i < allMarkers.length; i++)
+    {
         if (allMarkers[i].reachCircles != null) {
             allMarkers[i].reachCircles[2].setVisible(true);
             allMarkers[i].reachCircles[1].setVisible(true);

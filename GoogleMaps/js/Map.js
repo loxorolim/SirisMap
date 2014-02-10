@@ -35,6 +35,39 @@ function initialize() {
 
         //}
     });
+    
+    google.maps.event.addListener(map, 'mousemove', function (event) {
+        
+        if (opMode == "Insertion")
+        {
+            mouseInsertionIcon.setMap(null);
+       
+        var latLng = new google.maps.LatLng(event.latLng.lat()+1, event.latLng.lng()-1);
+        
+        var marker = new google.maps.Marker(
+        {
+            position: latLng,
+            map: map,
+            icon: meterOffIconImage,
+            clickable: false
+
+
+        });
+        
+        if (currentIns == "DAP")
+            marker.setIcon(dapOnIconImage);
+        else if (currentIns == "Meter")
+            marker.setIcon(meterOffIconImage);
+        else
+            marker.setIcon(null);
+
+        mouseInsertionIcon = marker;
+        }
+
+
+
+    });
+
     setButtons();
     //table = loadTable();
     //getValuesFromTable("ZigBee","Metropolitan","dbm0",15);

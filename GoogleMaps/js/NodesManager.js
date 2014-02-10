@@ -69,7 +69,8 @@ function removeFromList(list, obj) {
         }
     }
 }
-function connectMarkers(marker, marker2, color) {
+function connectMarkers(marker, marker2, color)
+{
     if (checkIfConnectionIsPossible(marker, marker2))
     {
         marker.neighbours.push(marker2);
@@ -205,15 +206,15 @@ function getMeterColor(meter)
     }
     var value = getValuesFromTable(dist);
     if (value.color == "GREEN")
-        return "greenSquare.png";
+        return meterBestIconImage;
     else
         if (value.color == "YELLOW")
-            return "yellowSquare.png";
+            return meterBetterIconImage;
         else
             if (value.color == "RED")
-                return "redSquare.png";
+                return meterGoodIconImage;
             else
-                return "blackSquare.png";
+                return meterOffIconImage;
     
 }
 
@@ -400,122 +401,18 @@ function connectViaMesh()
         metersToMesh = hopMeters;
         hopMeters = [];
     }
-    //for (var i = 0; i < disMeters.length ; i++)
-    //{
-    //    //PEGA O METER MAIS PRÓXIMO QUE ESTÁ CONECTADO A UM DAP E FAZ UMA LIGAÇÃO MESH SE POSSÍVEL
-    //    var meterToConnect;
-    //    var finalDis = -1;
-    //    for (var j = 0; j < allMarkers.length ; j++)
-    //    {
-    //        if (allMarkers[j].type == "Meter" && allMarkers[j].connected == true)
-    //        {
-    //            if (finalDis == -1)
-    //            {
-    //                finalDis = distance(disMeters[i],allMarkers[j]);
-    //                meterToConnect = allMarkers[j];
-    //            }
-    //            else
-    //            {
-    //                var dist = distance(disMeters[i], allMarkers[j]);
-    //                if (dist < finalDis)
-    //                {
-    //                    finalDis = dist;
-    //                    meterToConnect = allMarkers[j];
-    //                }
-
-    //            }
-    //        }
-    //    }
-    //    var values = getValuesFromTable(finalDis);
-    //    if (values != -1)
-    //    {
-    //        drawDashedLine(disMeters[i], meterToConnect, values.color)
-    //        removeFromList(disconnectedMeters, disMeters[i]);
-    //        disMeters[i].meshHop = 1;
-    //        hopMeters.push(disMeters[i]);
-    //    }
-    //}
-    ////SEGUNDA PASSADA, PARA OS NÓS QUE NÃO SE CONECTARAM AOS OUTROS COM APENAS 1 SALTO
-    //disMeters = disconnectedMeters.slice();
-    //var newHopMeters = [];
-    //for (var i = 0; i < disMeters.length; i++)
-    //{
-    //    var meterToConnect;
-    //    var finalDis = -1;
-    //    for (j = 0; j < hopMeters.length; j++)
-    //    {
-    //        if (hopMeters[j].meshHop == 1)
-    //        {
-    //            if (finalDis == -1)
-    //            {
-    //                finalDis = distance(disMeters[i], hopMeters[j]);
-    //                meterToConnect = hopMeters[j];
-    //            }
-    //            else
-    //            {
-    //                var dist = distance(disMeters[i], hopMeters[j]);
-    //                if (dist < finalDis)
-    //                {
-    //                    finalDis = dist;
-    //                    meterToConnect = hopMeters[j];
-    //                }
-
-    //            }
-    //        }
-    //    }
-    //    var values = getValuesFromTable(finalDis);
-    //    if (values != -1) {
-    //        drawDashedLine(disMeters[i], meterToConnect, values.color)
-    //        removeFromList(disconnectedMeters, disMeters[i]);
-    //        disMeters[i].meshHop = 2;
-    //        newHopMeters.push(disMeters[i]);
-    //    }
-    //}
-    //hopMeters = newHopMeters;
-    //disMeters = disconnectedMeters.slice();
-    ////var newHopMeters = [];
-    //for (var i = 0; i < disMeters.length; i++)
-    //{
-    //    var meterToConnect;
-    //    var finalDis = -1;
-    //    for (j = 0; j < hopMeters.length; j++)
-    //    {
-    //        if (hopMeters[j].meshHop == 2)
-    //        {
-    //            if (finalDis == -1)
-    //            {
-    //                finalDis = distance(disMeters[i], hopMeters[j]);
-    //                meterToConnect = hopMeters[j];
-    //            }
-    //            else
-    //            {
-    //                var dist = distance(disMeters[i], hopMeters[j]);
-    //                if (dist < finalDis)
-    //                {
-    //                    finalDis = dist;
-    //                    meterToConnect = hopMeters[j];
-    //                }
-
-    //            }
-    //        }
-    //    }
-    //    var values = getValuesFromTable(finalDis);
-    //    if (values != -1) {
-    //        drawDashedLine(disMeters[i], meterToConnect, values.color)
-    //        removeFromList(disconnectedMeters, disMeters[i]);
-    //        disMeters[i].meshHop = 3;
-    //        //newHopMeters.push(disMeters[i]);	
-    //    }
-    //}
+   
 }
 
-function setInfoWindowNull() {
+function setInfoWindowNull()
+{
     infowindow.setMap(null);
 }
 function getAllMarkers() {
     return allMarkers;
 }
-function setDapsToTechnology() {
+function setDapsToTechnology()
+{
     for (i = 0 ; i < daps.length; i++)
     {
         daps[i].teleTech = currentTech;
