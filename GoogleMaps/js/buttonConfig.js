@@ -12,7 +12,8 @@ function setButtons()
 			
 			//event.preventDefault(); // the magic
 
-			setOpMode("Removal");
+		    setOpMode("Removal");
+		    map.setOptions({ draggableCursor: "undefined, auto" })
 			setInfoWindowNull();
 			$('#configMessage').html(getConfigurations());
 		//	event.stopPropagation();
@@ -70,7 +71,9 @@ function setButtons()
 
 });
 
-
+        $(function () {
+	        $("#menu").menu();
+        });
 	   $( "#radioBackground" ).buttonset().find('label').width(122);
 	   $( "#accordion,#techAccordion" ).accordion({
 			
@@ -99,13 +102,15 @@ function setButtons()
 			setOpMode("Insertion");		
 			setInfoWindowNull();
 			setInsertionOptions("DAP")
+			map.setOptions({ draggableCursor: "url(dapcursor.png) 12 12, auto" });
 			$('#configMessage').html(getConfigurations());
 		});
 		$("#meterRadio").click(function()
 		{
 			setOpMode("Insertion");		
 			setInfoWindowNull();
-			setInsertionOptions("Meter")
+			setInsertionOptions("Meter");
+			map.setOptions({ draggableCursor: "url(metercursor.png) 11 11, auto" })
 			$('#configMessage').html(getConfigurations());
 		});
 		

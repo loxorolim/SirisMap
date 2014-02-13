@@ -6,6 +6,11 @@
 	height:0px;
 	
 }
+#image{
+position:absolute;
+opacity:0.4;
+z-index:100;
+}
 #TextoCor
 {
 	margin-right: 25px;

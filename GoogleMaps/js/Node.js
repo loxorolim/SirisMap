@@ -1,6 +1,6 @@
 ﻿function placeMeter(latitude, longitude)
 {
-    var latLng = new google.maps.LatLng(latitude+1, longitude-1);
+    var latLng = new google.maps.LatLng(latitude, longitude);
     var marker = new google.maps.Marker(
 	{
 	    type: "Meter",
@@ -53,7 +53,7 @@
 function placeDAP(latitude, longitude, technology)
 {
    
-    var latLng = new google.maps.LatLng(latitude+1, longitude-1);
+    var latLng = new google.maps.LatLng(latitude, longitude);
     var marker = new google.maps.Marker(
 	{
 	    type: "DAP",

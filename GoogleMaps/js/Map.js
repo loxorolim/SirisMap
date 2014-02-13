@@ -36,37 +36,42 @@ function initialize() {
         //}
     });
     
-    google.maps.event.addListener(map, 'mousemove', function (event) {
+   // $(document).mousemove(function (e) {
+   //     $("#image").css({ left: e.pageX-10, top: e.pageY-10 });
+   // });
+    
+    //google.maps.event.addListener(map, 'mousemove', function (event) {
         
-        if (opMode == "Insertion")
-        {
-            mouseInsertionIcon.setMap(null);
+    //    if (opMode == "Insertion")
+    //    {
+    //        mouseInsertionIcon.setMap(null);
        
-        var latLng = new google.maps.LatLng(event.latLng.lat()+1, event.latLng.lng()-1);
+    //    var latLng = new google.maps.LatLng(event.latLng.lat(), event.latLng.lng());
         
-        var marker = new google.maps.Marker(
-        {
-            position: latLng,
-            map: map,
-            icon: meterOffIconImage,
-            clickable: false
+    //    var marker = new google.maps.Marker(
+    //    {
+    //        position: latLng,
+    //        map: map,
+    //        icon: meterOffIconImage,
+    //        clickable: false,
+    //        anchor: new google.maps.Point(9.5, 9.5)
 
 
-        });
+    //    });
         
-        if (currentIns == "DAP")
-            marker.setIcon(dapOnIconImage);
-        else if (currentIns == "Meter")
-            marker.setIcon(meterOffIconImage);
-        else
-            marker.setIcon(null);
+    //    if (currentIns == "DAP")
+    //        marker.setIcon(dapOnIconImage);
+    //    else if (currentIns == "Meter")
+    //        marker.setIcon(meterOffIconImage);
+    //    else
+    //        marker.setIcon(null);
 
-        mouseInsertionIcon = marker;
-        }
+    //    mouseInsertionIcon = marker;
+    //    }
 
 
 
-    });
+    //});
 
     setButtons();
     //table = loadTable();
