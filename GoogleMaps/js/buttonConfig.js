@@ -42,7 +42,7 @@ function setButtons()
 	   $('#scenarioBackground').buttonset().find('label').width(radioSize);
 	   $('#technologyBackground').buttonset().find('label').width(radioSize);
 	   $('#configMessage').html(getConfigurations());
-	   $('#RFMesh').button();
+	  // $('#RFMesh').button();
 	    
 		
 	

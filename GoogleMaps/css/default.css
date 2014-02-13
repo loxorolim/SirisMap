@@ -11,6 +11,10 @@ position:absolute;
 opacity:0.4;
 z-index:100;
 }
+.ui-menu { 
+    width: 150px; 
+
+}
 #TextoCor
 {
 	margin-right: 25px;
