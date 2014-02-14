@@ -12,6 +12,7 @@
 	  <link href= "css/jquery-ui.min.css" rel= "stylesheet">
       <script src= "https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=drawing"></script>
       <script src= "js/jquery-1.10.2.min.js"></script>
+      <script src="js/jquery.blockUI.js"></script>    
 	  <script src= "js/jquery-ui.min.js"></script>
       <script src="js/Globals.js"></script>
       <script src= "js/ShadowingPropagation.js"></script>
@@ -27,178 +28,183 @@
   </head>
   <body>
 
+      
+      <div id="square">
+          <div id="helpimage"></div>
+          
+      </div>
+      
+          <div id=" wrapper">
+              <div id="map_canvas">
+              </div>
+              
+              <div id="over_map">
+                  
+                      <div id="controls">
 
-<div id= " wrapper">
-   <div id= "map_canvas">
-   </div>
-   
-   <div id= "over_map">
-       
-		<div id= "controls">
-            
-            <ul id="menu">
-                <li>
-                    <a href="#">Planejamento</a>
-                    <ul>
-                        <li>
-                            <a href="#">Inserção</a>
-                            <ul>
-                                <li><a id="dapRadio">DAP</a></li>
-                                <li><a id="meterRadio">Medidor</a></li>
-                            </ul>
-                        </li>
-                        <li><a id="Removal">Remoção</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Tecnologia</a>
-                    <ul>
-                        <li><a id="ZigBee" >802.11</a></li>
-                        <li><a id="80211">ZigBee</a></li>
-                        <li>
-                            <a href="#">Potência</a>
-                            <ul>
-                                <li><a id="z0dbm">0 dbm</a></li>
-                                <li><a id="z6dbm">6 dbm</a></li>
-                                <li><a id="z12dbm">12 dbm</a></li>
-                                <li> <a id="z18dbm">18 dbm</a> </li>
-                                <li><a id="z24dbm">24 dbm</a></li>
-                                <li><a id="z30dbm">30 dbm</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Cenário</a>
-                    <ul>
-                        <li><a id="metropolitanRadio">Urbano</a></li>
-                        <li><a id="urbanRadio">Suburbano</a></li>
-                        <li><a id="ruralRadio">Rural</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Exibição</a>
-                    <ul>
-                        <li><a id="lineRadio">Modo Linha</a></li>
-                        <li><a id="radiusRadio">Modo Raio</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a id="RFMesh">RFMesh</a>
-                </li>
-                <li>
-                    <a href="#">Ajuda</a>
-                </li>
-            </ul>
-            
-           <!-- 			
-			<div id= "accordion">
-			  <h3 id= "Insertion"> Inserção</h3>
-			  <div id= "insertionBackground">
-							<button id= "dapRadio"> DAP</button>
-							<button id= "meterRadio"> Medidor</button>
-						</div>
-						
-			  <button id= "Removal"> Remoção</button>
-
-			  <div> 
-			  </div>
-			  <h3 id= "Technology"> Tecnologia</h3>
-			  <div id= tech>
-					 <div id= "technologyBackground">
-					<button id= "ZigBee"> ZigBee</button>
-					<button id= "80211"> Wifi</button>
-					</div>
-					<div id= "techAccordion">	
-						<h3 id = "power"> Potência</h3>
-						<div id= "powerbackground">
-							<button id= "z0dbm" class= "dbButtons"> 0dbm</button>
-							<button id= "z6dbm" class= "dbButtons"> 6dbm</button>
-							<button id= "z12dbm" class= "dbButtons"> 12dbm</button>
-							<button id= "z18dbm" class= "dbButtons"> 18dbm</button>
-							<button id= "z24dbm" class= "dbButtons"> 24dbm</button>
-							<button id= "z30dbm" class= "dbButtons"> 30dbm</button>
-						</div>
-								  
-				  </div>	
-			  </div>
-			  <h3 id= "Scenario"> Cenário</h3>
-			  <div id= "scenarioBackground">
-							<button id= "metropolitanRadio"> Urbano</button>
-							<button id= "urbanRadio"> Suburbano</button>
-							<button id= "ruralRadio"> Rural</button>
-						</div>
-			  <h3 id = "DisplayXML"> Exibir XML</h3>
-			  <div id = "xmldisplay">	
-					<p id= "xmltext"></p>
-			  </div>
-			  
-			  
-			</div>	
-			<button id= "RFMesh"> RF Mesh</button>-->
-			<div id = "legenda">
-				<div id= "legendaDialog" title= "Legenda">
-					<div id = "valorTexto">
-						<div class = "legendaImagem">
-							<span id = "TextoCor" class = "escritaLegenda" > Cor </span>
-						</div>
-						<div class = "legendaImagem">
-							<span class = "escritaLegenda" > Chance de entrega</span>
-						</div>					
-					</div>
-					<div id= "legendaVerde" class = "legendas" >
-						<div class = "legendaImagem">
-							<img border="0" src="greenSquare.png" width="60" height="15">
-						</div>
-						<div class = "legendaImagem">
-							<span class = "escritaLegenda" > Maior ou igual a 98% </span>
-						</div>					
-					</div>
-						<div id= "legendaAmarela" class = "legendas" >
-						<div class = "legendaImagem">
-							<img border="0" src="yellowSquare.png" width="60" height="15">
-						</div>
-						<div class = "legendaImagem">
-							<span class = "escritaLegenda" > De 95% a 98%  </span>
-						</div>					
-					</div>
-						<div id= "legendaAzul" class = "legendas" >
-						<div class = "legendaImagem">
-							<img border="0" src="redSquare.png" width="60" height="15">
-						</div>
-						<div class = "legendaImagem">
-							<span class = "escritaLegenda" > De 90% a 95% </span>
-						</div>					
-					</div>
-				</div>	
-			</div>
-			
-			<div id = "dialogBackground">
-				<div id= "dialog" title= "Configurações selecionadas">
-				 
-				 <p id = "configMessage" class= "dialogHeader"> </p>
-
-				 <div id= "radioBackground">
-			<input type= "radio" id= "lineRadio" name= "radio2" checked= "checked" /><label for= "lineRadio" style= "font-size:14px"> Modo Linha</label>
-			<input type= "radio" id= "radiusRadio" name= "radio2" checked= "checked" /><label for= "radiusRadio" style= "font-size:14px"> Modo Raio</label>
-			</div>	
-			
-			
-				 
+                          <ul id="menu">
+                              <li>
+                                  <a href="#">Planejamento</a>
+                                  <ul>
+                                      <li>
+                                          <a href="#">Inserção</a>
+                                          <ul>
+                                              <li><a id="dapRadio">DAP</a></li>
+                                              <li><a id="meterRadio">Medidor</a></li>
+                                          </ul>
+                                      </li>
+                                      <li><a id="Removal">Remoção</a></li>
+                                  </ul>
+                              </li>
+                              <li>
+                                  <a href="#">Tecnologia</a>
+                                  <ul>
+                                      <li><a id="ZigBee">802.11</a></li>
+                                      <li><a id="80211">ZigBee</a></li>
+                                      <li>
+                                          <a href="#">Potência</a>
+                                          <ul>
+                                              <li><a id="z0dbm">0 dbm</a></li>
+                                              <li><a id="z6dbm">6 dbm</a></li>
+                                              <li><a id="z12dbm">12 dbm</a></li>
+                                              <li> <a id="z18dbm">18 dbm</a> </li>
+                                              <li><a id="z24dbm">24 dbm</a></li>
+                                              <li><a id="z30dbm">30 dbm</a></li>
+                                          </ul>
+                                      </li>
+                                  </ul>
+                              </li>
+                              <li>
+                                  <a href="#">Cenário</a>
+                                  <ul>
+                                      <li><a id="metropolitanRadio">Urbano</a></li>
+                                      <li><a id="urbanRadio">Suburbano</a></li>
+                                      <li><a id="ruralRadio">Rural</a></li>
+                                  </ul>
+                              </li>
+                              <li>
+                                  <a href="#">Exibição</a>
+                                  <ul>
+                                      <li><a id="lineRadio">Modo Linha</a></li>
+                                      <li><a id="radiusRadio">Modo Raio</a></li>
+                                  </ul>
+                              </li>
+                              <li>
+                                  <a id="RFMesh">RFMesh</a>
+                              </li>
+                              <li>
+                                  <a id="help">Ajuda</a>
+                              </li>
+                          </ul>
 
 
-				</div>
-			</div>
-			
-			
-		</div>
-		
 
-		
-		
+                          <!--
+            <div id= "accordion">
+              <h3 id= "Insertion"> Inserção</h3>
+              <div id= "insertionBackground">
+                            <button id= "dapRadio"> DAP</button>
+                            <button id= "meterRadio"> Medidor</button>
+                        </div>
+
+              <button id= "Removal"> Remoção</button>
+
+              <div>
+              </div>
+              <h3 id= "Technology"> Tecnologia</h3>
+              <div id= tech>
+                     <div id= "technologyBackground">
+                    <button id= "ZigBee"> ZigBee</button>
+                    <button id= "80211"> Wifi</button>
+                    </div>
+                    <div id= "techAccordion">
+                        <h3 id = "power"> Potência</h3>
+                        <div id= "powerbackground">
+                            <button id= "z0dbm" class= "dbButtons"> 0dbm</button>
+                            <button id= "z6dbm" class= "dbButtons"> 6dbm</button>
+                            <button id= "z12dbm" class= "dbButtons"> 12dbm</button>
+                            <button id= "z18dbm" class= "dbButtons"> 18dbm</button>
+                            <button id= "z24dbm" class= "dbButtons"> 24dbm</button>
+                            <button id= "z30dbm" class= "dbButtons"> 30dbm</button>
+                        </div>
+
+                  </div>
+              </div>
+              <h3 id= "Scenario"> Cenário</h3>
+              <div id= "scenarioBackground">
+                            <button id= "metropolitanRadio"> Urbano</button>
+                            <button id= "urbanRadio"> Suburbano</button>
+                            <button id= "ruralRadio"> Rural</button>
+                        </div>
+              <h3 id = "DisplayXML"> Exibir XML</h3>
+              <div id = "xmldisplay">
+                    <p id= "xmltext"></p>
+              </div>
 
 
-</div>
-</div>
+            </div>
+            <button id= "RFMesh"> RF Mesh</button>-->
+                          <div id="legenda">
+                              <div id="legendaDialog" title="Legenda">
+                                  <div id="valorTexto">
+                                      <div class="legendaImagem">
+                                          <span id="TextoCor" class="escritaLegenda"> Cor </span>
+                                      </div>
+                                      <div class="legendaImagem">
+                                          <span class="escritaLegenda"> Chance de entrega</span>
+                                      </div>
+                                  </div>
+                                  <div id="legendaVerde" class="legendas">
+                                      <div class="legendaImagem">
+                                          <img border="0" src="greenSquare.png" width="60" height="15">
+                                      </div>
+                                      <div class="legendaImagem">
+                                          <span class="escritaLegenda"> Maior ou igual a 98% </span>
+                                      </div>
+                                  </div>
+                                  <div id="legendaAmarela" class="legendas">
+                                      <div class="legendaImagem">
+                                          <img border="0" src="yellowSquare.png" width="60" height="15">
+                                      </div>
+                                      <div class="legendaImagem">
+                                          <span class="escritaLegenda"> De 95% a 98%  </span>
+                                      </div>
+                                  </div>
+                                  <div id="legendaAzul" class="legendas">
+                                      <div class="legendaImagem">
+                                          <img border="0" src="redSquare.png" width="60" height="15">
+                                      </div>
+                                      <div class="legendaImagem">
+                                          <span class="escritaLegenda"> De 90% a 95% </span>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+
+                          <div id="dialogBackground">
+                              <div id="dialog" title="Configurações selecionadas">
+
+                                  <p id="configMessage" class="dialogHeader"> </p>
+
+                                  <div id="radioBackground">
+                                      <input type="radio" id="lineRadio" name="radio2" checked="checked" /><label for="lineRadio" style="font-size:14px"> Modo Linha</label>
+                                      <input type="radio" id="radiusRadio" name="radio2" checked="checked" /><label for="radiusRadio" style="font-size:14px"> Modo Raio</label>
+                                  </div>
+
+
+
+
+
+                              </div>
+                          </div>
+
+
+                      </div>
+
+                  </div>
+
+          </div>
+      
 	
    
     

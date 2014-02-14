@@ -15,6 +15,7 @@ z-index:100;
     width: 150px; 
 
 }
+
 #TextoCor
 {
 	margin-right: 25px;
@@ -74,6 +75,28 @@ font: bold 14px
     text-align: center;  
 
 } 
+#square{
+    position:absolute;
+    width: 0%;
+    height:0px;
+    background-color:#808080;
+    z-index:100;
+    opacity:0.7;
+}
+#helpimage{
+   background-color:#f00;
+
+   position:absolute;
+   top:50%;
+   left:50%;
+   width:0%;
+   height:0%;
+   margin-top:-305px;
+   margin-left:-327px;
+   opacity:1.0;
+   z-index:101
+ 
+}
 button
 {
 	width:158px;

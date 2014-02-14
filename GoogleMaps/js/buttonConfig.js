@@ -8,19 +8,20 @@ function setButtons()
 			//setInfoWindowNull();
 			//$('#configMessage').html(getConfigurations());
 		});
-		$("#Removal").click(function(event) {
+		$("#Removal").click(function (event)
+		{
 			
 			//event.preventDefault(); // the magic
 
 		    setOpMode("Removal");
-		    map.setOptions({ draggableCursor: "undefined, auto" })
+		    map.setOptions({ draggableCursor: "url(removecursor.png) 12 12, auto" });
 			setInfoWindowNull();
 			$('#configMessage').html(getConfigurations());
 		//	event.stopPropagation();
 		
-			$("#Removal").removeClass("ui-state-focus");
-			event.stopImmediatePropagation(); 
-			event.preventDefault();
+			//$("#Removal").removeClass("ui-state-focus");
+			//event.stopImmediatePropagation(); 
+			//event.preventDefault();
 		});
 		$("#DisplayXML").click(function() {
 			showNodesXml();
@@ -36,6 +37,27 @@ function setButtons()
 			setInfoWindowNull();
 			setRFMesh();
 		});
+		$("#help").click(function () {
+		    $.blockUI({
+		        message: '<img src="helpmenu.gif" /> ',
+		        onOverlayClick: $.unblockUI
+		    });
+		    
+		   // $('#square').width('100%');
+		   // $('#square').height('800px');
+		   // $('#helpimage').width('654px');
+		   // $('#helpimage').height('451px');
+		});
+
+
+		$("#square").click(function () {
+		   // $('#square').width('0%');
+		   // $('#square').height('0%')
+		   // $('#helpimage').width('0%');
+		   // $('#helpimage').height('0%');
+
+		});
+
 		var radioSize = 155;
 	   $('#insertionBackground').buttonset().find('label').width(radioSize);
 	   $('#powerbackground').buttonset().find('label').width(76);
@@ -43,7 +65,7 @@ function setButtons()
 	   $('#technologyBackground').buttonset().find('label').width(radioSize);
 	   $('#configMessage').html(getConfigurations());
 	  // $('#RFMesh').button();
-	    
+	   
 		
 	
 	$('#dialog').dialog({
@@ -75,25 +97,25 @@ function setButtons()
 	        $("#menu").menu();
         });
 	   $( "#radioBackground" ).buttonset().find('label').width(122);
-	   $( "#accordion,#techAccordion" ).accordion({
+	   //$( "#accordion,#techAccordion" ).accordion({
 			
-			active: false,
-			collapsible: true,
-			heightStyle: "content",
-			icons: false
+	   // 	active: false,
+	   // 	collapsible: true,
+	   // 	heightStyle: "content",
+	   // 	icons: false
 			
 			
-		});
+	   // });
 
 		//Faz com que os botoes nao permaneçam pressionados em alguns browsers tipo IE10
-		$("#over_map").find("button").click(function () {
-			$(this).removeClass("ui-state-focus");
+		//$("#over_map").find("button").click(function () {
+		//	$(this).removeClass("ui-state-focus");
 			
-		});
-		$("#over_map").find("h3").click(function () {
-			$(this).removeClass("ui-state-focus");
+		//});
+		//$("#over_map").find("h3").click(function () {
+		//	$(this).removeClass("ui-state-focus");
 			
-		});
+		//});
 
 		
 	

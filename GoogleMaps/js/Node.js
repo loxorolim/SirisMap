@@ -136,6 +136,7 @@ function prepareMarkerEvents(marker)
 
 
     });
+   
     google.maps.event.addListener(marker, 'dragend', function (event)
     {
 
