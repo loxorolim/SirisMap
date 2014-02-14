@@ -168,8 +168,8 @@ function removeMarker(marker)
 
         }
     }
-
-    removeMarkerCircles(marker);
+    if(marker == "DAP")
+       removeMarkerCircles(marker);
 }
 
 

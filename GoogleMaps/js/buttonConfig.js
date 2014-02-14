@@ -39,8 +39,15 @@ function setButtons()
 		});
 		$("#help").click(function () {
 		    $.blockUI({
-		        message: '<img src="helpmenu.gif" /> ',
-		        onOverlayClick: $.unblockUI
+		        message: $('#displayBox'),
+		        onOverlayClick: $.unblockUI,
+		        css: {
+		            top: ($(window).height() - 451) / 2 + 'px',
+		            left: ($(window).width() - 654) / 2 + 'px',
+		            width: '654px',
+                    height: '451px'
+		        }
+		        
 		    });
 		    
 		   // $('#square').width('100%');
