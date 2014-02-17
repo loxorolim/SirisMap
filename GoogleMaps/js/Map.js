@@ -20,7 +20,8 @@ function initialize() {
 		    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
 		    position: google.maps.ControlPosition.TOP_RIGHT
 
-		}
+		},
+
 	}
     map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
     // Create an ElevationService
