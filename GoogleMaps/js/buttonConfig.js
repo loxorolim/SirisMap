@@ -12,7 +12,7 @@ function setButtons()
 
 
 		    setOpMode("Removal");
-		    map.setOptions({ draggableCursor: 'url(removecursor.png) 12 12, auto' });
+		    map.setOptions({ draggableCursor: "url(cursors/removecursor.cur), default" });
 			setInfoWindowNull();
 			$('#configMessage').html(getConfigurations());
 
@@ -79,7 +79,7 @@ function setButtons()
 			setOpMode("Insertion");		
 			setInfoWindowNull();
 			setInsertionOptions("DAP")
-			map.setOptions({ draggableCursor: "url(dapcursor.png) 12 12, auto" });
+			map.setOptions({ draggableCursor: "url(cursors/dapcursor.cur), auto" });
 			$('#configMessage').html(getConfigurations());
 		});
 		$("#meterRadio").click(function()
@@ -87,7 +87,7 @@ function setButtons()
 			setOpMode("Insertion");		
 			setInfoWindowNull();
 			setInsertionOptions("Meter");
-			map.setOptions({ draggableCursor: "url(metercursor.png) 11 11, auto" })
+			map.setOptions({ draggableCursor: "url(cursors/metercursor.cur), default" })
 			$('#configMessage').html(getConfigurations());
 		});
 		
