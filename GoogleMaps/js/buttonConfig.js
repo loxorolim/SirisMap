@@ -67,9 +67,9 @@ function setButtons()
 	       width: 680
 	   });
 
-        $(function () {
+       
 	        $("#menu").menu();
-        });
+       
 	   $( "#radioBackground" ).buttonset().find('label').width(122);
 
 		

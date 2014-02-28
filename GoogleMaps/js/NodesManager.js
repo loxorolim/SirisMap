@@ -139,10 +139,14 @@ function clearConnection(marker1,marker2,i)
     if (marker2.neighbours.length == 0)
     {
         marker2.connected = false;
-        marker2.setIcon(marker2.offIcon);
+        if(marker2.type == "DAP")
+            marker2.setIcon(marker2.offIcon);
         if (marker2.type == "Meter")
-            disconnectedMeters.push(marker2);       
+            disconnectedMeters.push(marker2);
+                        
     }
+    if (marker2.type == "Meter")   
+        marker2.setIcon(getMeterColor(marker2));
     markerConnections.splice(i, 1);
 }
 function getMarkerPositionFromNeighbour(marker, marker2)
@@ -168,8 +172,12 @@ function removeMarker(marker)
 
         }
     }
-    if(marker == "DAP")
-       removeMarkerCircles(marker);
+    if (marker.type == "DAP")
+    {
+        removeMarkerCircles(marker);
+
+    }
+     
 }
 
 

@@ -28,7 +28,7 @@
         if (status == google.maps.ElevationStatus.OK)
         {
             // Retrieve the first result
-            connectNodesByDistance(marker);
+            
 
             if (results[0])
             {
@@ -36,6 +36,7 @@
                 marker.elevation = results[0].elevation;
                 allMarkers.push(marker);
                 disconnectedMeters.push(marker);
+                connectNodesByDistance(marker);
                 meters.push(marker);
                 prepareMarkerEvents(marker);
                 if (meshEnabled)

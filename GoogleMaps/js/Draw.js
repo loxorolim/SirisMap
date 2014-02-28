@@ -20,10 +20,11 @@ function drawLine(marker1, marker2, colorname)
 	    strokeWeight: 2
 	});
     lines.push(routerPath);
-    lines[lines.length - 1].setMap(map);
+    routerPath.setMap(map);
+    //lines[lines.length - 1].setMap(map);
 
     if (radioMode == "Radius") 
-        lines[lines.length - 1].setVisible(false);
+        routerPath.setVisible(false);
     
 
 }

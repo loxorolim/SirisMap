@@ -1,4 +1,6 @@
-﻿var lines = [];
+﻿var taxiData = [];
+
+var lines = [];
 var dashedLines = [];
 
 var ID = 0;

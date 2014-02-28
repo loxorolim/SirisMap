@@ -61,6 +61,25 @@ function loadNodesFromXml()
 		});
 	});
 }
+function loadCarDriveFromXml() {
+    $(document).ready(function () {
+        $.ajax(
+		{
+		    type: "GET",
+		    url: "cardrive.xml",
+		    dataType: "xml",
+		    success: function (xml) {
+		        //$("node[name='x']");
+		        $(xml).find('point').each(function () {
+		            var latitude = $(this).find('Latitude').text();
+		            var longitude = $(this).find('Longitude').text();
+		            var point = new google.maps.LatLng(latitude, longitude);
+		            taxiData.push(point);
+		        })		
+		    }
+		});
+    });
+}
 function loadReachFromTable(tech,scenario, dbm)
 {
 	var ret;
