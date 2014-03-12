@@ -158,6 +158,28 @@ function getMarkerPositionFromNeighbour(marker, marker2)
     }
     return -1;
 }
+function calculateEfficiency(marker)
+{
+    var avg = 0;
+    var sumDist = 0;
+    var values = [];
+    for(var i = 0; i < heatmapPoints.length; i++)
+    {
+        var latLng = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+        var dist = google.maps.geometry.spherical.computeDistanceBetween(latLng, heatmapPoints[i].position);
+        if(dist < efficiencyRadio)
+        {
+            var value = heatmapPoints[i].efficiency * (1 - dist / efficiencyRadio);        
+            if(value > avg)
+                avg = value;
+           //values.push(value);
+           //sumDist += dist;
+        }
+    }
+  //  for (var j = 0; j < values.length ; j++)
+  //      avg += values[j].efficiency * (1 - values[j].distance/sumDist);
+    marker.efficiency = avg  ;
+}
 function removeMarker(marker)
 {
     removeMarkerConnections(marker);
@@ -191,6 +213,8 @@ function displayInfoWindow(marker)
     var content = 'ID: ' + marker.ID + '<br>Latitude: ' + marker.position.lat() + '<br>Longitude: ' + marker.position.lng() + '<br>Elevation: ' + marker.elevation + '<br>Neighbours IDs: ' + neighboursIDs + '<br>Connected: ' + marker.connected;
     if (marker.type == "Meter")
         content += '<br>Hop: ' + marker.meshHop;
+    if (marker.type == "DAP")
+        content += '<br>Efficiency: ' + marker.efficiency;
     if (marker.teleTech != null)
         content += '<br>Technology: ' + marker.teleTech + '<br>Reach: ' + marker.reach + ' meters';
     infowindow.setContent(content);

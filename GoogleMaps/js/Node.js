@@ -12,6 +12,7 @@
 	    neighbours: [],
 	    ID: ID,
 	    connected: false,
+	    
 	    meshHop: 0
 	});
     ID++;
@@ -68,6 +69,7 @@ function placeDAP(latitude, longitude, technology)
 	    teleTech: technology,
 	    reachCircles: [],
 	    neighbours: [],
+	    efficiency: 0,
 	    connected: false
 	});
     ID++;
@@ -132,7 +134,11 @@ function prepareMarkerEvents(marker)
         removeMarkerConnections(marker);
         connectNodesByDistance(marker);
         if (marker.type == "DAP")
+        {
+            calculateEfficiency(marker);
             removeMarkerCircles(marker);
+        }
+           
         
 
 

@@ -1,4 +1,6 @@
 ﻿var taxiData = [];
+var heatmapPoints = [];
+var efficiencyRadio = 30; //30metros
 
 var lines = [];
 var dashedLines = [];
