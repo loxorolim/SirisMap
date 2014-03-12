@@ -56,7 +56,7 @@ function placeDAP(latitude, longitude, technology)
 {
    
     var latLng = new google.maps.LatLng(latitude, longitude);
-    var marker = new google.maps.Marker(
+    var marker = new MarkerWithLabel(
 	{
 	    type: "DAP",
 	    position: latLng,
@@ -70,7 +70,11 @@ function placeDAP(latitude, longitude, technology)
 	    reachCircles: [],
 	    neighbours: [],
 	    efficiency: 0,
-	    connected: false
+	    connected: false,
+	    labelContent: "0",
+	    labelAnchor: new google.maps.Point(22,25),
+	    labelClass: "labels", // the CSS class for the label
+	    labelStyle: { opacity: 0.75 }
 	});
     ID++;
     var locations = [];
@@ -88,6 +92,8 @@ function placeDAP(latitude, longitude, technology)
             // Retrieve the first result
             if (results[0]) {
                 // Open an info window indicating the elevation at the clicked position
+
+                calculateEfficiency(marker);
                 drawCircle(marker);
                 marker.elevation = results[0].elevation;
                 allMarkers.push(marker);

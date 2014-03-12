@@ -178,7 +178,8 @@ function calculateEfficiency(marker)
     }
   //  for (var j = 0; j < values.length ; j++)
   //      avg += values[j].efficiency * (1 - values[j].distance/sumDist);
-    marker.efficiency = avg  ;
+    marker.efficiency = avg;
+    marker.labelContent = avg;
 }
 function removeMarker(marker)
 {
