@@ -179,7 +179,14 @@ function calculateEfficiency(marker)
   //  for (var j = 0; j < values.length ; j++)
   //      avg += values[j].efficiency * (1 - values[j].distance/sumDist);
     marker.efficiency = avg;
-    marker.labelContent = avg;
+    marker.labelContent = String(Math.floor(avg * 100)) + "%";
+    if(avg >= 0.80)
+        marker.labelStyle = { color: "#00c200" };
+    else if (avg <= 0.40)
+        marker.labelStyle = { color: "#FF0000" };
+    else
+        marker.labelStyle = { color: "#b0b200" };
+    marker.label.draw();
 }
 function removeMarker(marker)
 {
