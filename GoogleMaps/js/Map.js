@@ -12,10 +12,10 @@ function initialize() {
 	    mapTypeControl: true,
 	    panControl: false,
 	    zoomControl: true,    
-	    mapTypeControlOptions: {
-	        mapTypeIds: [google.maps.MapTypeId.ROADMAP, MY_MAPTYPE_ID]
-	    },
-	    mapTypeId: MY_MAPTYPE_ID,
+	    //mapTypeControlOptions: {
+	    //    mapTypeIds: [google.maps.MapTypeId.ROADMAP, MY_MAPTYPE_ID]
+	    //},
+	    //mapTypeId: MY_MAPTYPE_ID,
 	    
 	    zoomControlOptions:
 		{
@@ -31,23 +31,23 @@ function initialize() {
 
 	}
 
-    var featureOpts = [
-    {
-        stylers: [
-       { "lightness": -70 },
-       { "saturation": -67 }
-        ]
-    },
+    //var featureOpts = [
+    //{
+    //    stylers: [
+    //   { "lightness": -70 },
+    //   { "saturation": -67 }
+    //    ]
+    //},
     
-    ];
+    //];
     map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-    var styledMapOptions = {
-        name: 'Custom Style'
-    };
+    //var styledMapOptions = {
+    //    name: 'Custom Style'
+    //};
 
-    var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
+    //var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
 
-    map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
+    //map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
     
     // Create an ElevationService
     elevator = new google.maps.ElevationService();

@@ -62,6 +62,7 @@ function loadNodesFromXml()
 	});
 }
 function loadCarDriveFromXml() {
+    heatmapPoints = [];
     $(document).ready(function () {
         $.ajax(
 		{
@@ -73,8 +74,9 @@ function loadCarDriveFromXml() {
 		        $(xml).find('point').each(function () {
 		            var latitude = $(this).find('Latitude').text();
 		            var longitude = $(this).find('Longitude').text();
-		            var point = new google.maps.LatLng(latitude, longitude);
-		            taxiData.push(point);
+		            var efficiency = parseFloat($(this).find('Efficiency').text());
+		            var point = { location: new google.maps.LatLng(latitude, longitude), weight: efficiency }
+		            heatmapPoints.push(point);
 		        })		
 		    }
 		});

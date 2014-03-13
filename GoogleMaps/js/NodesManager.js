@@ -166,10 +166,10 @@ function calculateEfficiency(marker)
     for(var i = 0; i < heatmapPoints.length; i++)
     {
         var latLng = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
-        var dist = google.maps.geometry.spherical.computeDistanceBetween(latLng, heatmapPoints[i].position);
+        var dist = google.maps.geometry.spherical.computeDistanceBetween(latLng, heatmapPoints[i].location);
         if(dist < efficiencyRadio)
         {
-            var value = heatmapPoints[i].efficiency * (1 - dist / efficiencyRadio);        
+            var value = heatmapPoints[i].weight * (1 - dist / efficiencyRadio);        
             if(value > avg)
                 avg = value;
            //values.push(value);

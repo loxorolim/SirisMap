@@ -1,227 +1,375 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CarDrive>
  <point>
-  <Latitude>-22.917977286809318</Latitude>
-  <Longitude>-43.09169679880142</Longitude>
+  <Latitude>-22.917942700026106</Latitude>
+  <Longitude>-43.09157878160477</Longitude>
+  <Efficiency>0.8</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.91793034760139</Latitude>
+  <Latitude>-22.918041519383284</Latitude>
+  <Longitude>-43.09155195951462</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918120574817152</Latitude>
+  <Longitude>-43.09153586626053</Longitude>
+  <Efficiency>0.8</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91819221876425</Latitude>
+  <Longitude>-43.091522455215454</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918268803631292</Latitude>
+  <Longitude>-43.091511726379395</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918330565589386</Latitude>
+  <Longitude>-43.091495633125305</Longitude>
+  <Efficiency>0.5</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918387386565946</Latitude>
+  <Longitude>-43.091479539871216</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91845408942102</Latitude>
+  <Longitude>-43.091474175453186</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91851585129464</Latitude>
   <Longitude>-43.09146076440811</Longitude>
+  <Efficiency>0.7</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.917853762543043</Latitude>
-  <Longitude>-43.09097796678543</Longitude>
+  <Latitude>-22.918607258815932</Latitude>
+  <Longitude>-43.09143930673599</Longitude>
+  <Efficiency>0.9</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.917829057676283</Latitude>
-  <Longitude>-43.090771436691284</Longitude>
+  <Latitude>-22.918669020619742</Latitude>
+  <Longitude>-43.09142589569092</Longitude>
+  <Efficiency>0.7</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.918073635658853</Latitude>
-  <Longitude>-43.0916753411293</Longitude>
+  <Latitude>-22.91874066427693</Latitude>
+  <Longitude>-43.0914044380188</Longitude>
+  <Efficiency>0.8</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.91803657841713</Latitude>
-  <Longitude>-43.09143662452698</Longitude>
+  <Latitude>-22.91882218977175</Latitude>
+  <Longitude>-43.09139370918274</Longitude>
+  <Efficiency>0.8</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.917989639229763</Latitude>
-  <Longitude>-43.090986013412476</Longitude>
- </point>
- <point>
-  <Latitude>-22.917940229541262</Latitude>
-  <Longitude>-43.09074729681015</Longitude>
- </point>
- <point>
-  <Latitude>-22.917829057676283</Latitude>
-  <Longitude>-43.09027522802353</Longitude>
- </point>
- <point>
-  <Latitude>-22.918187277803597</Latitude>
-  <Longitude>-43.091643154621124</Longitude>
- </point>
- <point>
-  <Latitude>-22.91818233684276</Latitude>
-  <Longitude>-43.09141516685486</Longitude>
- </point>
- <point>
-  <Latitude>-22.918073635658853</Latitude>
-  <Longitude>-43.09071511030197</Longitude>
- </point>
- <point>
-  <Latitude>-22.917937759056354</Latitude>
-  <Longitude>-43.09024840593338</Longitude>
- </point>
- <point>
-  <Latitude>-22.918300919853035</Latitude>
-  <Longitude>-43.091610968112946</Longitude>
- </point>
- <point>
-  <Latitude>-22.918308331287733</Latitude>
-  <Longitude>-43.09139907360077</Longitude>
- </point>
- <point>
-  <Latitude>-22.91817245492056</Latitude>
-  <Longitude>-43.09091091156006</Longitude>
- </point>
- <point>
-  <Latitude>-22.91816751395918</Latitude>
-  <Longitude>-43.09069901704788</Longitude>
- </point>
- <point>
-  <Latitude>-22.918053871797873</Latitude>
-  <Longitude>-43.09023231267929</Longitude>
- </point>
- <point>
-  <Latitude>-22.918431855139673</Latitude>
-  <Longitude>-43.09157609939575</Longitude>
- </point>
- <point>
-  <Latitude>-22.918444207518665</Latitude>
-  <Longitude>-43.091353476047516</Longitude>
- </point>
- <point>
-  <Latitude>-22.918362681796445</Latitude>
-  <Longitude>-43.090876042842865</Longitude>
- </point>
- <point>
-  <Latitude>-22.918335506544814</Latitude>
-  <Longitude>-43.09067219495773</Longitude>
- </point>
- <point>
-  <Latitude>-22.91817739588175</Latitude>
-  <Longitude>-43.09022158384323</Longitude>
- </point>
- <point>
-  <Latitude>-22.91861219976131</Latitude>
-  <Longitude>-43.0915492773056</Longitude>
- </point>
- <point>
-  <Latitude>-22.918562790299788</Latitude>
-  <Longitude>-43.0911523103714</Longitude>
- </point>
- <point>
-  <Latitude>-22.918565260773295</Latitude>
-  <Longitude>-43.0910262465477</Longitude>
- </point>
- <point>
-  <Latitude>-22.91852820366602</Latitude>
-  <Longitude>-43.090849220752716</Longitude>
- </point>
- <point>
-  <Latitude>-22.918446677994336</Latitude>
-  <Longitude>-43.0904495716095</Longitude>
- </point>
- <point>
-  <Latitude>-22.91843432561556</Latitude>
-  <Longitude>-43.090350329875946</Longitude>
- </point>
- <point>
-  <Latitude>-22.918303390331303</Latitude>
-  <Longitude>-43.09016793966293</Longitude>
- </point>
- <point>
-  <Latitude>-22.918412091330918</Latitude>
-  <Longitude>-43.09016793966293</Longitude>
- </point>
- <point>
-  <Latitude>-22.918901244750188</Latitude>
-  <Longitude>-43.09150904417038</Longitude>
- </point>
- <point>
-  <Latitude>-22.918839483052228</Latitude>
-  <Longitude>-43.09127300977707</Longitude>
- </point>
- <point>
-  <Latitude>-22.918782662265226</Latitude>
-  <Longitude>-43.091028928756714</Longitude>
- </point>
- <point>
-  <Latitude>-22.91875301662778</Latitude>
-  <Longitude>-43.090859949588776</Longitude>
- </point>
- <point>
-  <Latitude>-22.918728311924944</Latitude>
-  <Longitude>-43.09059977531433</Longitude>
- </point>
- <point>
-  <Latitude>-22.9186863139198</Latitude>
-  <Longitude>-43.09032082557678</Longitude>
- </point>
- <point>
-  <Latitude>-22.918659138733048</Latitude>
-  <Longitude>-43.09022694826126</Longitude>
- </point>
- <point>
-  <Latitude>-22.91864678637365</Latitude>
-  <Longitude>-43.090092837810516</Longitude>
- </point>
- <point>
-  <Latitude>-22.919116175239697</Latitude>
-  <Longitude>-43.09145271778107</Longitude>
- </point>
- <point>
-  <Latitude>-22.919089000139167</Latitude>
-  <Longitude>-43.09120863676071</Longitude>
- </point>
- <point>
-  <Latitude>-22.91900747480486</Latitude>
-  <Longitude>-43.09072047472</Longitude>
+  <Latitude>-22.91889383334793</Latitude>
+  <Longitude>-43.09137761592865</Longitude>
+  <Efficiency>0.9</Efficiency>
+
  </point>
  <point>
   <Latitude>-22.91895806548747</Latitude>
-  <Longitude>-43.090476393699646</Longitude>
+  <Longitude>-43.09135615825653</Longitude>
+  <Efficiency>0.9</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.918777721326098</Latitude>
-  <Longitude>-43.09006333351135</Longitude>
+  <Latitude>-22.919037120386637</Latitude>
+  <Longitude>-43.09134542942047</Longitude>
+  <Efficiency>0.8</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.91889383334792</Latitude>
-  <Longitude>-43.090031147003174</Longitude>
+  <Latitude>-22.919143350334785</Latitude>
+  <Longitude>-43.09132397174835</Longitude>
+  <Efficiency>0.9</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.91921005281781</Latitude>
-  <Longitude>-43.09118181467056</Longitude>
+  <Latitude>-22.919244639277558</Latitude>
+  <Longitude>-43.09129983186722</Longitude>
+  <Efficiency>0.9</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.919135938945757</Latitude>
-  <Longitude>-43.09071511030197</Longitude>
+  <Latitude>-22.91934839860386</Latitude>
+  <Longitude>-43.0912783741951</Longitude>
+  <Efficiency>0.7</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.918997592942823</Latitude>
-  <Longitude>-43.090025782585144</Longitude>
+  <Latitude>-22.918666550148167</Latitude>
+  <Longitude>-43.09130787849426</Longitude>
+  <Efficiency>0.9</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.919355809981255</Latitude>
-  <Longitude>-43.09140980243683</Longitude>
+  <Latitude>-22.91864678637365</Latitude>
+  <Longitude>-43.09117913246155</Longitude>
+  <Efficiency>0.9</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.919249580199654</Latitude>
-  <Longitude>-43.09069365262985</Longitude>
+  <Latitude>-22.918644315901627</Latitude>
+  <Longitude>-43.09105843305588</Longitude>
+  <Efficiency>0.9</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.919172995886854</Latitude>
-  <Longitude>-43.090481758117676</Longitude>
+  <Latitude>-22.918617140706466</Latitude>
+  <Longitude>-43.090964555740356</Longitude>
+  <Efficiency>0.8</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.919116175239697</Latitude>
+  <Latitude>-22.918602317870455</Latitude>
+  <Longitude>-43.09080094099045</Longitude>
+  <Efficiency>0.5</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91858255408656</Latitude>
+  <Longitude>-43.090717792510986</Longitude>
+  <Efficiency>0.7</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91856526077331</Latitude>
+  <Longitude>-43.09058904647827</Longitude>
+  <Efficiency>0.8</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918540556036238</Latitude>
+  <Longitude>-43.09045225381851</Longitude>
+  <Efficiency>0.8</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91852573319184</Latitude>
+  <Longitude>-43.09031277894974</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918510910345827</Latitude>
+  <Longitude>-43.09020817279816</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918488676073753</Latitude>
+  <Longitude>-43.09010624885559</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918471382748507</Latitude>
+  <Longitude>-43.09002310037613</Longitude>
+  <Efficiency>0.7</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918538085562282</Latitude>
   <Longitude>-43.09000164270401</Longitude>
+  <Efficiency>0.8</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.919479332878392</Latitude>
-  <Longitude>-43.09136688709259</Longitude>
+  <Latitude>-22.91862208165145</Latitude>
+  <Longitude>-43.089972138404846</Longitude>
+  <Efficiency>0.9</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.919350869063027</Latitude>
-  <Longitude>-43.09070438146591</Longitude>
+  <Latitude>-22.918706077688555</Latitude>
+  <Longitude>-43.08995872735977</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918799955550757</Latitude>
+  <Longitude>-43.08993726968765</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918898774282813</Latitude>
+  <Longitude>-43.08991849422455</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918995122477202</Latitude>
+  <Longitude>-43.089905083179474</Longitude>
+  <Efficiency>0.7</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.919079118283083</Latitude>
+  <Longitude>-43.08988094329834</Longitude>
+  <Efficiency>0.9</Efficiency>
+
  </point>
  <point>
   <Latitude>-22.919298989410763</Latitude>
-  <Longitude>-43.09045493602753</Longitude>
+  <Longitude>-43.09055685997009</Longitude>
+  <Efficiency>0.9</Efficiency>
+
  </point>
  <point>
-  <Latitude>-22.919222405125875</Latitude>
-  <Longitude>-43.08998018503189</Longitude>
+  <Latitude>-22.91921005281781</Latitude>
+  <Longitude>-43.09058368206024</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.919108763849195</Latitude>
+  <Longitude>-43.090607821941376</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91898524061426</Latitude>
+  <Longitude>-43.090629279613495</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91886912867077</Latitude>
+  <Longitude>-43.090650737285614</Longitude>
+  <Efficiency>0.8</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91879254414294</Latitude>
+  <Longitude>-43.09067755937576</Longitude>
+  <Efficiency>0.7</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918683843448466</Latitude>
+  <Longitude>-43.09070438146591</Longitude>
+  <Efficiency>0.5</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91850102844757</Latitude>
+  <Longitude>-43.09073656797409</Longitude>
+  <Efficiency>0.8</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918417032283394</Latitude>
+  <Longitude>-43.090755343437195</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91834044750006</Latitude>
+  <Longitude>-43.09076875448227</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918253980757203</Latitude>
+  <Longitude>-43.09079021215439</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91816504347843</Latitude>
+  <Longitude>-43.09080898761749</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918098340481034</Latitude>
+  <Longitude>-43.09083044528961</Longitude>
+  <Efficiency>0.5</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91803410793399</Latitude>
+  <Longitude>-43.09083580970764</Longitude>
+  <Efficiency>0.7</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91795999341881</Latitude>
+  <Longitude>-43.09085726737976</Longitude>
+  <Efficiency>0.8</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.917880937891276</Latitude>
+  <Longitude>-43.090870678424835</Longitude>
+  <Efficiency>0.8</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91840220942547</Latitude>
+  <Longitude>-43.09002310037613</Longitude>
+  <Efficiency>0.7</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91832315415591</Latitude>
+  <Longitude>-43.09004992246628</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91823421692252</Latitude>
+  <Longitude>-43.09006601572037</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918135397705875</Latitude>
+  <Longitude>-43.09008210897446</Longitude>
+  <Efficiency>0.9</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.918061283246082</Latitude>
+  <Longitude>-43.090098202228546</Longitude>
+  <Efficiency>0.8</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.9179797572935</Latitude>
+  <Longitude>-43.090125024318695</Longitude>
+  <Efficiency>0.8</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.917888349348953</Latitude>
+  <Longitude>-43.090151846408844</Longitude>
+  <Efficiency>0.7</Efficiency>
+
+ </point>
+ <point>
+  <Latitude>-22.91780682329234</Latitude>
+  <Longitude>-43.09017598628998</Longitude>
+  <Efficiency>0.5</Efficiency>
+
  </point>
 </CarDrive>
