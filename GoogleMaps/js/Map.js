@@ -41,6 +41,7 @@ function initialize() {
     
     //];
     map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+   
     //var styledMapOptions = {
     //    name: 'Custom Style'
     //};
@@ -54,7 +55,7 @@ function initialize() {
     markerCluster = new MarkerClusterer(map);
     markerCluster.setGridSize(10);
 
-
+  //  $.blockUI({ fadeIn: 0, message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
     loadNodesFromXml();
     loadCarDriveFromXml();
     drawHeatMap();
@@ -67,5 +68,6 @@ function initialize() {
     
     setButtons();
     createTableFromOptions();
+   
 }
 google.maps.event.addDomListener(window, 'load', initialize);

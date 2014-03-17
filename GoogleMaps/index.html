@@ -8,17 +8,19 @@
     <meta name= "viewport" content= "initial-scale=1.0, user-scalable=no">
     <meta charset= "utf-8">
 
+      <link href="css/jquery-ui.min.css" rel="stylesheet">
       <link href= "css/default.css" rel= "stylesheet">
-	  <link href= "css/jquery-ui.min.css" rel= "stylesheet">
+	 
      
       <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization"></script>
 
       <script src="js/jquery-1.11.0.min.js"></script>
       <script src="js/jquery.blockUI.js"></script>    
-	  <script src= "js/jquery-ui.min.js"></script>
+      <script src="js/jquery-ui-1.10.4.custom.min.js"></script>
       <script src="js/Globals.js"></script>
 
       <script src="js/markerwithlabel.js"></script>
+      <script src="js/xmluploader.js"></script>
 
       
       <script src= "js/ShadowingPropagation.js"></script>
@@ -31,6 +33,7 @@
 	  <script src= "js/buttonConfig.js"></script>
 	  <script src= "js/xmlHandler.js"></script>	  
       <script src= "js/distance.js"></script>
+     
 
   </head>
   <body>
@@ -45,7 +48,7 @@
               <div id="over_map">
                   
                       <div id="controls">
-
+                          <input type="checkbox" id="check"><label for="check">Mapa de calor</label>
                           <ul id="menu">
                               <li>
                                   <a href="#">Planejamento</a>
@@ -99,6 +102,9 @@
                               <li>
                                   <a id="help">Ajuda</a>
                               </li>
+                              
+                                  
+                            
                           </ul>                        
                   </div>
                   <div id="dialog" title="Ajuda">
@@ -109,7 +115,11 @@
           </div>
       </div>
 
-
+      <script type="text/javascript">        
+          $.blockUI({ fadeIn: 0, message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
+          $(window).load(function () { $.unblockUI(); });
+      </script>
   </body>
+
 </html>
 

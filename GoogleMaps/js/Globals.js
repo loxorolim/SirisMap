@@ -1,4 +1,6 @@
-﻿var taxiData = [];
+﻿var drawHeatmap = false;
+var heatmap;
+var taxiData = [];
 var heatmapPoints = [];
 var efficiencyRadio = 30; //30metros
 

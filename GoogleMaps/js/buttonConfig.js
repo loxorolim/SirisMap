@@ -27,9 +27,11 @@ function setButtons()
 		$("#Scenario").click(function() {
 			setInfoWindowNull();
 		});
-		$( "#RFMesh" ).click(function() {
+		$("#RFMesh").click(function () {
+		    $.blockUI({ fadeIn: 0, message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
 			setInfoWindowNull();
 			setRFMesh();
+			$.unblockUI();
 		});
 		$("#help").click(function () {
 		    $("#dialog").dialog("open");
@@ -46,13 +48,47 @@ function setButtons()
 		    //});
 		});
 
-
+		
 		var radioSize = 155;
 	   $('#insertionBackground').buttonset().find('label').width(radioSize);
 	   $('#powerbackground').buttonset().find('label').width(76);
 	   $('#scenarioBackground').buttonset().find('label').width(radioSize);
 	   $('#technologyBackground').buttonset().find('label').width(radioSize);
 	   $('#configMessage').html(getConfigurations());
+	   //$('#check').click(function (ev) { ev.preventDefault(); });
+	  // $('#check').unbind('mouseout keyup mouseup hover');
+    $('#check').button({
+        icons: {
+            primary: "ui-icon-closethick"
+        }
+
+    }).click(function () {
+	       $(this).blur();
+	       $.blockUI({ fadeIn: 0,  message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
+	       drawHeatmap = !drawHeatmap;
+	       if (drawHeatmap){
+	           heatmap.setMap(map);
+	           $(this).button({
+	               icons: {
+	                   primary: "ui-icon-check"
+	               }
+	           })
+	       }              
+	           
+	       else {
+	           heatmap.setMap(null);
+	           $(this).button({
+	               icons: {
+	                   primary: "ui-icon-closethick"
+	               }
+	           })
+	       }
+	           
+	       //$('#check').button.removeClass("ui-state-focus ui-state-hover");
+	       $.unblockUI();
+
+	       
+	   });
 	  // $('#RFMesh').button();
 	   $("#dialog").dialog({
 	       autoOpen: false,

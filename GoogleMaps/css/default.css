@@ -13,7 +13,9 @@ z-index:100;
 }
 .ui-menu { 
     width: 150px; 
-
+}
+.ui-button {
+    width: 155px;
 }
 .labels {
      color: red;
