@@ -196,7 +196,8 @@ function removeMarker(marker)
     {
         if (allMarkers[i].ID == marker.ID)
         {
-            markerCluster.removeMarker(allMarkers[i]);
+            if(enableMarkerClusterer)
+                markerCluster.removeMarker(allMarkers[i]);
             allMarkers[i].setMap(null);
             allMarkers.splice(i, 1);
 
@@ -291,7 +292,6 @@ function createTableFromOptions()
                 c = "YELLOW";
             else
                 c = "RED";
-
 
             if (sp >= 0.9)
             {

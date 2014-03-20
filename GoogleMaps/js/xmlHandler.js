@@ -72,10 +72,10 @@ function loadCarDriveFromXml() {
 		    success: function (xml) {
 		        //$("node[name='x']");
 		        $(xml).find('point').each(function () {
-		            var latitude = $(this).find('Latitude').text();
-		            var longitude = $(this).find('Longitude').text();
+		            var latitude = parseFloat($(this).find('Latitude').text());
+		            var longitude = parseFloat($(this).find('Longitude').text());
 		            var efficiency = parseFloat($(this).find('Efficiency').text());
-		            var point = { location: new google.maps.LatLng(latitude, longitude), weight: efficiency }
+		            var point = { location: new google.maps.LatLng(latitude+0.0000001, longitude+0.0000001), weight: efficiency }
 		            heatmapPoints.push(point);
 		        })		
 		    }

@@ -5,7 +5,8 @@ function initialize() {
     var mapOptions =
 	{
 	    zoom: 3,
-	    minZoom: 2,
+	    minZoom: 3,
+        maxZoom: 18,
 	    center: new google.maps.LatLng(-28.643387, 0.612224),
 	    // mapTypeId: google.maps.MapTypeId.ROADMAP,
 	  
@@ -52,12 +53,15 @@ function initialize() {
     
     // Create an ElevationService
     elevator = new google.maps.ElevationService();
-    markerCluster = new MarkerClusterer(map);
-    markerCluster.setGridSize(10);
+    if (enableMarkerClusterer) {
+        markerCluster = new MarkerClusterer(map);
+        markerCluster.setGridSize(10);
+    }
+    
 
-  //  $.blockUI({ fadeIn: 0, message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
-    loadNodesFromXml();
     loadCarDriveFromXml();
+    loadNodesFromXml();
+    
     drawHeatMap();
     insertListener = google.maps.event.addListener(map, 'click', function (event) {
         //if (opMode == "Insertion") {
@@ -68,6 +72,5 @@ function initialize() {
     
     setButtons();
     createTableFromOptions();
-   
 }
 google.maps.event.addDomListener(window, 'load', initialize);

@@ -115,7 +115,8 @@ function placeDAP(latitude, longitude, technology)
 }
 function prepareMarkerEvents(marker)
 {
-    markerCluster.addMarker(marker);
+    if(enableMarkerClusterer)
+        markerCluster.addMarker(marker);
     google.maps.event.addListener(marker, 'click', function (event)
     {
         if (opMode == "Removal")

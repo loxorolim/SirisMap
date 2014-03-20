@@ -25,9 +25,9 @@ function drawHeatMap()
     //}
     var pointArray = new google.maps.MVCArray(heatmapPoints);
 
-        heatmap = new google.maps.visualization.HeatmapLayer({
+    heatmap = new google.maps.visualization.HeatmapLayer({
         data: pointArray,
-        radius: 10,
+        radius: 40,
         opacity: 0.9
     });
    // heatmap.set('radius', heatmap.get('radius') ? null : 40);
@@ -42,9 +42,9 @@ function drawHeatMap()
      'rgba(0, 225, 0, 1)',
      'rgba(0, 255, 0, 1)'
     ]
-    heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+   // heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
 
-    //heatmap.setMap(map);
+    heatmap.setMap(null);
 
 }
 //function changeRadius() {

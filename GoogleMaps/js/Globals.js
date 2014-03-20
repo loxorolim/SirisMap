@@ -1,4 +1,6 @@
-﻿var drawHeatmap = false;
+﻿var enableMarkerClusterer = false;
+
+var drawHeatmap = false;
 var heatmap;
 var taxiData = [];
 var heatmapPoints = [];
