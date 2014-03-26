@@ -35,16 +35,41 @@ function drawHeatMap()
    // heatmap.set('radius', heatmap.get('radius') ? null : 40);
     var gradient = [
      'rgba(255, 0, 0, 0)',
-     'rgba(150, 75, 0, 1)',
-     'rgba(125, 100, 0, 1)',
-     'rgba(100, 125, 0, 1)',
-     'rgba(75, 150, 0, 1)',
-     'rgba(50, 175, 0, 1)',
-     'rgba(25, 200, 0, 1)',
-     'rgba(0, 225, 0, 1)',
-     'rgba(0, 255, 0, 1)'
+     'rgba(255, 16, 0, 1)',
+     'rgba(255, 32, 0, 1)',
+     'rgba(255, 48, 0, 1)',
+     'rgba(255, 64, 0, 1)',
+     'rgba(255, 80, 0, 1)',
+     'rgba(255, 96, 0, 1)',
+     'rgba(255, 112, 0, 1)',
+     'rgba(255, 128, 0, 1)',
+     'rgba(255, 144, 0, 1)',
+     'rgba(255, 160, 0, 1)',
+     'rgba(255, 176, 0, 1)',
+     'rgba(255, 192, 0, 1)',
+     'rgba(255, 208, 0, 1)',
+     'rgba(255, 224, 0, 1)',
+     'rgba(255, 240, 0, 1)',
+     'rgba(255, 255, 0, 1)',
+     'rgba(240, 255, 0, 1)',
+     'rgba(224, 255, 0, 1)',
+     'rgba(208, 255, 0, 1)',
+     'rgba(192, 255, 0, 1)',
+     'rgba(176, 255, 0, 1)',
+     'rgba(160, 255, 0, 1)',
+     'rgba(144, 255, 0, 1)',
+     'rgba(128, 255, 0, 1)',
+     'rgba(112, 255, 0, 1)',
+     'rgba(96, 255, 0, 1)',
+     'rgba(80, 255, 0, 1)',
+     'rgba(64, 255, 0, 1)',
+     'rgba(48, 255, 0, 1)',
+     'rgba(32, 255, 0, 1)',
+     'rgba(16, 255, 0, 1)'
+     
+
     ]
-   // heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+    heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
   
     heatmap.setMap(map);
    
