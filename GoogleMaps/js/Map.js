@@ -52,16 +52,14 @@ function initialize() {
     //map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
     
     // Create an ElevationService
-    elevator = new google.maps.ElevationService();
-    if (enableMarkerClusterer) {
-        markerCluster = new MarkerClusterer(map);
-        markerCluster.setGridSize(10);
-    }
+    elevator = new google.maps.ElevationService();  
+    clusterMap();
+    
     
 
     loadCarDriveFromXml();
     loadNodesFromXml();
-    
+    createCircle();
     drawHeatMap();
     insertListener = google.maps.event.addListener(map, 'click', function (event) {
         //if (opMode == "Insertion") {
@@ -72,5 +70,22 @@ function initialize() {
     
     setButtons();
     createTableFromOptions();
+}
+function clusterMap() {
+    for (var i = 0; i < allMarkers.length; i++) {
+        allMarkers[i].setOptions({ map: map, visible: true });
+    }
+    markerCluster = new MarkerClusterer(map, allMarkers);
+    // markerCluster.setMap(null);
+    markerCluster.setGridSize(3);
+    // markerCluster.refresh();
+}
+
+function unclusterMap() {
+    markerCluster.clearMarkers();
+    // markerCluster.refresh();
+    for (var i = 0; i < allMarkers.length; i++) {
+        allMarkers[i].setOptions({ map: map, visible: true });
+    }
 }
 google.maps.event.addDomListener(window, 'load', initialize);

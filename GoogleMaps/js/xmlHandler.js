@@ -75,8 +75,13 @@ function loadCarDriveFromXml() {
 		            var latitude = parseFloat($(this).find('Latitude').text());
 		            var longitude = parseFloat($(this).find('Longitude').text());
 		            var efficiency = parseFloat($(this).find('Efficiency').text());
-		            var point = { location: new google.maps.LatLng(latitude+0.0000001, longitude+0.0000001), weight: efficiency }
+		            var point = { location: new google.maps.LatLng(latitude + 0.0000001, longitude + 0.0000001), weight: Math.pow(efficiency,4), efficiency: efficiency/10 }
+		            //for (var i = 0; i < efficiency * 10 ; i++) {
+		            //    var point = { location: new google.maps.LatLng(latitude + 0.0000001, longitude + 0.0000001) }
+		            //    
+		            //}
 		            heatmapPoints.push(point);
+		              
 		        })		
 		    }
 		});

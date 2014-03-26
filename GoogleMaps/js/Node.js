@@ -117,6 +117,7 @@ function prepareMarkerEvents(marker)
 {
     if(enableMarkerClusterer)
         markerCluster.addMarker(marker);
+    markerCluster.redraw();
     google.maps.event.addListener(marker, 'click', function (event)
     {
         if (opMode == "Removal")
