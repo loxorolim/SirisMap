@@ -89,6 +89,35 @@ function setButtons()
 
 	       
     });
+    $('#autoPlanning').button().click(function () {
+        applyPlanning();
+        //$(this).blur();
+        //$.blockUI({ fadeIn: 0, message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
+        //enableMarkerClusterer = !enableMarkerClusterer;
+        //if (enableMarkerClusterer) {
+        //    clusterMap();
+        //    $(this).button({
+        //        icons: {
+        //            primary: "ui-icon-check"
+        //        }
+        //    })
+        //}
+
+        //else {
+        //    unclusterMap();
+        //    //markerCluster.clearMarkers();
+        //    $(this).button({
+        //        icons: {
+        //            primary: "ui-icon-closethick"
+        //        }
+        //    })
+        //}
+
+        ////$('#check').button.removeClass("ui-state-focus ui-state-hover");
+        //$.unblockUI();
+
+
+    });
     
     $('#checkCluster').button({
         icons: {

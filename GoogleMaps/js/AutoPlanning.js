@@ -1,4 +1,5 @@
 ﻿
+
 function circlesFromP1p2r(p1,p2,r){
     if(p1.x == p2.x && p2.y == p2.y)
         return null;
@@ -47,21 +48,55 @@ function containsPoint(elem, vet) {
     }
     return -1;
 }
+function CanvasProjectionOverlay() { }
+CanvasProjectionOverlay.prototype = new google.maps.OverlayView();
+CanvasProjectionOverlay.prototype.constructor = CanvasProjectionOverlay;
+CanvasProjectionOverlay.prototype.onAdd = function () { };
+CanvasProjectionOverlay.prototype.draw = function () { };
+CanvasProjectionOverlay.prototype.onRemove = function () { };
 
-
-function applyPlanning() {
+function markersToPoints() {
+    var canvasProjectionOverlay = new CanvasProjectionOverlay();
+    canvasProjectionOverlay.setMap(map);
     var points = [];
-    for (var i = 0 ; i < 10; i++) {
-        var point = ({
-            x: Math.random()*10,
-            y: Math.random()*10
-        });
-        points.push(point);
+    for (var i = 0; i < meters.length; i++) {
+        var markerPos = meters[i].getPosition();
+        var p = canvasProjectionOverlay.getProjection().fromLatLngToContainerPixel(markerPos);
+        points.push(p);
     }
+    return points;
+}
+function addDapAtPoints(circles) {
+    var canvasProjectionOverlay = new CanvasProjectionOverlay();
+    canvasProjectionOverlay.setMap(map);
+    for (var i = 0; i < circles.length; i++) {
+        var point = ({
+            x: circles[i].x,
+            y: circles[i].y
+        });
+        var latLng = canvasProjectionOverlay.getProjection().fromContainerPixelToLatLng(point);
+        placeDAP(latLng.lat(), latLng.lng(), "bla");
+    }
+}
+function getDapMaximumReach() {
+    return table[table.length - 1].distance;
+}
+function applyPlanning() {
+   // var p = 
+    //var projection = map.getProjection();
+   // var markerPos = allMarkers[0].getPosition();
+    //var screenPos = projection.fromLatLngToContainerPixel(markerPos);
+
+   
     
+   
 
 
-    var r = 3;
+    var points = markersToPoints();
+
+
+
+    var r = getDapMaximumReach();
     var CirclesBetween2Points = [];
     
     for(var i = 0; i < points.length; i ++)
@@ -116,6 +151,7 @@ function applyPlanning() {
         }
   
     }
+    addDapAtPoints(circlesChosen);
 
     //for(var i = 0; i < points.length ; i++){
     //    for (var j = 0 ; j < coverage.length; j++) {

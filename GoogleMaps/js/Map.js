@@ -56,7 +56,7 @@ function initialize() {
     clusterMap();
     
     
-    applyPlanning();
+    
     loadCarDriveFromXml();
     loadNodesFromXml();
     createCircle();
@@ -70,6 +70,7 @@ function initialize() {
     
     setButtons();
     createTableFromOptions();
+   // applyPlanning();
 }
 function clusterMap() {
     for (var i = 0; i < allMarkers.length; i++) {
