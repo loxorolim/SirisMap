@@ -56,7 +56,7 @@ function initialize() {
     clusterMap();
     
     
-
+    applyPlanning();
     loadCarDriveFromXml();
     loadNodesFromXml();
     createCircle();
