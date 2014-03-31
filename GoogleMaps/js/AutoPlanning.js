@@ -31,8 +31,8 @@ function circlesFromP1p2r(p1,p2,r){
         }
     }
 }
-function covers(c,pt){
-    return (((c.x - pt.x)*(c.x - pt.x) + (c.y - pt.y)*(c.y - pt.y)) <= (c.r)*(c.r));
+function covers(c,pt,r){
+    return (((c.x - pt.x)*(c.x - pt.x) + (c.y - pt.y)*(c.y - pt.y)) <= r*r);
 }
 function contains(elem, vet){
     for(var i = 0; i < vet.length; i++){
@@ -66,15 +66,16 @@ function markersToPoints() {
     }
     return points;
 }
-function addDapAtPoints(circles) {
-    var canvasProjectionOverlay = new CanvasProjectionOverlay();
-    canvasProjectionOverlay.setMap(map);
+function addDapAtPoints(circles,meters) {
+    //var canvasProjectionOverlay = new CanvasProjectionOverlay();
+    //canvasProjectionOverlay.setMap(map);
     for (var i = 0; i < circles.length; i++) {
-        var point = ({
-            x: circles[i].x,
-            y: circles[i].y
-        });
-        var latLng = canvasProjectionOverlay.getProjection().fromContainerPixelToLatLng(point);
+        //var point = ({
+        //    x: circles[i].x,
+        //    y: circles[i].y
+        //});
+        var latLng = pointToLatLng(circles[i], meters);
+       // var latLng = canvasProjectionOverlay.getProjection().fromContainerPixelToLatLng(point);
         placeDAP(latLng.lat(), latLng.lng(), "bla");
     }
 }
@@ -88,11 +89,11 @@ function applyPlanning() {
     //var screenPos = projection.fromLatLngToContainerPixel(markerPos);
 
    
-    
+   
    
 
 
-    var points = markersToPoints();
+    var points = metersToPoints(meters);
 
 
 
@@ -121,7 +122,7 @@ function applyPlanning() {
             c: CirclesBetween2Points[i],
             points: []});
         for(var j = 0; j < points.length; j ++)
-            if(covers(CirclesBetween2Points[i],points[j])){
+            if(covers(CirclesBetween2Points[i],points[j],r)){
                 obj.points.push(points[j]);
                 
             }   
@@ -151,7 +152,7 @@ function applyPlanning() {
         }
   
     }
-    addDapAtPoints(circlesChosen);
+    addDapAtPoints(circlesChosen,meters);
 
     //for(var i = 0; i < points.length ; i++){
     //    for (var j = 0 ; j < coverage.length; j++) {
