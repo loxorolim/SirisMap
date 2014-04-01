@@ -221,7 +221,7 @@ function displayInfoWindow(marker)
     }
     var content = 'ID: ' + marker.ID + '<br>Latitude: ' + marker.position.lat() + '<br>Longitude: ' + marker.position.lng() + '<br>Elevation: ' + marker.elevation + '<br>Neighbours IDs: ' + neighboursIDs + '<br>Connected: ' + marker.connected;
     if (marker.type == "Meter")
-        content += '<br>Hop: ' + marker.meshHop;
+        content += '<br>Hop: ' + marker.meshHop + '<br>X: ' + marker.X + '<br>Y: ' + marker.Y ;
     if (marker.type == "DAP")
         content += '<br>Efficiency: ' + marker.efficiency;
     if (marker.teleTech != null)

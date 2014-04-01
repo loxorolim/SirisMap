@@ -11,6 +11,8 @@
 	    icon: meterOffIconImage,
 	    neighbours: [],
 	    ID: ID,
+	    X: 0,
+        Y: 0,
 	    connected: false,
 	    
 	    meshHop: 0

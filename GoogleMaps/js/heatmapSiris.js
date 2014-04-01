@@ -69,7 +69,7 @@ function drawHeatMap()
      
 
     ]
-    heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+ //   heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
   
     heatmap.setMap(map);
    

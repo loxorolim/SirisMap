@@ -48,6 +48,25 @@ function containsPoint(elem, vet) {
     }
     return -1;
 }
+function findBestCoverage(points, coverage) {
+   
+    var coveragePos = -1;
+    var numContained = 0;
+    for (var i = 0; i < coverage.length; i++) {
+      //  if(coverage[i].points.length)
+        var contained = 0;
+        for (var j = 0; j < points.length ; j++) {
+            if (containsPoint(points[j], coverage[i].points) >= 0)
+                contained++;
+        }
+        if (contained > numContained) {
+            coveragePos = i;
+            numContained = contained;
+        }
+            
+    }
+    return coveragePos;
+}
 function CanvasProjectionOverlay() { }
 CanvasProjectionOverlay.prototype = new google.maps.OverlayView();
 CanvasProjectionOverlay.prototype.constructor = CanvasProjectionOverlay;
@@ -134,25 +153,40 @@ function applyPlanning() {
         return 0;
     });
     var circlesChosen = [];
-   // var i = 0;
+    // var i = 0;
+    addDapAtPoints(points, meters);
     while (points.length > 0) {
-        for (var j = 0 ; j < coverage.length; j++) {
-            if (containsPoint(points[0], coverage[j].points) != -1) {
-                //remover esse coverage 
-                // remover todos os pointos q ele cobre
-                circlesChosen.push(coverage[j].c);
-                for (var k = 0; k < coverage[j].points.length; k++) {
-                    points.splice(containsPoint(coverage[j].points[k], points),1);
-                }
-                coverage.splice(j,1);
-                break;
+        var bestCoveragePos = findBestCoverage(points, coverage);
+        var bestCoverage = coverage[bestCoveragePos];
+        for (var k = 0; k < coverage[bestCoveragePos].points.length; k++) {
+            var pointPos = containsPoint(coverage[bestCoveragePos].points[k], points);
+            if(pointPos >= 0)
+                points.splice(pointPos, 1);
+            
+        }
+        coverage.splice(bestCoveragePos, 1);
+        circlesChosen.push(coverage[bestCoveragePos].c);
+        //for (var j = 0 ; j < coverage.length; j++) {
+        //    if (containsPoint(points[0], coverage[j].points) != -1) {
+        //        //remover esse coverage 
+        //        // remover todos os pointos q ele cobre
+        //        circlesChosen.push(coverage[j].c);
+        //        for (var k = 0; k < coverage[j].points.length; k++) {
+        //            points.splice(containsPoint(coverage[j].points[k], points),1);
+        //        }
+        //        coverage.splice(j,1);
+        //        break;
                 
 
-            }
-        }
+        //    }
+        //}
   
     }
-    addDapAtPoints(circlesChosen,meters);
+     
+    //var teste = [];
+    //for (var i = 0; i < 1 ; i++)
+    //    teste.push(coverage[i].c);
+    //addDapAtPoints(teste, meters);
 
     //for(var i = 0; i < points.length ; i++){
     //    for (var j = 0 ; j < coverage.length; j++) {
