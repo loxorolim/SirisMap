@@ -169,7 +169,7 @@ function calculateEfficiency(marker)
         var dist = google.maps.geometry.spherical.computeDistanceBetween(latLng, heatmapPoints[i].location);
         if(dist < efficiencyRadio)
         {
-            var value = heatmapPoints[i].weight * (1 - dist / efficiencyRadio);        
+            var value = heatmapPoints[i].efficiency * (1 - dist / efficiencyRadio);        
             if(value > avg)
                 avg = value;
            //values.push(value);
@@ -196,8 +196,8 @@ function removeMarker(marker)
     {
         if (allMarkers[i].ID == marker.ID)
         {
-            if(enableMarkerClusterer)
-                markerCluster.removeMarker(allMarkers[i]);
+
+            markerCluster.removeMarker(allMarkers[i]);
             allMarkers[i].setMap(null);
             allMarkers.splice(i, 1);
 

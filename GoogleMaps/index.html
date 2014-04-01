@@ -18,6 +18,8 @@
       <script src="js/jquery.blockUI.js"></script>    
       <script src="js/jquery-ui-1.10.4.custom.min.js"></script>
       <script src="js/Globals.js"></script>
+      <script src="js/AutoPlanning.js"></script>
+      <script src="js/LatLngToXY.js"></script>
 
       <script src="js/markerwithlabel.js"></script>
       <script src="js/xmluploader.js"></script>
@@ -49,7 +51,9 @@
               <div id="over_map">
                   
                       <div id="controls">
-                          <input type="checkbox" id="check"><label for="check">Mapa de calor</label>
+                          <input type="checkbox" id="checkHeatmap"><label for="checkHeatmap">Mapa de calor</label>
+                          <input type="checkbox" id="checkCluster"><label for="checkCluster">Junção de componentes</label>
+                          <button id="autoPlanning">Auto Planejamento</button>
                           <ul id="menu">
                               <li>
                                   <a href="#">Planejamento</a>

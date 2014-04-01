@@ -1,6 +1,7 @@
-﻿var enableMarkerClusterer = false;
+﻿var enableMarkerClusterer = true;
+var markerCluster;
 
-var drawHeatmap = false;
+var drawHeatmap = true;
 var heatmap;
 var taxiData = [];
 var heatmapPoints = [];
@@ -14,7 +15,7 @@ var ID = 0;
 var meshMaxJumps = 3;
 
 var map;
-var markerCluster;
+
 var elevator;
 var insertListener;
 
