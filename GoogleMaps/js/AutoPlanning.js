@@ -1,45 +1,20 @@
-﻿
-
-function circlesFromP1p2r(p1,p2,r){
-    if(p1.x == p2.x && p2.y == p2.y)
+﻿function circlesFromP1p2r(p1, p2, r) {
+    if (p1.x == p2.x && p2.y == p2.y)
         return null;
-    else{
-        var deltax = p2.x - p1.x ;
-        var deltay = p2.y - p1.y;
-        var q = Math.sqrt(deltax*deltax + deltay*deltay);
-     //   var q = google.maps.geometry.spherical.computeDistanceBetween(p1.latLng, p2.latLng);
-        if(q>2.0*r)
-            return null;
-        else{
-            var x3 = (p1.x + p2.x) / 2 ;
-            var y3 = (p1.y + p2.y) / 2 ;
-            var d = Math.sqrt(r*r - ((q/2)*(q/2)));
-            var circle1 = ({
-                x: x3 - d*deltay/q,
-                y: y3 + d*deltax/q,
-                r: Math.abs(r)
-            });
-            var circle2 = ({
-                x: x3 + d*deltay/q,
-                y: y3 - d*deltax/q,
-                r: Math.abs(r)
-            });
-            var ret = [];
-            ret.push(circle1);
-            ret.push(circle2);
-            return ret;
-        }
+    else {        
+        var latLng1 = pointToLatLng(p1);
+        var latLng2 = pointToLatLng(p2);
+        var dist = google.maps.geometry.spherical.computeDistanceBetween(latLng1,latLng2);
+        var fraction = (0.9*r) / dist;
+        var latLng = google.maps.geometry.spherical.interpolate(latLng1, latLng2, fraction);
+        var circle = latLngToPoint(latLng);
+        return circle;
     }
 }
-function covers(c,pt,r){
-    return (((c.x - pt.x)*(c.x - pt.x) + (c.y - pt.y)*(c.y - pt.y)) <= r*r);
-}
-function contains(elem, vet){
-    for(var i = 0; i < vet.length; i++){
-        if(vet[i] == elem)
-            return i;
-    }
-    return -1;
+function covers(c, pt, r) {
+    var latlng = pointToLatLng(pt, meters);
+    var latlng2 = pointToLatLng(c, meters);
+    return (google.maps.geometry.spherical.computeDistanceBetween(latlng, latlng2) <= r)
 }
 function containsPoint(elem, vet) {
     for (var i = 0; i < vet.length; i++) {
@@ -53,48 +28,26 @@ function findBestCoverage(points, coverage) {
     var coveragePos = -1;
     var numContained = 0;
     for (var i = 0; i < coverage.length; i++) {
-      //  if(coverage[i].points.length)
-        var contained = 0;
-        for (var j = 0; j < points.length ; j++) {
-            if (containsPoint(points[j], coverage[i].points) >= 0)
-                contained++;
+        if (coverage[i].points.length >= numContained) {
+            var contained = 0;
+            for (var j = 0; j < points.length ; j++) {
+                if (containsPoint(points[j], coverage[i].points) >= 0)
+                    contained++;
+            }
+            if (contained > numContained) {
+                coveragePos = i;
+                numContained = contained;
+            }
         }
-        if (contained > numContained) {
-            coveragePos = i;
-            numContained = contained;
-        }
+        
             
     }
     return coveragePos;
 }
-function CanvasProjectionOverlay() { }
-CanvasProjectionOverlay.prototype = new google.maps.OverlayView();
-CanvasProjectionOverlay.prototype.constructor = CanvasProjectionOverlay;
-CanvasProjectionOverlay.prototype.onAdd = function () { };
-CanvasProjectionOverlay.prototype.draw = function () { };
-CanvasProjectionOverlay.prototype.onRemove = function () { };
 
-function markersToPoints() {
-    var canvasProjectionOverlay = new CanvasProjectionOverlay();
-    canvasProjectionOverlay.setMap(map);
-    var points = [];
-    for (var i = 0; i < meters.length; i++) {
-        var markerPos = meters[i].getPosition();
-        var p = canvasProjectionOverlay.getProjection().fromLatLngToContainerPixel(markerPos);
-        points.push(p);
-    }
-    return points;
-}
 function addDapAtPoints(circles,meters) {
-    //var canvasProjectionOverlay = new CanvasProjectionOverlay();
-    //canvasProjectionOverlay.setMap(map);
     for (var i = 0; i < circles.length; i++) {
-        //var point = ({
-        //    x: circles[i].x,
-        //    y: circles[i].y
-        //});
         var latLng = pointToLatLng(circles[i], meters);
-       // var latLng = canvasProjectionOverlay.getProjection().fromContainerPixelToLatLng(point);
         placeDAP(latLng.lat(), latLng.lng(), "bla");
     }
 }
@@ -102,39 +55,16 @@ function getDapMaximumReach() {
     return table[table.length - 1].distance;
 }
 function applyPlanning() {
-   // var p = 
-    //var projection = map.getProjection();
-   // var markerPos = allMarkers[0].getPosition();
-    //var screenPos = projection.fromLatLngToContainerPixel(markerPos);
-
-   
-   
-   
-
-
     var points = metersToPoints(meters);
-
-
-
     var r = getDapMaximumReach();
-    var CirclesBetween2Points = [];
-    
+    var CirclesBetween2Points = [];   
     for(var i = 0; i < points.length; i ++)
-        for( var j = 0; j < points.length;j++){
-            if(i != j){
-                var circles = circlesFromP1p2r(points[i], points[j], r);
-                if (circles != null) {
-
-                    CirclesBetween2Points.push(circles[0]);
-                    CirclesBetween2Points.push(circles[1]);
-                }
-                //if(circles[0] != NULL)
-                //    CirclesBetween2Points.push(circles[0]);
-                //if(circles[1] != NULL)
-                //    CirclesBetween2Points.push(circles[0]);
+        for( var j = 0; j < points.length;j++)
+            if (i != j) {
+                var circle = circlesFromP1p2r(points[i], points[j], r);
+                if (circle != null)
+                    CirclesBetween2Points.push(circlesFromP1p2r(points[i], points[j], r));
             }
-               
-        }
     var coverage = [];
     for(var i = 0 ; i < CirclesBetween2Points.length ; i++){
         var obj = ({
@@ -153,19 +83,24 @@ function applyPlanning() {
         return 0;
     });
     var circlesChosen = [];
-    // var i = 0;
-    addDapAtPoints(points, meters);
+   
     while (points.length > 0) {
         var bestCoveragePos = findBestCoverage(points, coverage);
         var bestCoverage = coverage[bestCoveragePos];
+        var listaPontos = printPoints(points);
+
+        var listaCoberta = printPoints(coverage[bestCoveragePos].points);
+
         for (var k = 0; k < coverage[bestCoveragePos].points.length; k++) {
             var pointPos = containsPoint(coverage[bestCoveragePos].points[k], points);
             if(pointPos >= 0)
                 points.splice(pointPos, 1);
-            
+            listaPontos = printPoints(points);
+            listaCoberta = printPoints(coverage[bestCoveragePos].points);
         }
-        coverage.splice(bestCoveragePos, 1);
         circlesChosen.push(coverage[bestCoveragePos].c);
+        coverage.splice(bestCoveragePos, 1);
+        
         //for (var j = 0 ; j < coverage.length; j++) {
         //    if (containsPoint(points[0], coverage[j].points) != -1) {
         //        //remover esse coverage 
@@ -182,6 +117,8 @@ function applyPlanning() {
         //}
   
     }
+    
+    addDapAtPoints(circlesChosen, meters);
      
     //var teste = [];
     //for (var i = 0; i < 1 ; i++)
@@ -203,3 +140,17 @@ function applyPlanning() {
     
 
 }
+function printPoints(points) {
+    var listaPontos = "";
+    points.sort(function (a, b) {
+        if (a.x < b.x) return -1;
+        if (a.x > b.x) return 1;
+        return 0;
+    });
+    for (var ls = 0 ; ls < points.length; ls++) {
+        listaPontos += "Ponto " + ls + " : (" + points[ls].x + ", " + points[ls].y + ")\n";
+    }
+    return listaPontos;
+
+}
+

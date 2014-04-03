@@ -58,7 +58,7 @@ function initialize() {
     
     
     loadCarDriveFromXml();
-    //loadNodesFromXml();
+    loadNodesFromXml();
     createCircle();
     drawHeatMap();
     insertListener = google.maps.event.addListener(map, 'click', function (event) {
