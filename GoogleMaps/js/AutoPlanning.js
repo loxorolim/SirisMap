@@ -57,21 +57,25 @@ function getDapMaximumReach() {
 function applyPlanning() {
     var points = metersToPoints(meters);
     var r = getDapMaximumReach();
-    var CirclesBetween2Points = [];   
-    for(var i = 0; i < points.length; i ++)
-        for( var j = 0; j < points.length;j++)
-            if (i != j) {
-                var circle = circlesFromP1p2r(points[i], points[j], r);
-                if (circle != null)
-                    CirclesBetween2Points.push(circlesFromP1p2r(points[i], points[j], r));
-            }
+    //var CirclesBetween2Points = [];   
+    //for(var i = 0; i < points.length; i ++)
+    //    for( var j = 0; j < points.length;j++)
+    //        if (i != j) {
+    //            var circle = circlesFromP1p2r(points[i], points[j], r);
+    //            if (circle != null)
+    //                CirclesBetween2Points.push(circlesFromP1p2r(points[i], points[j], r));
+    //        }
+    var electricPoles = [];
+    for (var i = 0 ; i < dapPositions.length ; i++) {
+        electricPoles.push(latLngToPoint(dapPositions[i]));
+    }
     var coverage = [];
-    for(var i = 0 ; i < CirclesBetween2Points.length ; i++){
+    for(var i = 0 ; i < electricPoles.length ; i++){
         var obj = ({
-            c: CirclesBetween2Points[i],
+            c: electricPoles[i],
             points: []});
         for(var j = 0; j < points.length; j ++)
-            if(covers(CirclesBetween2Points[i],points[j],r)){
+            if(covers(electricPoles[i],points[j],r)){
                 obj.points.push(points[j]);
                 
             }   
@@ -86,7 +90,10 @@ function applyPlanning() {
    
     while (points.length > 0) {
         var bestCoveragePos = findBestCoverage(points, coverage);
+        if (bestCoveragePos == -1)
+            break;
         var bestCoverage = coverage[bestCoveragePos];
+
         var listaPontos = printPoints(points);
 
         var listaCoberta = printPoints(coverage[bestCoveragePos].points);
@@ -100,44 +107,11 @@ function applyPlanning() {
         }
         circlesChosen.push(coverage[bestCoveragePos].c);
         coverage.splice(bestCoveragePos, 1);
-        
-        //for (var j = 0 ; j < coverage.length; j++) {
-        //    if (containsPoint(points[0], coverage[j].points) != -1) {
-        //        //remover esse coverage 
-        //        // remover todos os pointos q ele cobre
-        //        circlesChosen.push(coverage[j].c);
-        //        for (var k = 0; k < coverage[j].points.length; k++) {
-        //            points.splice(containsPoint(coverage[j].points[k], points),1);
-        //        }
-        //        coverage.splice(j,1);
-        //        break;
-                
 
-        //    }
-        //}
   
     }
     
     addDapAtPoints(circlesChosen, meters);
-     
-    //var teste = [];
-    //for (var i = 0; i < 1 ; i++)
-    //    teste.push(coverage[i].c);
-    //addDapAtPoints(teste, meters);
-
-    //for(var i = 0; i < points.length ; i++){
-    //    for (var j = 0 ; j < coverage.length; j++) {
-    //        if (contains(points[i], coverage[j].points) != -1) {
-    //            //remover esse coverage 
-    //            // remover todos os pointos q ele cobre
-    //            circlesChosen.push(coverage[j].c);
-                
-    //        }
-                
-    //    }
-    //}
-
-    
 
 }
 function printPoints(points) {

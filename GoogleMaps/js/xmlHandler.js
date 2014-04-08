@@ -87,6 +87,35 @@ function loadCarDriveFromXml() {
 		});
     });
 }
+function loadDapPositionsFromXml() {
+    dapPositions = [];
+    $(document).ready(function () {
+        $.ajax(
+		{
+		    type: "GET",
+		    url: "dappositions.xml",
+		    dataType: "xml",
+		    success: function (xml) {
+		        //$("node[name='x']");
+		        $(xml).find('point').each(function () {
+		            var latitude = parseFloat($(this).find('Latitude').text());
+		            var longitude = parseFloat($(this).find('Longitude').text());
+		            var point = new google.maps.LatLng(latitude, longitude);
+		            dapPositions.push(point);
+		            var marker = new google.maps.Marker(
+                    {
+                        position: point,
+                        map: map,
+                        draggable: false,
+                        icon: poleIcon,
+
+                    });
+
+		        })
+		    }
+		});
+    });
+}
 function loadReachFromTable(tech,scenario, dbm)
 {
 	var ret;

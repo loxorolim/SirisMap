@@ -17,7 +17,8 @@ function drawLine(marker1, marker2, colorname)
 	    path: markerPositions,
 	    strokeColor: color,
 	    strokeOpacity: 1.0,
-	    strokeWeight: 2
+	    strokeWeight: 2,
+	    clickable: false
 	});
     lines.push(routerPath);
     routerPath.setMap(map);
@@ -56,6 +57,7 @@ function drawDashedLine(marker1, marker2, colorname)
 	        offset: '0',
 	        repeat: '15px'
 	    }],
+	    clickable: false,
 	    strokeWeight: 2
 	});
     dashedLines.push(routerPath);
@@ -106,6 +108,7 @@ function drawCircle(marker)
 	    strokeWeight: 0,
 	    fillColor: "#0000FF",
 	    fillOpacity: 0.35,
+	    clickable: false,
 	    map: map
 	});
     yellowCircle = new google.maps.Circle(
@@ -117,6 +120,7 @@ function drawCircle(marker)
 	    strokeWeight: 0,
 	    fillColor: "#FFFF00",
 	    fillOpacity: 0.35,
+	    clickable: false,
 	    map: map
 	});
     greenCircle = new google.maps.Circle(
@@ -128,6 +132,7 @@ function drawCircle(marker)
 	    strokeWeight: 0,
 	    fillColor: "#00FF00",
 	    fillOpacity: 0.35,
+	    clickable: false,
 	    map: map
 	});
     marker.reachCircles = [greenCircle, yellowCircle, redCircle];

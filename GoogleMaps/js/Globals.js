@@ -19,6 +19,7 @@ var map;
 var elevator;
 var insertListener;
 
+var dapPositions = [];
 var allMarkers = [];
 var disconnectedMeters = [];
 var oneHopMeters = [];
@@ -80,6 +81,10 @@ var meterGoodIconImage =
         size: new google.maps.Size(10, 10),
         anchor: new google.maps.Point(5, 5)
     }
+var poleIcon = {
+    url: 'pole.png'
+}
+        
 //////////
 
 var mouseInsertionIcon = new google.maps.Marker({});
