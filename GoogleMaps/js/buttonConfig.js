@@ -172,69 +172,69 @@ function setButtons()
 			$('#configMessage').html(getConfigurations());
 		});
 		
-		$("#metropolitanRadio").click(function() 
-		{
-			setScenario("Metropolitan")
-			$('#configMessage').html(getConfigurations());
-		});
-		$("#urbanRadio").click(function()
-		{
-			setScenario("Urban")
-			$('#configMessage').html(getConfigurations());
-		});
-		$("#ruralRadio").click(function() 
-		{
-			setScenario("Rural")
-			$('#configMessage').html(getConfigurations());
-		});
+		//$("#metropolitanRadio").click(function() 
+		//{
+		//	setScenario("Metropolitan")
+
+		//});
+		//$("#urbanRadio").click(function()
+		//{
+		//	setScenario("Urban")
+
+		//});
+		//$("#ruralRadio").click(function() 
+		//{
+		//	setScenario("Rural")
+		//	$('#configMessage').html(getConfigurations());
+		//});
 
 		
-		$("#ZigBee").click(function() 
-		{
-			setCurrentTech("ZigBee");
-			setInsertionOptions("DAP")
-			setDapsToTechnology();
-			$('#configMessage').html(getConfigurations());
+		//$("#ZigBee").click(function() 
+		//{
+		//	setCurrentTech("ZigBee");
+		//	setInsertionOptions("DAP")
+		//	setDapsToTechnology();
+		//	$('#configMessage').html(getConfigurations());
 			
-		});
-		$("#80211").click(function()
-		{		
-			setCurrentTech("w80211");
-			setInsertionOptions("DAP")
-			setDapsToTechnology();
-			$('#configMessage').html(getConfigurations());
-		});
+		//});
+		//$("#80211").click(function()
+		//{		
+		//	setCurrentTech("w80211");
+		//	setInsertionOptions("DAP")
+		//	setDapsToTechnology();
+		//	$('#configMessage').html(getConfigurations());
+		//});
 
-		$("#z0dbm").click(function() 
-		{
-			setdbm("dbm0");
-			$('#configMessage').html(getConfigurations());
-		});
-		$("#z6dbm").click(function() 
-		{
-			setdbm("dbm6");
-			$('#configMessage').html(getConfigurations());
-		});
-		$("#z12dbm").click(function() 
-		{
-			setdbm("dbm12");
-			$('#configMessage').html(getConfigurations());
-		});
-		$("#z18dbm").click(function() 
-		{
-			setdbm("dbm18");
-			$('#configMessage').html(getConfigurations());
-		});
-		$("#z24dbm").click(function() 
-		{
-			setdbm("dbm24");
-			$('#configMessage').html(getConfigurations());
-		});
-		$("#z30dbm").click(function() 
-		{
-			setdbm("dbm30");
-			$('#configMessage').html(getConfigurations());
-		});		
+		//$("#z0dbm").click(function() 
+		//{
+		//	setdbm("dbm0");
+		//	$('#configMessage').html(getConfigurations());
+		//});
+		//$("#z6dbm").click(function() 
+		//{
+		//	setdbm("dbm6");
+		//	$('#configMessage').html(getConfigurations());
+		//});
+		//$("#z12dbm").click(function() 
+		//{
+		//	setdbm("dbm12");
+		//	$('#configMessage').html(getConfigurations());
+		//});
+		//$("#z18dbm").click(function() 
+		//{
+		//	setdbm("dbm18");
+		//	$('#configMessage').html(getConfigurations());
+		//});
+		//$("#z24dbm").click(function() 
+		//{
+		//	setdbm("dbm24");
+		//	$('#configMessage').html(getConfigurations());
+		//});
+		//$("#z30dbm").click(function() 
+		//{
+		//	setdbm("dbm30");
+		//	$('#configMessage').html(getConfigurations());
+		//});		
 		
 			
 	

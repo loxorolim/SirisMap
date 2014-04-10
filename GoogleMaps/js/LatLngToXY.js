@@ -2,10 +2,14 @@
 function metersToPoints(meters) {
     var points = [];
     for (var i = 0; i < meters.length ; i++) {
-        var p = latLngToPoint(meters[i].getPosition());
-        meters[i].X = p.x;
-        meters[i].Y = p.y;
-        points.push(p);
+        if (!meters[i].connected) {
+            var p = latLngToPoint(meters[i].getPosition());
+            meters[i].X = p.x;
+            meters[i].Y = p.y;
+            points.push(p);
+        }
+
+     
     }    
     return points;   
 }
