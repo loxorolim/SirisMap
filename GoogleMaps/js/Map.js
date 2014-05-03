@@ -60,7 +60,6 @@ function initialize() {
     loadCarDriveFromXml();
     loadNodesFromXml();
     loadDapPositionsFromXml();
-    createCircle();
     drawHeatMap();
     insertListener = google.maps.event.addListener(map, 'click', function (event) {
         //if (opMode == "Insertion") {

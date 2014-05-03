@@ -19,7 +19,7 @@ var map;
 var elevator;
 var insertListener;
 
-var dapPositions = [];
+var poles = [];
 var allMarkers = [];
 var disconnectedMeters = [];
 var oneHopMeters = [];

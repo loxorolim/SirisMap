@@ -27,12 +27,6 @@ function setButtons()
 		$("#Scenario").click(function() {
 			setInfoWindowNull();
 		});
-		$("#RFMesh").click(function () {
-		    $.blockUI({ fadeIn: 0, message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
-			setInfoWindowNull();
-			setRFMesh();
-			$.unblockUI();
-		});
 		$("#help").click(function () {
 		    $("#dialog").dialog("open");
 		    //$.blockUI({
@@ -89,6 +83,7 @@ function setButtons()
 
 	       
     });
+
     $('#autoPlanning').button().click(function () {
        
         $(this).blur();
@@ -100,7 +95,38 @@ function setButtons()
 
 
     });
-    
+    $('#checkRFMesh').button({
+        icons: {
+            primary: "ui-icon-closethick"
+        }
+
+    }).click(function () {
+        $(this).blur();
+        $.blockUI({ fadeIn: 0, message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
+        if (meshEnabled) {
+            setRFMesh();
+            $(this).button({
+                icons: {
+                    primary: "ui-icon-closethick"
+                }
+            })
+        }
+
+        else {
+            setRFMesh();
+            //markerCluster.clearMarkers();
+            $(this).button({
+                icons: {
+                    primary: "ui-icon-check"
+                }
+            })
+        }
+
+        //$('#check').button.removeClass("ui-state-focus ui-state-hover");
+        $.unblockUI();
+
+
+    });
     $('#checkCluster').button({
         icons: {
             primary: "ui-icon-check"
@@ -170,6 +196,13 @@ function setButtons()
 			setInsertionOptions("Meter");
 			map.setOptions({ draggableCursor: "url(cursors/metercursor.cur), default" })
 			$('#configMessage').html(getConfigurations());
+		});
+		$("#pole").click(function () {
+		    setOpMode("Insertion");
+		    setInfoWindowNull();
+		    setInsertionOptions("Pole");
+		    map.setOptions({ draggableCursor: "url(cursors/polecursor.cur), default" })
+		    $('#configMessage').html(getConfigurations());
 		});
 		
 		//$("#metropolitanRadio").click(function() 

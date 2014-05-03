@@ -66,8 +66,8 @@ function applyPlanning() {
     //                CirclesBetween2Points.push(circlesFromP1p2r(points[i], points[j], r));
     //        }
     var electricPoles = [];
-    for (var i = 0 ; i < dapPositions.length ; i++) {
-        electricPoles.push(latLngToPoint(dapPositions[i]));
+    for (var i = 0 ; i < poles.length ; i++) {
+        electricPoles.push(latLngToPoint(poles[i].position));
     }
     var coverage = [];
     for(var i = 0 ; i < electricPoles.length ; i++){

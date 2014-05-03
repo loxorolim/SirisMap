@@ -210,6 +210,15 @@ function removeMarker(marker)
     }
      
 }
+function removePole(pole) {
+    for (var i = 0; i < poles.length; i++) {
+        if (pole == poles[i]) {
+            poles[i].setMap(null);
+            poles.splice(i, 1);
+
+        }
+    }
+}
 
 
 function displayInfoWindow(marker)
@@ -345,6 +354,8 @@ function setInsertionOptions(type)
                 placeDAP(event.latLng.lat(), event.latLng.lng(), currentTech);           
             if (type == "Meter")
                 placeMeter(event.latLng.lat(), event.latLng.lng());
+            if (type == "Pole")
+                placePole(event.latLng.lat(), event.latLng.lng());
         }
 
     });

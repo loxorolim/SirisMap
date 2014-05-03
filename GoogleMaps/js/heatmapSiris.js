@@ -75,44 +75,7 @@ function drawHeatMap()
    
 
 }
-function createCircle() {
 
-    for(var rad=10000;rad<=50000;rad+=10000)
-    {
-
-        //var circleOptions = new google.maps.Circle({
-        //    center:latLng,   //set center
-        //    radius:rad,   //set radius in meters
-        //    //fillColor: Color.TRANSPARENT,  //default
-        //    strokeColor:0x10000000,
-        //    strokeWidth:5,
-        //});
-        var yellowCircle = new google.maps.Circle(
-	    {
-	        center: new google.maps.LatLng(-22, -43),
-	    radius: rad,
-	    strokeColor: "#FFFF00",
-	    strokeOpacity: 0.8,
-	    strokeWeight: 0,
-	    fillColor: "#FFFF00",
-	    fillOpacity: 0.35,
-	    map: map
-	    });
-        var yellowCircle = new google.maps.Circle(
-	    {
-	        center: new google.maps.LatLng(-22.5, -43.5),
-	        radius: rad,
-	        strokeColor: "#FF00FF",
-	        strokeOpacity: 0.8,
-	        strokeWeight: 0,
-	        fillColor: "#FF00FF",
-	        fillOpacity: 0.35,
-	        map: map
-	    });
-              
-     //myCircle = map.addCircle(circleOptions);
-    }
-}
 
 //function changeRadius() {
 //    heatmap.set('radius', heatmap.get('radius') ? null : 40);

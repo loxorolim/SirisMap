@@ -100,16 +100,17 @@ function loadDapPositionsFromXml() {
 		        $(xml).find('point').each(function () {
 		            var latitude = parseFloat($(this).find('Latitude').text());
 		            var longitude = parseFloat($(this).find('Longitude').text());
-		            var point = new google.maps.LatLng(latitude, longitude);
-		            dapPositions.push(point);
-		            var marker = new google.maps.Marker(
-                    {
-                        position: point,
-                        map: map,
-                        draggable: false,
-                        icon: poleIcon,
+		            placePole(latitude, longitude);
+		            //var point = new google.maps.LatLng(latitude, longitude);
+		            //dapPositions.push(point);
+		            //var marker = new google.maps.Marker(
+                    //{
+                    //    position: point,
+                    //    map: map,
+                    //    draggable: false,
+                    //    icon: poleIcon,
 
-                    });
+                    //});
 
 		        })
 		    }
