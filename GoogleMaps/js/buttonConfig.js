@@ -41,6 +41,23 @@ function setButtons()
 		        
 		    //});
 		});
+		$("#xml").click(function () {
+		    showNodesXml();
+		    showPolesXml();
+		    $("#xmltextnodes").dialog("open");
+		    $("#xmltextpoles").dialog("open");
+		    //$.blockUI({
+		    //    message: $('#displayBox'),
+		    //    onOverlayClick: $.unblockUI,
+		    //    css: {
+		    //        top: ($(window).height() - 451) / 2 + 'px',
+		    //        left: ($(window).width() - 654) / 2 + 'px',
+		    //        width: '654px',
+		    //        height: '451px'
+		    //    }
+
+		    //});
+		});
 
 		
 		var radioSize = 155;
@@ -172,6 +189,32 @@ function setButtons()
 	           duration: 1000
 	       },
 	       width: 680
+	   });
+	   $("#xmltextnodes").dialog({
+	       autoOpen: false,
+	       show: {
+	           effect: "scale",
+	           duration: 1000
+	       },
+	       hide: {
+	           effect: "scale",
+	           duration: 1000
+	       },
+	       width: 680,
+           height: 500
+	   });
+	   $("#xmltextpoles").dialog({
+	       autoOpen: false,
+	       show: {
+	           effect: "scale",
+	           duration: 1000
+	       },
+	       hide: {
+	           effect: "scale",
+	           duration: 1000
+	       },
+	       width: 680,
+	       height: 500
 	   });
 
        

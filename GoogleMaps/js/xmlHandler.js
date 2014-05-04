@@ -27,7 +27,23 @@ function showNodesXml()
 		}
 	}
 	fin += "<br>&lt\/Nodes&gt";
-	$("#xmltext").html(init+meters+daps+fin);
+	$("#xmltextnodes").html(init+meters+daps+fin);
+}
+function showPolesXml() {
+    var init = "&lt?xml version=\"1.0\" encoding=\"utf-8\"?&gt" + "<br>&ltPositions&gt";
+    var meters = "";
+    var fin = "";
+    var markers = poles;
+    for (i = 0; i < markers.length; i++) {
+
+            meters += "<br>&nbsp&ltpoint&gt"
+			+ "<br>&nbsp&nbsp&ltLatitude&gt" + markers[i].position.lat() + "&lt\/Latitude&gt"
+			+ "<br>&nbsp&nbsp&ltLongitude&gt" + markers[i].position.lng() + "&lt\/Longitude&gt"
+			+ "<br>&nbsp&lt\/point&gt";
+        
+    }
+    fin += "<br>&lt\/Positions&gt";
+    $("#xmltextpoles").html(init + meters + fin);
 }
 function loadNodesFromXml()
 {
