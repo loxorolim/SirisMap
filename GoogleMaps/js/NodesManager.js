@@ -8,21 +8,23 @@ function connectNodesByDistance(marker)
 
     for (var i = 0; i < allMarkers.length; i++)
     {
-       // var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
-        var dis = distance(marker, allMarkers[i]);
-        //dis = dis*1000;
-        var values = getValuesFromTable(dis);
+        // var dis = distance(marker.position.lat(), marker.position.lng(), allMarkers[i].position.lat(), allMarkers[i].position.lng(), "K");
+        if (!(marker.type == "Meter" && allMarkers[i].type == "Meter")) {
+            var dis = distance(marker, allMarkers[i]);
+            //dis = dis*1000;
+            var values = getValuesFromTable(dis);
 
-        if (values != -1)
-        {
-            //Se o marker é um DAP ele pode se conectar a DAPs e a medidores
-            if (marker.type == "DAP")
-                connectMarkers(marker, allMarkers[i], values.color);
-            else
-            //Se o marker é um medidor ele só pode conectar a DAPs
-                if (allMarkers[i].type == "DAP")
-                    connectMarkers(allMarkers[i], marker, values.color);
+            if (values != -1) {
+                //Se o marker é um DAP ele pode se conectar a DAPs e a medidores
+                if (marker.type == "DAP")
+                    connectMarkers(marker, allMarkers[i], values.color);
+                else
+                    //Se o marker é um medidor ele só pode conectar a DAPs
+                    if (allMarkers[i].type == "DAP")
+                        connectMarkers(allMarkers[i], marker, values.color);
+            }
         }
+        
     }
 
     if (marker.type == "DAP")
@@ -59,7 +61,7 @@ function distance(marker1, marker2)
     
     var latLngA = new google.maps.LatLng(marker1.position.lat(), marker1.position.lng());
     var latLngB = new google.maps.LatLng(marker2.position.lat(), marker2.position.lng());
-    var dist = google.maps.geometry.spherical.computeDistanceBetween(latLngA, latLngB);
+    var dist =  google.maps.geometry.spherical.computeDistanceBetween(latLngA, latLngB);
     return dist
 }
 function removeFromList(list, obj) {
