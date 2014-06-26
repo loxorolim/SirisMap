@@ -42,7 +42,7 @@ function setButtons()
 		    //});
 		});
 		$("#xml").click(function () {
-		    showNodesXml();
+		    showNodesKml();
 		    showPolesXml();
 		    $("#xmltextnodes").dialog("open");
 		    $("#xmltextpoles").dialog("open");

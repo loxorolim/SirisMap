@@ -29,6 +29,58 @@ function showNodesXml()
 	fin += "<br>&lt\/Nodes&gt";
 	$("#xmltextnodes").html(init+meters+daps+fin);
 }
+function showNodesKml() {
+    var init = "&lt?xml version=\"1.0\" encoding=\"UTF-8\"?&gt" + "<br>&ltkml xmlns=\"http://earth.google.com/kml/2.2\"&gt<br>&ltDocument&gt";
+    var style = "<br>&ltStyle id=\"greenLine\"&gt<br>&ltLineStyle&gt<br>&ltcolor&gtFF00D214&lt\/color&gt<br>&ltwidth&gt5&lt\/width&gt<br>&lt\/LineStyle&gt<br>&lt\/Style&gt<br>&ltStyle id=\"blueLine\"&gt<br>&ltLineStyle&gt<br>&ltcolor&gtFFB40014&lt\/color&gt<br>&ltwidth&gt5&lt\/width&gt<br>&lt\/LineStyle&gt<br>&lt\/Style&gt<br>&ltStyle id=\"yellowLine\"&gt<br>&ltLineStyle&gt<br>&ltcolor&gtFF14F0FF&lt\/color&gt<br>&ltwidth&gt5&lt\/width&gt<br>&lt\/LineStyle&gt<br>&lt\/Style&gt";
+    var meters = "";
+    var daps = "";
+    var linestext = "";
+    var fin = "";
+    var markers = getAllMarkers();
+    for (i = 0; i < markers.length; i++) {
+        if (markers[i].type == "Meter") {
+            meters += "<br>&ltPlacemark&gt"
+			+ "<br>&ltname&gt" + "Medidor" + "&lt\/name&gt"
+			+ "<br>&ltdescription&gt" + "Um medidor inteligente" + "&lt\/description&gt"
+            + "<br>&ltPoint&gt"
+            + "<br>&ltcoordinates&gt" + markers[i].position.lng() + "," + markers[i].position.lat() + "&lt\/coordinates&gt"
+            + "<br>&lt\/Point&gt"
+			+ "<br>&lt\/Placemark&gt";
+        }
+
+        else
+            if (markers[i].type == "DAP") {
+                daps += "<br>&ltPlacemark&gt"
+			    + "<br>&ltname&gt" + "DAP" + "&lt\/name&gt"
+			    + "<br>&ltdescription&gt" + "Um DAP com tecnologia " + markers[i].teleTech + "&lt\/description&gt"
+                + "<br>&ltPoint&gt"
+                + "<br>&ltcoordinates&gt" + markers[i].position.lng() + "," + markers[i].position.lat() + "&lt\/coordinates&gt"
+                + "<br>&lt\/Point&gt"
+                + "<br>&lt\/Placemark&gt";
+            }
+    }
+    for (i = 0; i < lines.length; i++) {
+        var path = lines[i].getPath();
+        var color = lines[i].strokeColor;
+        linestext += "<br>&ltPlacemark&gt"
+			    + "<br>&ltname&gt" + "Linha reta" + "&lt\/name&gt";
+        if (color == "#00FF00")
+            linestext += "<br>&ltstyleUrl&gt" + "#greenLine" + "&lt\/styleUrl&gt";
+        if (color == "#FFFF00")
+            linestext += "<br>&ltstyleUrl&gt" + "#yellowLine" + "&lt\/styleUrl&gt";
+        if (color == "#0000FF")
+            linestext += "<br>&ltstyleUrl&gt" + "#blueLine" + "&lt\/styleUrl&gt";
+        linestext +=
+			     "<br>&ltdescription&gt" + "A linha reta de uma conexao "  + "&lt\/description&gt"
+                + "<br>&ltLineString&gt"
+                + "<br>&ltcoordinates&gt" + path.j[0].lng() + "," + path.j[0].lat() + "," + "0 " + path.j[1].lng() + ","  + path.j[1].lat() + "," + "0 " + "&lt\/coordinates&gt"
+                + "<br>&lt\/LineString&gt"
+                + "<br>&lt\/Placemark&gt";
+
+    }
+    fin += "<br>&lt\/Document&gt<br>&lt\/kml&gt";
+    $("#xmltextnodes").html(init + style + meters + daps + linestext+ fin);
+}
 function showPolesXml() {
     var init = "&lt?xml version=\"1.0\" encoding=\"utf-8\"?&gt" + "<br>&ltPositions&gt";
     var meters = "";
