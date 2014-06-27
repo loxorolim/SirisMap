@@ -1,5 +1,11 @@
 ﻿
 function createScpMatrixes() {
+    var points = metersToPoints(meters);
+    var electricPoles = [];
+    for (var i = 0 ; i < poles.length ; i++) {
+        electricPoles.push(latLngToPoint(poles[i].position));
+    }
+    var r = getDapMaximumReach();
     var cM = [];
     var sM = [];
     for (var i = 0; i < points.length; i++) {
@@ -21,5 +27,4 @@ function createScpMatrixes() {
         coverageMatrix: cM 
     });
     return scpMatrixes;
-
 }

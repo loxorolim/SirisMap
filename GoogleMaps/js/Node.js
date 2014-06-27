@@ -154,8 +154,6 @@ function placeMeter(latitude, longitude) {
     //        return -1;
 
     //});
-    var sol = [0, 0, 0, 0, 0, 0, 0];
-    constructPhase(sol);
 
     allMarkers.push(marker);
     disconnectedMeters.push(marker);

@@ -102,7 +102,8 @@ function setButtons()
     });
 
     $('#autoPlanning').button().click(function () {
-       
+        autoPlanningGrasp()
+
         $(this).blur();
         $.blockUI({ fadeIn: 0, message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
         applyPlanning();

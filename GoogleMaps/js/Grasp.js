@@ -1,27 +1,80 @@
 ﻿var alpha = 0.9;
+var iterations = 100;
+var p = 0.75;
+function autoPlanningGrasp() {
+    var Matrixes = createScpMatrixes();
+    var scpMatrix = Matrixes.scpMatrix;
+    var coverageMatrix = Matrixes.coverageMatrix;
+    var bestSolution;
+    var bestFitness = -1;
+  //  alpha = 1;
+  //  for (var a = 0; a < 10; a++) {
+        for (var i = 0; i < iterations; i++) {
+            var scpCopy = matrixCopy(scpMatrix);
+            var coverageCopy = matrixCopy(coverageMatrix);
+            var solution = constructPhase(scpCopy, coverageCopy);
+            //        solution = LocalSearch(solution, scpMatrix, coverageMatrix);
+            var vals = solutionEvaluation(scpMatrix, coverageMatrix, solution);
+            if (bestFitness == -1 || solution.fitness < bestFitness) {
+                bestSolution = solution.solution;
+                bestFitness = solution.fitness;
+            }
+        }
+ //       alpha = alpha - 0.10;
+ //   }
+   
+    return bestSolution;
+}
+function matrixCopy(matrix) {
+    var ret = [];
+    for (var i = 0; i < matrix.length; i++) {
+        var line = [];
+        for (var j = 0; j < matrix[i].length; j++) 
+            line.push(matrix[i][j]);       
+        ret.push(line);
+    }
+    return ret;
+}
+function arrayCopy(array) {
+    var ret = [];
+    for (var i = 0; i < array.length; i++) {     
+        ret.push(array[i]);
+    }
+    return ret;
+}
+function constructPhase(scpMatrix, coverageMatrix) {
 
-function autoPlanningGrasp
-
-function constructPhase(solution) {
- //   var Matrixes = createScpMatrixes();
- //   var scpMatrix = Matrixes.scpMatrix;
- //   var coverageMatrix = Matrixes.coverageMatrix;
-
-    var scpMatrix = [[0, 1, 4], [5, 6], [0, 1, 2], [1, 5]];
-    var coverageMatrix = [[0,2], [0,2,3], [2],[],[0],[1,3],[1]];
+    var solution = initialSolution(coverageMatrix.length);
+    
+//    var scpMatrix = [[0, 1, 4], [5, 6], [0, 1, 2], [1, 5]];
+//    var coverageMatrix = [[0,2], [0,2,3], [2],[],[0],[1,3],[1]];
     //TALVEZ TENHA Q COPIAR AS MATRIZES ANTES
     var tam = scpMatrix.length;
-    while(tam > 0){ //ALTERAR ISSO AQUI PRA NAO DAR LOOP INFINITO SE TIVER PONTOS IMPSOSIVEIS DE SE COBRIR
+    var solutionFitness = 0;
+    while(tam > 0){ 
         var rcl = generateRCL(scpMatrix, coverageMatrix, solution);
+        if (rcl.length == 0) //caso haja medidor impossivel de ser coberto
+            break;
         var chosen = Math.floor((Math.random() * rcl.length));
         chosen = rcl[chosen].position;
         solution[chosen] = 1;
-//        var scpCopy = scp
+        solutionFitness++;
+        //        var scpCopy = scp
+
         tam = removeCovered(scpMatrix, coverageMatrix, chosen, tam);
 
-
     }
-
+    var ret = ({
+        solution: solution,
+        fitness: solutionFitness
+    });
+    return ret;
+}
+function initialSolution(size) {
+    var solution = [];
+    for (var i = 0; i < size; i++)
+        solution.push(0);
+    return solution;
 }
 function removeCovered(scpMatrix,coverageMatrix, chosen, tam) {
 
@@ -72,4 +125,119 @@ function generateRCL(scpMatrix, coverageMatrix, solution) {
     });
     return rcl;
 
+}
+function LocalSearch(solution, scpMatrix, coverageMatrix) {
+
+    var bestSolution = arrayCopy(solution);
+    var vals = solutionEvaluation(scpMatrix, coverageMatrix, bestSolution);
+    var bestSatisfied = vals.rowsSatisfied;
+    var bestColumnsNumber = vals.columnsNumber;
+    for (var i = 0; i < coverageMatrix.length; i++) {
+        var r = Math.random();
+        if (r < p)
+            bestFlip(scpMatrix, coverageMatrix, solution);
+        else
+            randomFlip(solution);
+
+        var newVals = solutionEvaluation(scpMatrix, coverageMatrix, solution);
+        if (newVals.rowsSatisfied == bestSatisfied)
+            if (newVals.columnsNumber < bestColumnsNumber) {
+                bestColumnsNumber = newVals.columnsNumber;
+                bestSolution = arrayCopy(solution);
+            }
+    }
+    return bestSolution;
+}
+
+function randomFlip(solution) {
+    var r = Math.random() * solution.length;
+    if (solution[r] == 1)
+        solution[r] = 0;
+    else
+        solution[r] = 1;
+}
+function bestFlip(scpMatrix,coverageMatrix,solution) {
+    var bestFlips = [];
+    var ret = solutionEvaluation(scpMatrix, coverageMatrix, solution);
+    var bestSatisfied = ret.rowsSatisfied;
+    var bestColumnsNumber = ret.columnsNumber;
+    var cArray = createCounterArray(coverageMatrix, scpMatrix.length, solution);
+
+    for (var i = 0; i < coverageMatrix.length ; i++) {
+        var analysed = solution[i];
+        if (analysed == 0) { //É 0
+            var sat = ret.rowsSatisfied;
+            for (var j = 0; j < coverageMatrix[i].length; j++)
+                if (cArray[coverageMatrix[i][j]] == 0)
+                    sat++;
+            if (sat > bestSatisfied) {
+                while (bestFlips.length > 0) {
+                    bestFlips.pop();
+                }
+                bestFlips.push(i);
+                bestSatisfied = sat;
+                bestColumnsNumber = ret.columnsNumber + 1;
+            }
+            else if ( sat = bestSatisfied) {
+                if (ret.columnsNumber + 1 == bestColumnsNumber)
+                    bestFlips.push(i);
+            }
+                
+        }
+        else {  //É 1
+            var sat = ret.rowsSatisfied;
+            for (var j = 0; j < coverageMatrix[i].length; j++)
+                if (cArray[coverageMatrix[i][j]] == 1)
+                    sat--;
+            if (sat == bestSatisfied) {
+                if (ret.columnsNumber - 1 < bestColumnsNumber) {
+                    while (bestFlips.length > 0) {
+                        bestFlips.pop();
+                    }
+                    bestFlips.push(i);
+                    bestColumnsNumber = ret.columnsNumber - 1;
+                }
+                else if (ret.columnsNumber - 1 == bestColumnsNumber)
+                    bestFlips.push(i);
+            }
+        }
+    }
+    var pos = Math.random() * bestFlips.length;
+    if (bestFlips.length != 0) {
+        if (solution[pos] == 1)
+            solution[pos] = 0;
+        else
+            solution[pos] = 1;
+    }
+        
+}
+function solutionEvaluation(scpMatrix, coverageMatrix, solution) {
+    var rowsSatisfied = 0;
+    var columnsNumber = 0;
+
+    for (var i = 0; i < scpMatrix.length; i++) 
+        for (var j = 0; j < scpMatrix[i].length; j++)
+            if(solution[scpMatrix[i][j]] == 1){
+                rowsSatisfied++;
+                break;
+            }
+    for (var i = 0; i < solution.length; i++)
+        if (solution[i] == 1)
+            columnsNumber++;
+    var ret = ({
+        rowsSatisfied: rowsSatisfied,
+        columnsNumber: columnsNumber
+    });
+    return ret;
+}
+function createCounterArray(coverageMatrix, rowSize, solution) {
+    var cArray = [];
+    for (var i = 0; i < rowSize; i++)
+        cArray.push(0);
+    for (var i = 0; i < coverageMatrix.length; i++) {
+        if (solution[i] == 1)
+            for (var j = 0; j < coverageMatrix[i].length; j++)
+                cArray[coverageMatrix[i][j]]++;
+    }
+    return cArray;
 }
