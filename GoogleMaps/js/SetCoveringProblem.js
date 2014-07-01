@@ -28,3 +28,20 @@ function createScpMatrixes() {
     });
     return scpMatrixes;
 }
+function createMeterNeighbourhoodMatrix() {
+    var points = metersToPoints(meters);
+    var r = getDapMaximumReach();
+    var M = [];
+
+    for (var i = 0 ; i < points.length ; i++) {
+        var pointsCovered = [];
+        for (var j = 0; j < points.length; j++)
+            if (i != j && covers(points[i], points[j], r)) {
+                pointsCovered.push(j);
+
+            }
+        M.push(pointsCovered);
+    }
+
+    return M;
+}
