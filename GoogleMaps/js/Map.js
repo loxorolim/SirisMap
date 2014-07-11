@@ -55,7 +55,10 @@ function initialize() {
     elevator = new google.maps.ElevationService();  
     clusterMap();
     
-    
+ //   var ctaLayer = new google.maps.KmlLayer({
+ //       url: 'http://www.midiacom.uff.br/~grolim/KmlExamples/agronomicakml.kml'
+ //   });
+ //   ctaLayer.setMap(map);
     
     loadCarDriveFromXml();
     loadNodesFromXml();

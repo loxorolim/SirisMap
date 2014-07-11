@@ -352,12 +352,21 @@ function setInsertionOptions(type)
     insertListener = google.maps.event.addListener(map, 'click', function (event) {
         if (getOpMode() == "Insertion")
         {
-            if (type == "DAP")          
-                placeDAP(event.latLng.lat(), event.latLng.lng(), currentTech);           
-            if (type == "Meter")
-                placeMeter(event.latLng.lat(), event.latLng.lng());
-            if (type == "Pole")
-                placePole(event.latLng.lat(), event.latLng.lng());
+            if (type == "DAP") {
+                var dap = createDAP();
+                dap.place(event.latLng.lat(), event.latLng.lng());
+            }
+              //  placeDAP(event.latLng.lat(), event.latLng.lng(), currentTech);           
+            if (type == "Meter") {
+                var meter = createMeter();
+                meter.place(event.latLng.lat(), event.latLng.lng());
+            }
+                //placeMeter(event.latLng.lat(), event.latLng.lng());
+            if (type == "Pole") {
+                var pole = createPole();
+                pole.place(event.latLng.lat(), event.latLng.lng());
+            }
+              //  placePole(event.latLng.lat(), event.latLng.lng());
         }
 
     });

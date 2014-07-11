@@ -113,7 +113,9 @@ function loadNodesFromXml()
 				{
 					var latitude = $(this).find('Latitude').text();
 					var longitude = $(this).find('Longitude').text();
-					placeMeter(latitude, longitude);
+				    //placeMeter(latitude, longitude);
+					var meter = createMeter();
+					meter.place(latitude, longitude);
 				})
 				$(xml).find('DAP').each(function()
 				{
@@ -123,7 +125,9 @@ function loadNodesFromXml()
 					var setInsertionOptions = parseInt($(this).find('setInsertionOptions').text(),10);
 					
 					// loadMarker(latitude,longitude);
-					placeDAP(latitude, longitude, technology, setInsertionOptions);
+				    //placeDAP(latitude, longitude, technology, setInsertionOptions);
+					var dap = createDap();
+					dap.place(latitude, longitude);
 				});
 			}
 		});
@@ -168,7 +172,9 @@ function loadDapPositionsFromXml() {
 		        $(xml).find('point').each(function () {
 		            var latitude = parseFloat($(this).find('Latitude').text());
 		            var longitude = parseFloat($(this).find('Longitude').text());
-		            placePole(latitude, longitude);
+		            //placePole(latitude, longitude);
+		            var pole = createPole();
+		            pole.place(latitude, longitude);
 		            //var point = new google.maps.LatLng(latitude, longitude);
 		            //dapPositions.push(point);
 		            //var marker = new google.maps.Marker(

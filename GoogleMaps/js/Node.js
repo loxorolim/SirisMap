@@ -8,7 +8,7 @@
 //	    map: map,
 //	    draggable: true,
 //	    offIcon: meterOffIconImage,
-//	    icon: meterOffIconImage,
+//	    icon: meterOffIconImage
 //	    neighbours: [],
 //	    ID: ID,
 //	    X: 0,
@@ -61,8 +61,211 @@
 //    if (meshEnabled)
 //        executeRFMesh();
 //}
+function createPole() {
+    var marker = new google.maps.Marker({
+            type: "Pole",
+            position: null,
+            map: map,
+            draggable: true,
+            icon: poleIcon,
+            zIndex:  -1,
+            place : function (latitude,longitude) {
+                var latLng = new google.maps.LatLng(latitude, longitude);
+                this.position = latLng;
+                poles.push(this);
+            },
+            remove: function () {
+                var pole = this;
+                poles = poles.filter(function (item) {
+                    return ((item.position.lat() != pole.position.lat()) && (item.position.lng() != pole.position.lng())) ;
+                });
+                this.setMap(null);
+            }
+
+    });
+    google.maps.event.addListener(marker, 'click', function (event) {
+        if (opMode == "Removal")
+            marker.remove();
+    });
+    google.maps.event.addListener(marker, 'dragend', function (event) {
+        marker.setPosition(event.latLng);
+    });
+    return marker;
+}
+function createMeter() {
+    var marker = new google.maps.Marker({
+        type: "Meter",
+        position: null,
+        map: map,
+        draggable: true,
+        icon: meterOffIconImage,
+        neighbours: [],
+        place: function (latitude, longitude) {
+            var latLng = new google.maps.LatLng(latitude, longitude);
+            this.position = latLng;
+            meters.push(this);
+        },
+        remove: function () {
+            var meter = this;
+            meters = meters.filter(function (item) {
+                return ((item.position.lat() != meter.position.lat()) && (item.position.lng() != meter.position.lng()));
+            });
+            this.setMap(null);
+        },
+        changeIcon: function (newIcon) {
+            this.icon = newIcon;
+        },
+        connect: function (target) {
+           
+            this.neighbours.push(target);
+
+            //target.neighbours.push(this);
+        },
+        connectByDistance: function (newDistance) {
+            for (var i = 0; i < daps.length; i++) {
+                var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, daps[i].position);
+                var values = getValuesFromTable(dist);
+                if (values != -1) {
+                    this.connect(daps[i]);
+                    daps[i].connect(this);
+                }
+            }                 
+        },
+        removeByDistance: function (newDistance) {
+            // TESTAR SE O FILTER AQUI TA FUNCIONANDO DIREITO!!! O i-- PRINCIPALMENTE
+            for (var i = 0; i < this.neighbours.length; i++) {
+                var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, this.neighbours[i].position);
+                var values = getValuesFromTable(dist);
+                if (values == -1) {
+                    this.neighbours.splice(i, 1);
+                    // var meter = this;
+                   // this.neighbours = this.neighbours.filter(function (item) {
+                   //     return ((item.position.lat() != meter.position.lat()) && (item.position.lng() != meter.position.lng()));
+                   // });
+                    i--;
+                }
+            }
+        },
+        calculateEfficiency: function () {
+
+        }
+
+    });
+    google.maps.event.addListener(marker, 'click', function (event) {
+        if (opMode == "Removal") {
+            marker.remove();
+            if (meshEnabled)
+                executeRFMesh()
+        }
+        else
+            displayInfoWindow(marker);
+
+    });
+    google.maps.event.addListener(marker, 'dragstart', function (event) {
+        infowindow.setMap(null);
+        removeMesh();
+    });
+    google.maps.event.addListener(marker, 'drag', function (event) {
+        marker.removeByDistance(event.latLng);
+        marker.connectByDistance(event.latLng);
+
+    });
+
+    google.maps.event.addListener(marker, 'dragend', function (event) {
+
+        if (meshEnabled)
+            connectViaMesh();
+        marker.setPosition(event.latLng);
+    });
+    return marker;
+}
+function createDAP() {
+    var marker = new google.maps.Marker({
+        type: "DAP",
+        position: null,
+        map: map,
+        draggable: true,
+        icon: dapOnIconImage,
+        neighbours: [],
+        place: function (latitude, longitude) {
+            var latLng = new google.maps.LatLng(latitude, longitude);
+            this.position = latLng;
+            daps.push(this);
+        },
+        remove: function () {
+            var dap = this;
+            daps = daps.filter(function (item) {
+                return ((item.position.lat() != dap.position.lat()) && (item.position.lng() != dap.position.lng()));
+            });
+            this.setMap(null);
+        },
+        changeIcon: function (newIcon) {
+            this.icon = newIcon;
+        },
+        connect: function (target) {
+            this.neighbours.push(target);
+            //DESENHAR LINHA AQUI
+        },
+        connectByDistance: function (newDistance) {
+            //POR ENQUANTO DAPS NAO SE CONECTAM ENTRE SI
+            for (var i = 0; i < meters.length; i++) {
+                var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, meters[i].position);
+                var values = getValuesFromTable(dist);
+                if (values != -1) {
+                    this.connect(meters[i]);
+                    meters[i].connect(this);
+                }
+            }
+        },
+        removeByDistance: function (newDistance) {
+            // TESTAR SE O FILTER AQUI TA FUNCIONANDO DIREITO!!! O i-- PRINCIPALMENTE
+            for (var i = 0; i < this.neighbours.length; i++) {
+                var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, this.neighbours[i].position);
+                var values = getValuesFromTable(dist);
+                if (values == -1) {
+                    this.neighbours.splice(i, 1);
+                    //this.neighbours = this.neighbours.filter(function (item) {
+                    //    return ((item.position.lat() != neighbour.position.lat()) && (item.position.lng() != dap.position.lng()));
+                    //});
+                    i--;
+                }
+            }
+        },
+        calculateEfficiency: function () {
+
+        }
+
+    });
+    google.maps.event.addListener(marker, 'click', function (event) {
+        if (opMode == "Removal") {
+            marker.remove();
+ //           if (meshEnabled)
+ //               executeRFMesh()
+        }
+//        else
+//            displayInfoWindow(marker);
+
+    });
+    google.maps.event.addListener(marker, 'dragstart', function (event) {
+        infowindow.setMap(null);
+  //      removeMesh();
+    });
+    google.maps.event.addListener(marker, 'drag', function (event) {
+        marker.removeByDistance(event.latLng);
+        marker.connectByDistance(event.latLng);
+
+    });
+
+    google.maps.event.addListener(marker, 'dragend', function (event) {
+
+ //       if (meshEnabled)
+ //           connectViaMesh();
+        marker.setPosition(event.latLng);
+    });
+    return marker;
+}
 function placePole(latitude, longitude) {
-    var latLng = new google.maps.LatLng(latitude, longitude);
+    
     var marker = new google.maps.Marker(
 	{
 	    type: "Pole",
@@ -70,36 +273,9 @@ function placePole(latitude, longitude) {
 	    map: map,
 	    draggable: true,
 	    icon: poleIcon,
+        zIndex: -1
 	});
- //   var locations = [];
-    // var markerLocation = latLng;
- //   locations.push(latLng);
-    // Create a LocationElevationRequest object using the array's one value
-    //var positionalRequest =
-	//{
-	//    'locations': locations
-    //}
 
-    //elevator.getElevationForLocations(positionalRequest, function (results, status) {
-    //    if (status == google.maps.ElevationStatus.OK) {
-    //        // Retrieve the first result
-
-
-    //        if (results[0]) {
-    //            // Open an info window indicating the elevation at the clicked position
-    //            marker.elevation = results[0].elevation;
-    //            preparePoleEvents(marker);
-    //            poles.push(marker);
-
-
-    //        }
-    //        else
-    //            return -1;
-    //    }
-    //    else
-    //        return -1;
-
-    //});
     preparePoleEvents(marker);
     poles.push(marker);
 }
