@@ -1,5 +1,8 @@
-﻿var enableMarkerClusterer = true;
+﻿//var enableMarkerClusterer = true;
 var markerCluster;
+var GREEN = "#00FF00";
+var YELLOW = "#FFFF00";
+var BLUE = "#0000FF";
 
 var drawHeatmap = true;
 var heatmap;

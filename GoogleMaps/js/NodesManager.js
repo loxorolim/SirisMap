@@ -298,11 +298,14 @@ function createTableFromOptions()
             var sp = shadowingPropagation(i);
             var c;
             if (sp >= 0.98)
-                c = "GREEN";
+                //  c = "GREEN";
+                c = GREEN;
             else if (0.95 <= sp && sp < 0.98)
-                c = "YELLOW";
+                //  c = "YELLOW";
+                c = YELLOW;
             else
-                c = "RED";
+                c = BLUE;
+             //   c = "RED";
 
             if (sp >= 0.9)
             {

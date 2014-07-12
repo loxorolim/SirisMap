@@ -1,4 +1,5 @@
 ﻿
+
 function drawLine(marker1, marker2, colorname)
 {
     var markerPositions = [marker1.getPosition(), marker2.getPosition()];

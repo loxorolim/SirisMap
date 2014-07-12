@@ -5,7 +5,7 @@ function initialize() {
     var mapOptions =
 	{
 	    zoom: 3,
-	    minZoom: 3,
+//	    minZoom: 3,
         maxZoom: 18,
 	    center: new google.maps.LatLng(-28.643387, 0.612224),
 	    // mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -53,7 +53,7 @@ function initialize() {
     
     // Create an ElevationService
     elevator = new google.maps.ElevationService();  
-    clusterMap();
+   // clusterMap();
     
  //   var ctaLayer = new google.maps.KmlLayer({
  //       url: 'http://www.midiacom.uff.br/~grolim/KmlExamples/agronomicakml.kml'
@@ -63,6 +63,13 @@ function initialize() {
     loadCarDriveFromXml();
     loadNodesFromXml();
     loadDapPositionsFromXml();
+    markerCluster = new MarkerClusterer(map,[], {
+        //maxZoom: 13,
+        minimumClusterSize: 50,
+        gridSize: 30
+    });
+    
+    //markerCluster = new MarkerClusterer(map, allMarkers);
     drawHeatMap();
     insertListener = google.maps.event.addListener(map, 'click', function (event) {
         //if (opMode == "Insertion") {
