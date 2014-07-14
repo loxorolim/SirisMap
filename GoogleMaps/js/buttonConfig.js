@@ -123,7 +123,7 @@ function setButtons()
         $(this).blur();
         $.blockUI({ fadeIn: 0, message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
         if (meshEnabled) {
-            setRFMesh();
+            resetMesh();
             $(this).button({
                 icons: {
                     primary: "ui-icon-closethick"
@@ -132,7 +132,9 @@ function setButtons()
         }
 
         else {
-            setRFMesh();
+            //setRFMesh();
+            connectViaMesh();         
+            
             //markerCluster.clearMarkers();
             $(this).button({
                 icons: {
@@ -140,6 +142,7 @@ function setButtons()
                 }
             })
         }
+        meshEnabled = !meshEnabled;
 
         //$('#check').button.removeClass("ui-state-focus ui-state-hover");
         $.unblockUI();

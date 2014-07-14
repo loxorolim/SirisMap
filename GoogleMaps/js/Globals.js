@@ -84,6 +84,13 @@ var meterGoodIconImage =
         size: new google.maps.Size(10, 10),
         anchor: new google.maps.Point(5, 5)
     }
+var meterMeshIconImage =
+    {
+        url: 'meshSquare.png',
+        size: new google.maps.Size(10, 10),
+        anchor: new google.maps.Point(5, 5)
+    }
+
 var poleIcon = {
     url: 'pole.png'
 }

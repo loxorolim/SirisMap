@@ -416,58 +416,58 @@ function getConnectedMeters()
     return ret;
 
 }
-function connectViaMesh()
-{
+//function connectViaMesh()
+//{
 
-    //ALTERAR PARA 3 'FOR' UM DENTRO DO OUTRO!!!
-    //PARA CADA METER DESCONECTADO
-    var disMeters = disconnectedMeters.slice();
-    var metersToMesh = getConnectedMeters();
-    var hopMeters = [];
-    for (var n = 0 ; n < meshMaxJumps ; n++)
-    {
-        var disMeters = disconnectedMeters.slice();
+//    //ALTERAR PARA 3 'FOR' UM DENTRO DO OUTRO!!!
+//    //PARA CADA METER DESCONECTADO
+//    var disMeters = disconnectedMeters.slice();
+//    var metersToMesh = getConnectedMeters();
+//    var hopMeters = [];
+//    for (var n = 0 ; n < meshMaxJumps ; n++)
+//    {
+//        var disMeters = disconnectedMeters.slice();
         
-        for (var i = 0; i < disMeters.length ; i++)
-        {
-            //PEGA O METER MAIS PRÓXIMO QUE ESTÁ CONECTADO A UM DAP E FAZ UMA LIGAÇÃO MESH SE POSSÍVEL
-            var meterToConnect;
-            var finalDis = -1;
-            for (var j = 0; j < metersToMesh.length ; j++)
-            {
-                if (finalDis == -1)
-                {
-                    finalDis = distance(disMeters[i], metersToMesh[j]);
-                    meterToConnect = metersToMesh[j];
-                }
-                else
-                {
-                    var dist = distance(disMeters[i], metersToMesh[j]);
-                    if (dist < finalDis)
-                    {
-                        finalDis = dist;
-                        meterToConnect = metersToMesh[j];
-                    }
+//        for (var i = 0; i < disMeters.length ; i++)
+//        {
+//            //PEGA O METER MAIS PRÓXIMO QUE ESTÁ CONECTADO A UM DAP E FAZ UMA LIGAÇÃO MESH SE POSSÍVEL
+//            var meterToConnect;
+//            var finalDis = -1;
+//            for (var j = 0; j < metersToMesh.length ; j++)
+//            {
+//                if (finalDis == -1)
+//                {
+//                    finalDis = distance(disMeters[i], metersToMesh[j]);
+//                    meterToConnect = metersToMesh[j];
+//                }
+//                else
+//                {
+//                    var dist = distance(disMeters[i], metersToMesh[j]);
+//                    if (dist < finalDis)
+//                    {
+//                        finalDis = dist;
+//                        meterToConnect = metersToMesh[j];
+//                    }
 
-                }
+//                }
                 
                 
-            }
-            var values = getValuesFromTable(finalDis);
-            if (values != -1)
-            {
-                drawDashedLine(disMeters[i], meterToConnect, values.color)
-                removeFromList(disconnectedMeters, disMeters[i]);
-                disMeters[i].meshHop = n+1;
-                hopMeters.push(disMeters[i]);
-            }
+//            }
+//            var values = getValuesFromTable(finalDis);
+//            if (values != -1)
+//            {
+//                drawDashedLine(disMeters[i], meterToConnect, values.color)
+//                removeFromList(disconnectedMeters, disMeters[i]);
+//                disMeters[i].meshHop = n+1;
+//                hopMeters.push(disMeters[i]);
+//            }
             
-        }
-        metersToMesh = hopMeters;
-        hopMeters = [];
-    }
+//        }
+//        metersToMesh = hopMeters;
+//        hopMeters = [];
+//    }
    
-}
+//}
 
 function setInfoWindowNull()
 {

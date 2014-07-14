@@ -72,6 +72,29 @@ function generateUUID() {
     });
     return uuid;
 };
+function connectViaMesh() {
+    resetMesh();
+    var connectedMeters = meters.filter(function (item) {
+        return (item.connected == true);
+    });
+    var aux = [];
+    for (var i = 0; i < meshMaxJumps; i++) {
+        for (var j = 0; j < connectedMeters.length; j++) {
+            connectedMeters[j].connectViaMesh();
+            aux = aux.concat(connectedMeters[j].meshNeighbours);
+        }
+        connectedMeters = aux;
+        aux = [];
+    }
+}
+function resetMesh() {
+
+    for (var i = 0; i < meters.length; i++) {
+        meters[i].disconnectMesh();
+    }
+}
+
+
 function createPole() {
     var marker = new google.maps.Marker({
             type: "Pole",
@@ -79,17 +102,19 @@ function createPole() {
             map: map,
             draggable: true,
             icon: poleIcon,
-            zIndex:  -1,
+            zIndex: -1,
+            ID: null,
             place : function (latitude,longitude) {
                 var latLng = new google.maps.LatLng(latitude, longitude);
                 this.position = latLng;
                 poles.push(this);
-                markerCluster.addMarker(this,true);
+                markerCluster.addMarker(this, true);
+                this.ID = generateUUID();
             },
             remove: function () {
                 var pole = this;
                 poles = poles.filter(function (item) {
-                    return ((item.position.lat() != pole.position.lat()) && (item.position.lng() != pole.position.lng())) ;
+                    return (item.ID != pole.ID);
                 });                
                 this.setMap(null);
                 markerCluster.removeMarker(this, true);
@@ -111,10 +136,12 @@ function createMeter() {
         type: "Meter",
         position: null,
         map: map,
-
+        connected: false,
         draggable: true,
+        meshConnectionLines: [],
         icon: meterOffIconImage,
         neighbours: [],
+        meshNeighbours: [],
         place: function (latitude, longitude) {
             
             var latLng = new google.maps.LatLng(latitude, longitude);
@@ -124,6 +151,8 @@ function createMeter() {
             this.ID = generateUUID();
             this.removeConnections(this.getPosition());
             this.connectByDistance(this.getPosition());
+            if (meshEnabled)
+                connectViaMesh();
         },
         remove: function () {
             var meter = this;
@@ -150,16 +179,18 @@ function createMeter() {
 
             }
             var values = getValuesFromTable(dist);
-            if (values != -1) {
+            if (values != -1 && dist != -1) {
                 if (values.color == GREEN)
                     this.changeIcon(meterBestIconImage);
                 if (values.color == YELLOW)
                     this.changeIcon(meterBetterIconImage);
                 if (values.color == BLUE)
                     this.changeIcon(meterGoodIconImage);
+                this.connected = true;
             }
             else {
                 this.changeIcon(meterOffIconImage);
+                this.connected = false;
             }
         
         },
@@ -171,6 +202,7 @@ function createMeter() {
                 }
             }
             this.neighbours.push(target);
+            
             this.changeMeterColor();
 
             //target.neighbours.push(this);
@@ -184,6 +216,60 @@ function createMeter() {
             }
             this.changeMeterColor();
         },
+        meshConnect: function (target, source, color) {
+            if (source) {
+                var lineSymbol = {
+                    path: 'M 0,-1 0,1',
+                    strokeOpacity: 1,
+                    scale: 3
+                };
+                var meterPositions = [this.getPosition(), target.getPosition()];
+                var routerPath = new google.maps.Polyline(
+                {
+                    path: meterPositions,
+                    strokeColor: color,
+                    strokeOpacity: 0,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '0',
+                        repeat: '15px'
+                    }],
+                    clickable: false,
+                    strokeWeight: 1
+                });
+                this.meshConnectionLines.push(routerPath);
+                routerPath.setMap(map);
+            }
+            else {
+                this.changeIcon(meterMeshIconImage);
+            }
+            this.meshNeighbours.push(target);
+            this.connected = true;
+        },
+        disconnectMesh: function () {
+            this.meshNeighbours = [];
+            for (var i = 0; i < this.meshConnectionLines.length; i++) {
+                this.meshConnectionLines[i].setMap(null);
+            }
+            this.meshConnectionLines = [];
+            if (this.neighbours.length == 0) {
+                this.connected = false;
+                this.changeIcon(meterOffIconImage);
+            }
+               
+        },
+        connectViaMesh: function () {
+            for (var i = 0; i < meters.length; i++) {
+                if (!meters[i].connected) {
+                    var dist = google.maps.geometry.spherical.computeDistanceBetween(this.getPosition(), meters[i].getPosition());
+                    var values = getValuesFromTable(dist);
+                    if (values != -1) {
+                        this.meshConnect(meters[i], true, values.color);
+                        meters[i].meshConnect(this, false);
+                    }
+                }
+            }
+        },
         connectByDistance: function (newDistance) {
             for (var i = 0; i < daps.length; i++) {
                 var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, daps[i].position);
@@ -196,11 +282,11 @@ function createMeter() {
         },
         removeConnections: function (newDistance) {
             for (var i = 0; i < this.neighbours.length; i++) {
-                var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, this.neighbours[i].position);
-                var values = getValuesFromTable(dist);
-                if (values == -1) {
+             //   var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, this.neighbours[i].position);
+             //   var values = getValuesFromTable(dist);
+             //   if (values == -1) {
                     this.neighbours[i].disconnectTarget(this);
-                }
+             //   }
             }
             this.neighbours = [];
             this.changeMeterColor();
@@ -228,20 +314,22 @@ function createMeter() {
 
     });
     google.maps.event.addListener(marker, 'dragstart', function (event) {
+        marker.removeConnections(event.latLng);
+        resetMesh();
         infowindow.setMap(null);
-        removeMesh();
+       // removeMesh();
     });
     google.maps.event.addListener(marker, 'drag', function (event) {
-        marker.removeConnections(event.latLng);
-        marker.connectByDistance(event.latLng);
+        
 
     });
 
     google.maps.event.addListener(marker, 'dragend', function (event) {
-
+        marker.removeConnections(event.latLng);
+        marker.connectByDistance(event.latLng);
+        marker.setPosition(event.latLng);
         if (meshEnabled)
             connectViaMesh();
-        marker.setPosition(event.latLng);
     });
     return marker;
 }
@@ -263,6 +351,8 @@ function createDAP() {
             this.ID = generateUUID();
             this.removeConnections(this.getPosition());
             this.connectByDistance(this.getPosition());
+            if (meshEnabled)
+                connectViaMesh();
 
         },
         remove: function () {
@@ -346,11 +436,11 @@ function createDAP() {
         },
         removeConnections: function (newDistance) {
             for (var i = 0; i < this.neighbours.length; i++) {
-                var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, this.neighbours[i].position);
-                var values = getValuesFromTable(dist);
-                if (values == -1) {
+              //  var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, this.neighbours[i].position);
+               // var values = getValuesFromTable(dist);
+                //if (values == -1) {
                     this.neighbours[i].disconnectTarget(this);
-                }
+                //}
             }
                       
             for (var i = 0; i < this.connectionLines.length; i++) {
@@ -377,8 +467,8 @@ function createDAP() {
     google.maps.event.addListener(marker, 'click', function (event) {
         if (opMode == "Removal") {
             marker.remove();
- //           if (meshEnabled)
- //               executeRFMesh()
+            if (meshEnabled)
+                connectViaMesh()
         }
         else
            marker.displayInfoWindow();
@@ -386,20 +476,26 @@ function createDAP() {
     });
     google.maps.event.addListener(marker, 'dragstart', function (event) {
         infowindow.setMap(null);
+        marker.removeConnections(event.latLng);
+        resetMesh();
   //      removeMesh();
     });
     google.maps.event.addListener(marker, 'drag', function (event) {
-        marker.removeConnections(event.latLng);
-        marker.connectByDistance(event.latLng);
+        
+       // marker.removeConnections(event.latLng);
+       // marker.connectByDistance(event.latLng);
+      //  connectViaMesh();
 
     });
 
     google.maps.event.addListener(marker, 'dragend', function (event) {
-
- //       if (meshEnabled)
-        //           connectViaMesh();
-
         marker.setPosition(event.latLng);
+        marker.removeConnections(event.latLng);
+        marker.connectByDistance(event.latLng);
+        if (meshEnabled)
+            connectViaMesh();
+
+       
     });
     return marker;
 }
