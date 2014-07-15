@@ -6,7 +6,9 @@ function applySolution(solution) {
     for (var i = 0 ; i < solution.length; i++) {
         if (solution[i] == 1) {
             var latLng = poles[i].position;
-            placeDAP(latLng.lat(), latLng.lng(), "bla");
+            var newDap = createDAP();
+            newDap.place(latLng.lat(),latLng.lng());
+            //placeDAP(latLng.lat(), latLng.lng(), "bla");
         }
             
     }

@@ -78,12 +78,40 @@ function connectViaMesh() {
         return (item.connected == true);
     });
     var aux = [];
+    for (var i = 0; i < meshMaxJumps-1; i++) {
+        for (var j = 0 ; j < meters.length; j++) {
+            if(!meters[j].connected)
+                meters[j].meshConnect2(connectedMeters);
+        }
+        connectedMeters = meters.filter(function (item) {
+            return (item.connected == true && connectedMeters.indexOf(item) < 0);
+        });
+        //for (var j = 0; j < connectedMeters.length; j++) {
+
+        //    connectedMeters[j].meshConnect2();
+        //    aux = aux.concat(connectedMeters[j].meshNeighbours);
+        //}
+        //connectedMeters = aux.filter(function (elem, pos) {
+        //    return aux.indexOf(elem) == pos;
+        //});
+        //aux = [];
+    }
+}
+function connectViaMesh2() {
+    resetMesh();
+    var connectedMeters = meters.filter(function (item) {
+        return (item.connected == true);
+    });
+    var aux = [];
     for (var i = 0; i < meshMaxJumps; i++) {
         for (var j = 0; j < connectedMeters.length; j++) {
+
             connectedMeters[j].connectViaMesh();
             aux = aux.concat(connectedMeters[j].meshNeighbours);
         }
-        connectedMeters = aux;
+        connectedMeters = aux.filter(function (elem, pos) {
+            return aux.indexOf(elem) == pos;
+        });
         aux = [];
     }
 }
@@ -102,7 +130,7 @@ function createPole() {
             map: map,
             draggable: true,
             icon: poleIcon,
-            zIndex: -1,
+            zIndex: 0,
             ID: null,
             place : function (latitude,longitude) {
                 var latLng = new google.maps.LatLng(latitude, longitude);
@@ -136,6 +164,7 @@ function createMeter() {
         type: "Meter",
         position: null,
         map: map,
+        zIndex: 2,
         connected: false,
         draggable: true,
         meshConnectionLines: [],
@@ -162,6 +191,9 @@ function createMeter() {
             this.setMap(null);
             for (var i = 0; i < this.neighbours.length; i++) {
                 this.neighbours[i].disconnectTarget(this);
+            }
+            for (var i = 0; i < this.meshConnectionLines.length; i++) {
+                this.meshConnectionLines[i].setMap(null);
             }
             markerCluster.removeMarker(this, true);
         },
@@ -216,8 +248,9 @@ function createMeter() {
             }
             this.changeMeterColor();
         },
-        meshConnect: function (target, source, color) {
-            if (source) {
+
+        meshConnect: function (target, color) {
+       //     if (source) {
                 var lineSymbol = {
                     path: 'M 0,-1 0,1',
                     strokeOpacity: 1,
@@ -239,12 +272,36 @@ function createMeter() {
                 });
                 this.meshConnectionLines.push(routerPath);
                 routerPath.setMap(map);
-            }
-            else {
+        //    }
+          //  else {
                 this.changeIcon(meterMeshIconImage);
-            }
+         //   }
             this.meshNeighbours.push(target);
             this.connected = true;
+        },
+        meshConnect2: function (connectedMeters) {
+            var closest = -1;
+            var minDist = -1;
+            var color = null;
+            //var connectedMeters = meters.filter(function (item) {
+            //    return (item.connected == true);
+            //});
+            for (var i = 0; i < connectedMeters.length; i++) {
+               // if (connectedMeters[i].connected) {
+                    var dist = google.maps.geometry.spherical.computeDistanceBetween(this.getPosition(), connectedMeters[i].getPosition());
+                    var values = getValuesFromTable(dist);
+                    if ((values != -1) && (dist < minDist || minDist == -1)) {
+                        minDist = dist;
+                        closest = i;
+                        color = values.color;
+                        //this.meshConnect(meters[i], true, values.color);
+                        //meters[i].meshConnect(this, false);
+                    }
+              //  }
+            }
+            if (closest != -1) {
+                this.meshConnect(connectedMeters[closest], color);
+            }
         },
         disconnectMesh: function () {
             this.meshNeighbours = [];
@@ -339,6 +396,7 @@ function createDAP() {
         type: "DAP",
         position: null,
         map: map,
+        zIndex: 1,
         draggable: true,
         icon: dapOnIconImage,
         neighbours: [],

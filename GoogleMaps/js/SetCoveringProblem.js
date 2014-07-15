@@ -149,6 +149,21 @@ function createMeshScpMatrixes() {
 ////        return (google.maps.geometry.spherical.computeDistanceBetween(latlng, latlng2) <= r)
     
 //}
+////function connectViaMesh() {
+////    resetMesh();
+////    var connectedMeters = meters.filter(function (item) {
+////        return (item.connected == true);
+////    });
+////    var aux = [];
+////    for (var i = 0; i < meshMaxJumps; i++) {
+////        for (var j = 0; j < connectedMeters.length; j++) {
+////            connectedMeters[j].connectViaMesh();
+////            aux = aux.concat(connectedMeters[j].meshNeighbours);
+////        }
+////        connectedMeters = aux;
+////        aux = [];
+////    }
+////}
 function createMeterNeighbourhoodMatrix() {
     var points = metersToPoints(meters);
     var r = getDapMaximumReach();

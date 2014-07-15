@@ -6,7 +6,7 @@ function initialize() {
 	{
 	    zoom: 3,
 //	    minZoom: 3,
-        maxZoom: 18,
+//        maxZoom: 18,
 	    center: new google.maps.LatLng(-28.643387, 0.612224),
 	    // mapTypeId: google.maps.MapTypeId.ROADMAP,
 	  

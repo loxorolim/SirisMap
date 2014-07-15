@@ -6,6 +6,7 @@ function autoPlanningGrasp() {
 
 
     var Matrixes = createMeshScpMatrixes();
+    //var Matrixes = createScpMatrixes();
 //    var meterNeighbourhood = createMeterNeighbourhoodMatrix();
     var scpMatrix = Matrixes.scpMatrix;
     var coverageMatrix = Matrixes.coverageMatrix;
