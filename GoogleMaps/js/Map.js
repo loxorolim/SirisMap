@@ -80,6 +80,7 @@ function initialize() {
     
     setButtons();
     createTableFromOptions();
+
    // applyPlanning();
 }
 function clusterMap() {

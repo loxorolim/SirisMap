@@ -78,7 +78,7 @@ function connectViaMesh() {
         return (item.connected == true);
     });
     var aux = [];
-    for (var i = 0; i < meshMaxJumps-1; i++) {
+    for (var i = 0; i < meshMaxJumps; i++) {
         for (var j = 0 ; j < meters.length; j++) {
             if(!meters[j].connected)
                 meters[j].meshConnect2(connectedMeters);

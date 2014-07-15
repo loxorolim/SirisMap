@@ -1,6 +1,7 @@
 ﻿function applyPlanning() {
     var solution = autoPlanningGrasp();
     applySolution(solution);
+    $.unblockUI();
 }
 function applySolution(solution) {
     for (var i = 0 ; i < solution.length; i++) {
@@ -12,6 +13,7 @@ function applySolution(solution) {
         }
             
     }
+
 }
 
 function covers(c, pt, r) {

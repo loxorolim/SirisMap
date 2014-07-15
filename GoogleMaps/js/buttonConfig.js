@@ -105,12 +105,13 @@ function setButtons()
         
 
         $(this).blur();
-        $.blockUI({ fadeIn: 0, message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
-       // autoPlanningGrasp();
-        applyPlanning();
+        $.blockUI({  message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
+        // autoPlanningGrasp();
+        setTimeout('applyPlanning()', 1000);
+       // applyPlanning();
 
         //$('#check').button.removeClass("ui-state-focus ui-state-hover");
-        $.unblockUI();
+       // $.unblockUI();
 
 
     });
