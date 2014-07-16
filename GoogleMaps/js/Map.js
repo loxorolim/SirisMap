@@ -59,7 +59,7 @@ function initialize() {
  //       url: 'http://www.midiacom.uff.br/~grolim/KmlExamples/agronomicakml.kml'
  //   });
  //   ctaLayer.setMap(map);
-    
+    //executeBER();
     loadCarDriveFromXml();
     loadNodesFromXml();
     loadDapPositionsFromXml();
