@@ -372,7 +372,8 @@ function createMeter() {
     });
     google.maps.event.addListener(marker, 'dragstart', function (event) {
         marker.removeConnections(event.latLng);
-        resetMesh();
+        if (meshEnabled)
+            resetMesh();
         infowindow.setMap(null);
        // removeMesh();
     });
@@ -535,7 +536,8 @@ function createDAP() {
     google.maps.event.addListener(marker, 'dragstart', function (event) {
         infowindow.setMap(null);
         marker.removeConnections(event.latLng);
-        resetMesh();
+        if(meshEnabled)
+             resetMesh();
   //      removeMesh();
     });
     google.maps.event.addListener(marker, 'drag', function (event) {
