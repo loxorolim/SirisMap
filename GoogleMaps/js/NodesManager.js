@@ -288,14 +288,17 @@ function getValuesFromTable(dist)
 
 function createTableFromOptions()
 {
-    if (currentTech == "w80211")
-    {
+  //  if (currentTech == "w80211")
+  //  {
         var wifitable = [];
-        //de 0 a 100 metros
-        for (var i = 0; i <= 100 ; i += 5)
+    //de 0 a 100 metros
+        var i = 0;
+        while(true)
         {
             var dist = i;
-            var sp = shadowingPropagation(i);
+            //var sp = shadowingPropagation(i);
+            var sp = getHataSRDSuccessRate(dist/1000);
+            
             var c;
             if (sp >= 0.98)
                 //  c = "GREEN";
@@ -322,13 +325,11 @@ function createTableFromOptions()
             {
                 break;
             }
+            i += 5;
         }
         table = wifitable;
-    }
-    if (currentTech == "ZigBee")
-    {
+   // }
 
-    }
 }
 
 
@@ -503,52 +504,52 @@ function setdbm(d) {
     setDapsToTechnology();
 
 }
-function getConfigurations() {
-    if (opMode == "Removal")
-        var mode = "Mode: " + opMode;
-    else
-        var mode = "Mode: " + currentIns + " " + opMode;
-    if (currentTech == "w80211")
-        var tech = "<br>Technology: " + 802.11;
-    else
-        var tech = "<br>Technology: " + currentTech;
-    var power;
-    switch (dbm) {
-        case "dbm0":
-            {
-                power = "0 dbm";
-                break;
-            }
-        case "dbm6":
-            {
-                power = "6 dbm";
-                break;
-            }
-        case "dbm12":
-            {
-                power = "12 dbm";
-                break;
-            }
-        case "dbm18":
-            {
-                power = "18 dbm";
-                break;
-            }
-        case "dbm24":
-            {
-                power = "24 dbm";
-                break;
-            }
-        case "dbm30":
-            {
-                power = "30 dbm";
-                break;
-            }
-        default:
-            break;
-    }
-    var power = "<br>Power: " + power;
-    var sce = "<br>Scenario: " + scenario;
+//function getConfigurations() {
+//    if (opMode == "Removal")
+//        var mode = "Mode: " + opMode;
+//    else
+//        var mode = "Mode: " + currentIns + " " + opMode;
+//    if (currentTech == "w80211")
+//        var tech = "<br>Technology: " + 802.11;
+//    else
+//        var tech = "<br>Technology: " + currentTech;
+//    var power;
+//    switch (dbm) {
+//        case "dbm0":
+//            {
+//                power = "0 dbm";
+//                break;
+//            }
+//        case "dbm6":
+//            {
+//                power = "6 dbm";
+//                break;
+//            }
+//        case "dbm12":
+//            {
+//                power = "12 dbm";
+//                break;
+//            }
+//        case "dbm18":
+//            {
+//                power = "18 dbm";
+//                break;
+//            }
+//        case "dbm24":
+//            {
+//                power = "24 dbm";
+//                break;
+//            }
+//        case "dbm30":
+//            {
+//                power = "30 dbm";
+//                break;
+//            }
+//        default:
+//            break;
+//    }
+//    var power = "<br>Power: " + power;
+//    var sce = "<br>Scenario: " + scenario;
 
-    return mode + tech + power + sce;
-}
+//    return mode + tech + power + sce;
+//}

@@ -65,7 +65,7 @@ function setButtons()
 	   $('#powerbackground').buttonset().find('label').width(76);
 	   $('#scenarioBackground').buttonset().find('label').width(radioSize);
 	   $('#technologyBackground').buttonset().find('label').width(radioSize);
-	   $('#configMessage').html(getConfigurations());
+	  // $('#configMessage').html(getConfigurations());
 	   //$('#check').click(function (ev) { ev.preventDefault(); });
 	  // $('#check').unbind('mouseout keyup mouseup hover');
     $('#checkHeatmap').button({
@@ -236,7 +236,7 @@ function setButtons()
 			setInfoWindowNull();
 			setInsertionOptions("DAP")
 			map.setOptions({ draggableCursor: "url(cursors/dapcursor.cur), auto" });
-			$('#configMessage').html(getConfigurations());
+			
 		});
 		$("#meterRadio").click(function()
 		{
@@ -244,14 +244,38 @@ function setButtons()
 			setInfoWindowNull();
 			setInsertionOptions("Meter");
 			map.setOptions({ draggableCursor: "url(cursors/metercursor.cur), default" })
-			$('#configMessage').html(getConfigurations());
+			
 		});
 		$("#pole").click(function () {
 		    setOpMode("Insertion");
 		    setInfoWindowNull();
 		    setInsertionOptions("Pole");
 		    map.setOptions({ draggableCursor: "url(cursors/polecursor.cur), default" })
-		    $('#configMessage').html(getConfigurations());
+		   
+		});
+		$("#ZigBee").click(function () {
+		    technology = "802_15_4";
+		    refresh();
+		});
+		$("#80211a").click(function () {
+		    technology = "802_11_a";
+		    refresh();
+		});
+		$("#80211g").click(function () {
+		    technology = "802_11_g";
+		    refresh();
+		});
+		$("#urbanRadio").click(function () {
+		    scenario = "Urbano";
+		    refresh();
+		});
+		$("#suburbanRadio").click(function () {
+		    scenario = "Suburbano";
+		    refresh();
+		});
+		$("#ruralRadio").click(function () {
+		    scenario = "Rural";
+		    refresh();
 		});
 		
 		//$("#metropolitanRadio").click(function() 

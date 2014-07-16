@@ -3,34 +3,23 @@
 
 //Indicar o uso de ponto flutuante de maior precisão
 
-function executeBER(){
-
-
-    //Parâmetros:
-    //Altura TX [m]
-    h_tx = 3;                 
-    //Altura RX [m]
-    h_rx = 5;                 
-    //Distancia
-    d=0.03;
-    //Tecnologia
-    technology = '802_11_g';
-    //Taxa de transmissão
-    bit_rate = 6;        //[MBit/s]
-    //Potência do rádio transmissor
-    transmitter_power = -20; // [dBm]
-    //Tipo de ambiente
-    //environment = 'Rural';         
-    //environment = 'Suburbano';    
-    environment = 'Urbano';      
- 
-    //Short Range Devices
-    SRD = true;
-
-    //Função que de fato calcula a taxa de erro de bits
-    ber = bit_error_probability(environment, technology, bit_rate, transmitter_power, h_tx, h_rx, d, SRD);
-    alert(ber);
+var scenario = "Urbano";
+var technology = "802_11_g";
+var H_TX = 3;
+var H_RX = 5;
+var BIT_RATE = 6;
+var TRANSMITTER_POWER = -20;
+var SRD = true;
+function getHataSRDSuccessRate(distance) {
+    return 1 - bit_error_probability(scenario, technology, BIT_RATE, TRANSMITTER_POWER, H_TX, H_RX, distance, SRD);
 }
+function refresh() {
+    createTableFromOptions();
+    for (var i = 0; i < daps.length; i++) {
+        daps[i].refresh();
+    }
+}
+
 
 //BER para diversas tecnologias
 //2014-07-14
@@ -52,7 +41,7 @@ function bit_error_probability(env,technology,bit_rate,transmitter_power,h_tx,h_
     
 
     //Escolha de tecnologia 802.11g
-    if (technology = '802_11_g'){
+    if (technology == '802_11_g'){
         frequency = 2400;	//[MHz]
 
         signal_power = transmitter_power -  loss( frequency , h_tx , h_rx , d, env, SRD);
@@ -85,29 +74,29 @@ function bit_error_probability(env,technology,bit_rate,transmitter_power,h_tx,h_
     if (technology == '802_11_a'){
         frequency = 5400;	//[MHz]
         
-    signal_power = transmitter_power - loss( frequency , h_tx , h_rx , d, env, SRD);
+        signal_power = transmitter_power - loss( frequency , h_tx , h_rx , d, env, SRD);
         
-    //signal_power_W = (10.^(signal_power/10))/1000;
-    signal_power_W = (Math.pow(10,(signal_power/10)))/1000;
-    E_b = signal_power_W / (bit_rate*(Math.pow(10,6)));
+        //signal_power_W = (10.^(signal_power/10))/1000;
+        signal_power_W = (Math.pow(10,(signal_power/10)))/1000;
+        E_b = signal_power_W / (bit_rate*(Math.pow(10,6)));
                
-    gama_b = E_b / N_0;
+        gama_b = E_b / N_0;
 
-    //BPSK
-    if ((bit_rate == 6) || (bit_rate == 9))
-        bit_error = 0.5 * erfc(Math.pow(gama_b,0.5)	);
+        //BPSK
+        if ((bit_rate == 6) || (bit_rate == 9))
+            bit_error = 0.5 * erfc(Math.pow(gama_b,0.5)	);
 
-    //QPSK
-    else if ((bit_rate == 12) || (bit_rate == 18))	
-        bit_error = 0.5 * erfc(Math.pow(gama_b,0.5)	);
+        //QPSK
+        else if ((bit_rate == 12) || (bit_rate == 18))	
+            bit_error = 0.5 * erfc(Math.pow(gama_b,0.5)	);
 
-    //16-QAM 
-    else if ((bit_rate == 24) || (bit_rate == 36))		
-        bit_error = 0.5 * erfc(	Math.pow((0.4*gama_b),0.5)	);
+        //16-QAM 
+        else if ((bit_rate == 24) || (bit_rate == 36))		
+            bit_error = 0.5 * erfc(	Math.pow((0.4*gama_b),0.5)	);
 		
-    //64-QAM
-    else if ((bit_rate == 48) || (bit_rate == 54))	
-        bit_error = (1.0/3.0) * erfc( Math.pow(	( (9/63)*gama_b ),0.5)  );
+        //64-QAM
+        else if ((bit_rate == 48) || (bit_rate == 54))	
+            bit_error = (1.0/3.0) * erfc( Math.pow(	( (9/63)*gama_b ),0.5)  );
     
     }
     
@@ -139,7 +128,7 @@ function bit_error_probability(env,technology,bit_rate,transmitter_power,h_tx,h_
 function loss( f , h_tx , h_rx , d, environment, SRD){
 
 
-
+    var path_loss;
     //Como d <= 20km
     var alpha = 1;
 

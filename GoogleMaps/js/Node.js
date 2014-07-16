@@ -512,6 +512,10 @@ function createDAP() {
         calculateEfficiency: function () {
 
         },
+        refresh: function() {
+            this.removeConnections(this.getPosition());
+            this.connectByDistance(this.getPosition());
+        },
         displayInfoWindow: function () {
             var content = 'ID: ' + this.ID +
                 '<br>Latitude: ' + this.position.lat() +

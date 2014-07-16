@@ -42,8 +42,7 @@ var circles = [];
 var request;
 
 
-var scenario = "Metropolitan";
-var currentTech = "w80211";
+
 var currentIns = "DAP";
 var table = [];
 
