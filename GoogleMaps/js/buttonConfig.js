@@ -14,7 +14,7 @@ function setButtons()
 		    setOpMode("Removal");
 		    map.setOptions({ draggableCursor: "url(cursors/removecursor.cur), default" });
 			setInfoWindowNull();
-			$('#configMessage').html(getConfigurations());
+			//$('#configMessage').html(getConfigurations());
 
 		});
 		$("#DisplayXML").click(function() {
@@ -107,11 +107,45 @@ function setButtons()
         $(this).blur();
         $.blockUI({  message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
         // autoPlanningGrasp();
-        setTimeout('applyPlanning()', 1000);
+        setTimeout('applyPlanning(true)', 1000);
+        if (!meshEnabled) {
+            connectViaMesh();
+            meshEnabled = true;
+            //markerCluster.clearMarkers();
+            $('#checkRFMesh').button({
+                icons: {
+                    primary: "ui-icon-check"
+                }
+            })
+        }
        // applyPlanning();
 
         //$('#check').button.removeClass("ui-state-focus ui-state-hover");
        // $.unblockUI();
+
+
+    });
+    $('#autoPlanningSemMesh').button().click(function () {
+
+
+        $(this).blur();
+        $.blockUI({ message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
+        // autoPlanningGrasp();
+        setTimeout('applyPlanning(false)', 1000);
+        //if (!meshEnabled) {
+        //    //connectViaMesh();
+        //    //meshEnabled = true;
+        //    //markerCluster.clearMarkers();
+        //    $('#checkRFMesh').button({
+        //        icons: {
+        //            primary: "ui-icon-check"
+        //        }
+        //    })
+        //}
+        // applyPlanning();
+
+        //$('#check').button.removeClass("ui-state-focus ui-state-hover");
+        // $.unblockUI();
 
 
     });

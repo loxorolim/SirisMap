@@ -392,7 +392,7 @@ function createMeter() {
     return marker;
 }
 function createDAP() {
-    var marker = new google.maps.Marker({
+    var marker = new MarkerWithLabel({
         ID: null,
         type: "DAP",
         position: null,
@@ -402,6 +402,10 @@ function createDAP() {
         icon: dapOnIconImage,
         neighbours: [],
         connectionLines: [],
+        labelContent: "0",
+        labelAnchor: new google.maps.Point(22,25),
+        labelClass: "labels", // the CSS class for the label
+        labelStyle: { opacity: 0.75 },
         place: function (latitude, longitude) {
             var latLng = new google.maps.LatLng(latitude, longitude);
             this.position = latLng;
@@ -412,6 +416,7 @@ function createDAP() {
             this.connectByDistance(this.getPosition());
             if (meshEnabled)
                 connectViaMesh();
+            calculateEfficiency(marker);
 
         },
         remove: function () {
@@ -556,6 +561,7 @@ function createDAP() {
         marker.setPosition(event.latLng);
         marker.removeConnections(event.latLng);
         marker.connectByDistance(event.latLng);
+        calculateEfficiency(marker);
         if (meshEnabled)
             connectViaMesh();
 

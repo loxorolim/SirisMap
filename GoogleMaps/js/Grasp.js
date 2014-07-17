@@ -2,11 +2,12 @@
 var iterations = 500;
 var p = 0.75;
 
-function autoPlanningGrasp() {
-
-
-    var Matrixes = createMeshScpMatrixes();
-    //var Matrixes = createScpMatrixes();
+function autoPlanningGrasp(mesh) {
+    var Matrixes;
+    if(mesh)
+        Matrixes = createMeshScpMatrixes();
+    else
+        Matrixes = createScpMatrixes();
 //    var meterNeighbourhood = createMeterNeighbourhoodMatrix();
     var scpMatrix = Matrixes.scpMatrix;
     var coverageMatrix = Matrixes.coverageMatrix;
