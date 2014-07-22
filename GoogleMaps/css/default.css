@@ -6,6 +6,56 @@
 	height:0px;
 	
 }
+#scenario {
+    font-weight:bold;
+    font-size:16px;
+    margin-left:40px;
+    margin-top: 15px;
+    color:#1c94c4
+
+}
+#technology {
+    font-weight:bold;
+    font-size:16px;
+    margin-left:120px;
+    margin-top: 15px;
+    color:#1c94c4
+}
+#power {
+    font-weight:bold;
+    font-size:16px;
+    margin-left:200px;
+    margin-top: 15px;
+    color:#1c94c4
+}
+#trapezoid {
+	
+    width: 400px;
+height: 54px;
+
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+filter: alpha(opacity=80);
+-moz-opacity: 0.8;
+-khtml-opacity: 0.8;
+opacity: 0.8;
+border: 9px #888888 solid;
+
+background-color: #ffffff;
+
+-webkit-border-bottom-left-radius: 80px;
+-moz-border-radius-bottomleft: 80px;
+border-bottom-left-radius: 80px;
+
+-webkit-border-bottom-right-radius: 80px;
+-moz-border-radius-bottomright: 80px;
+border-bottom-right-radius: 80px;
+
+-moz-box-shadow: -3px 3px 11px 0px #575757;
+-webkit-box-shadow: -3px 3px 11px 0px #575757;
+box-shadow: -3px 3px 11px 0px #575757;
+
+    
+}
 #image{
 position:absolute;
 opacity:0.4;

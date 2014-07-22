@@ -63,6 +63,10 @@ function initialize() {
     loadCarDriveFromXml();
     loadNodesFromXml();
     loadDapPositionsFromXml();
+    //var trapezoid = $('#trapezoid');
+    //trapezoid.index = 1;
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(
+  document.getElementById('trapezoid'));
     markerCluster = new MarkerClusterer(map,[], {
         //maxZoom: 13,
         minimumClusterSize: 50,
