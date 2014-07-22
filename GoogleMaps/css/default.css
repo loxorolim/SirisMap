@@ -7,26 +7,51 @@
 	
 }
 #scenario {
+    position: relative;
     font-weight:bold;
     font-size:16px;
-    margin-left:40px;
-    margin-top: 15px;
-    color:#1c94c4
+    left:50px;
+    float: left;
+    top: 15px;
+    width: 80px;
+    height: 25px;
+    color:#1c94c4;
+    padding: 1px;
+    margin: 1px;
+    text-align:center;
+   
+
 
 }
 #technology {
+    position: relative;
     font-weight:bold;
     font-size:16px;
-    margin-left:120px;
-    margin-top: 15px;
-    color:#1c94c4
+    left:75px;
+    float: left;
+    top: 15px;
+    width: 80px;
+    height: 25px;
+    color:#1c94c4;
+    padding: 1px;
+    margin: 1px;
+    text-align:center;
+    
+   
 }
 #power {
+     position: relative;
     font-weight:bold;
     font-size:16px;
-    margin-left:200px;
-    margin-top: 15px;
-    color:#1c94c4
+    left:100px;
+    float: left;
+    top: 15px;
+    width: 80px;
+    height: 25px;
+    color:#1c94c4;
+    padding: 1px;
+    margin: 1px;
+    text-align:center;
 }
 #trapezoid {
 	

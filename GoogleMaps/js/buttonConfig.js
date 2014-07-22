@@ -288,26 +288,32 @@ function setButtons()
 		   
 		});
 		$("#ZigBee").click(function () {
+		    $("#technology").text("ZigBee");
 		    technology = "802_15_4";
 		    refresh();
 		});
 		$("#80211a").click(function () {
+		    $("#technology").text("802.11a");
 		    technology = "802_11_a";
 		    refresh();
 		});
 		$("#80211g").click(function () {
+		    $("#technology").text("802.11g");
 		    technology = "802_11_g";
 		    refresh();
 		});
 		$("#urbanRadio").click(function () {
+		    $("#scenario").text("Urbano");
 		    scenario = "Urbano";
 		    refresh();
 		});
 		$("#suburbanRadio").click(function () {
+		    $("#scenario").text("Suburbano");
 		    scenario = "Suburbano";
 		    refresh();
 		});
 		$("#ruralRadio").click(function () {
+		    $("#scenario").text("Rural");
 		    scenario = "Rural";
 		    refresh();
 		});
