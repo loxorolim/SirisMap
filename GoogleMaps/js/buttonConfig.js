@@ -67,7 +67,97 @@ function setButtons()
 	   $('#technologyBackground').buttonset().find('label').width(radioSize);
 	  // $('#configMessage').html(getConfigurations());
 	   //$('#check').click(function (ev) { ev.preventDefault(); });
-	  // $('#check').unbind('mouseout keyup mouseup hover');
+    // $('#check').unbind('mouseout keyup mouseup hover');
+	   $("#scenario")        
+         .next()
+           .button({
+               text: false,              
+               icons: {
+                   primary: "ui-icon-triangle-1-s"
+               }
+           })
+           .click(function () {
+               var menu = $(this).parent().next().show().position({
+                   my: "left top",
+                   at: "left bottom",
+                   of: this
+               });
+               $(document).one("click", function () {
+                   menu.hide();
+               });
+               return false;
+           })
+           .parent()
+             .buttonset()
+             .next()
+               .hide()
+               .menu();
+	   $("#technology")
+            .next()
+              .button({
+                  text: false,
+                  icons: {
+                      primary: "ui-icon-triangle-1-s"
+                  }
+              })
+              .click(function () {
+                  var menu = $(this).parent().next().show().position({
+                      my: "left top",
+                      at: "left bottom",
+                      of: this
+                  });
+                  $(document).one("click", function () {
+                      menu.hide();
+                  });
+                  return false;
+              })
+              .parent()
+                .buttonset()
+                .next()
+                  .hide()
+                  .menu();
+	   $("#slider").slider({
+	       value: -20,
+	       min: -20,
+	       max: 30,
+	       step: 1,
+	       slide: function (event, ui) {
+	           $("#power").text(ui.value + "dBm");
+	       }
+	   });
+	  // $("#amount").val("$" + $("#slider").slider("value"));
+               
+	   $("#slider").hide();
+	   $("#choosePower").hover(function () {
+	       $("#slider").show();
+	   }, function () {
+	       $("#slider").hide();
+
+	   });
+	   $("#selectScenario").hide();
+	   $("#chooseScenario").hover(function () {
+	       $("#selectScenario").show();
+	   }, function () {
+	       $("#selectScenario").hide();
+	       var menu = $("#scenario").parent().next().hide().position({
+	           my: "left top",
+	           at: "left bottom",
+	           of: this
+	       });
+	       
+	   });
+	   $("#selectTechnology").hide();
+	   $("#chooseTechnology").hover(function () {
+	       $("#selectTechnology").show();
+	   }, function () {
+	       $("#selectTechnology").hide();
+	       var menu = $("#technology").parent().next().hide().position({
+	           my: "left top",
+	           at: "left bottom",
+	           of: this
+	       });
+	   });
+
     $('#checkHeatmap').button({
         icons: {
             primary: "ui-icon-check"

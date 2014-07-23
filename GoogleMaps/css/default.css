@@ -6,19 +6,53 @@
 	height:0px;
 	
 }
+#chooseScenario{
+    position: relative;
+    left:50px;
+    width: 120px;
+    top: 15px;
+    float: left;
+    
+}
+
+#chooseTechnology{
+    position: relative;
+    left:50px;
+    top: 15px;
+    width: 100px;
+    float: left;
+    
+
+}
+#choosePower{
+    position: relative;
+    height: 50px;
+    left:50px;
+    top: 15px;
+    float: left;
+    width:80px;
+    text-align:center;
+}
+#slider{
+    width:80px;
+}
 #scenario {
     position: relative;
     font-weight:bold;
     font-size:16px;
-    left:50px;
-    float: left;
-    top: 15px;
-    width: 80px;
-    height: 25px;
+    
+    float:left;
+    /*text-align:center;*/
+
+    /*left:50px;*/
+    
+    /*top: 15px;*/
+    
+    
     color:#1c94c4;
     padding: 1px;
     margin: 1px;
-    text-align:center;
+    
    
 
 
@@ -27,15 +61,12 @@
     position: relative;
     font-weight:bold;
     font-size:16px;
-    left:75px;
-    float: left;
-    top: 15px;
-    width: 80px;
-    height: 25px;
+    float:left;
+    
     color:#1c94c4;
     padding: 1px;
     margin: 1px;
-    text-align:center;
+    /*text-align:center;*/
     
    
 }
@@ -43,15 +74,11 @@
      position: relative;
     font-weight:bold;
     font-size:16px;
-    left:100px;
-    float: left;
-    top: 15px;
-    width: 80px;
-    height: 25px;
+    height: 30px;
     color:#1c94c4;
     padding: 1px;
     margin: 1px;
-    text-align:center;
+    
 }
 #trapezoid {
 	
@@ -86,9 +113,8 @@ position:absolute;
 opacity:0.4;
 z-index:100;
 }
-.ui-menu { 
-    width: 150px; 
-}
+
+.ui-menu { position: absolute; width: 150px; }
 .ui-button {
     width: 155px;
 }
