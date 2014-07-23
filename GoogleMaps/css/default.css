@@ -6,83 +6,41 @@
 	height:0px;
 	
 }
-#chooseScenario{
-    position: relative;
-    left:50px;
-    width: 120px;
-    top: 15px;
-    float: left;
-    
-}
 
-#chooseTechnology{
-    position: relative;
-    left:50px;
-    top: 15px;
-    width: 100px;
-    float: left;
-    
-
-}
-#choosePower{
-    position: relative;
-    height: 50px;
-    left:50px;
-    top: 15px;
-    float: left;
-    width:80px;
-    text-align:center;
-}
 #slider{
     width:80px;
 }
-#scenario {
-    position: relative;
+.selections{
+
     font-weight:bold;
-    font-size:16px;
-    
-    float:left;
-    /*text-align:center;*/
-
-    /*left:50px;*/
-    
-    /*top: 15px;*/
-    
-    
+    font-size:18px;
+    float:left; 
     color:#1c94c4;
-    padding: 1px;
     margin: 1px;
-    
-   
-
-
 }
-#technology {
-    position: relative;
-    font-weight:bold;
-    font-size:16px;
-    float:left;
-    
-    color:#1c94c4;
-    padding: 1px;
-    margin: 1px;
-    /*text-align:center;*/
-    
-   
+
+.insideOptions{
+    width: 135px;
+    margin: 2px;
+    margin-top: 15px;
+    float: left;
 }
 #power {
-     position: relative;
+     
     font-weight:bold;
     font-size:16px;
-    height: 30px;
     color:#1c94c4;
-    padding: 1px;
-    margin: 1px;
+
     
+}
+#insideTrapezoid{
+    width:420px;
+    height: 80px;
+    margin-left: 45px;
 }
 #trapezoid {
 	
-    width: 400px;
+    width: 510px;
 height: 54px;
 
 -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
