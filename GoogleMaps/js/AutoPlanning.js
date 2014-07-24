@@ -1,5 +1,5 @@
-﻿function applyPlanning(mesh) {
-    var solution = autoPlanningGrasp(mesh);
+﻿function applyPlanning() {
+    var solution = autoPlanningGrasp();
     applySolution(solution);
     $.unblockUI();
 }

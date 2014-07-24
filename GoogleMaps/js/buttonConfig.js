@@ -126,31 +126,39 @@ function setButtons()
 	       }
 	   });
 	  // $("#amount").val("$" + $("#slider").slider("value"));
-               
-	   $("#slider").hide();
+	   
+	   $("#slider").css({ opacity: 0.5 });
+	   $("#slider").slider({
+	       stop: function (event, ui) {
+	           TRANSMITTER_POWER = ui.value;
+	           refresh();
+	       }
+	   });
 	   $("#choosePower").hover(function () {
-	       $("#slider").show();
+	       $("#slider").css({ opacity: 1.0 });
 	   }, function () {
-	       $("#slider").hide();
+	       $("#slider").css({ opacity: 0.5 });
 
 	   });
-	   $("#selectScenario").hide();
+	   $("#selectScenario").css({ opacity: 0.5 });
 	   $("#chooseScenario").hover(function () {
-	       $("#selectScenario").show();
+	       $("#selectScenario").css({ opacity: 1.0 });
 	   }, function () {
-	       $("#selectScenario").hide();
+	       $("#selectScenario").css({ opacity: 0.5 });
 	       var menu = $("#scenario").parent().next().hide().position({
 	           my: "left top",
 	           at: "left bottom",
 	           of: this
 	       });
+
+
 	       
 	   });
-	   $("#selectTechnology").hide();
+	   $("#selectTechnology").css({ opacity: 0.5 });
 	   $("#chooseTechnology").hover(function () {
-	       $("#selectTechnology").show();
+	       $("#selectTechnology").css({ opacity: 1.0 });
 	   }, function () {
-	       $("#selectTechnology").hide();
+	       $("#selectTechnology").css({ opacity: 0.5 });
 	       var menu = $("#technology").parent().next().hide().position({
 	           my: "left top",
 	           at: "left bottom",
@@ -197,16 +205,16 @@ function setButtons()
         $(this).blur();
         $.blockUI({  message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
         // autoPlanningGrasp();
-        setTimeout('applyPlanning(true)', 1000);
-        if (!meshEnabled) {
+        setTimeout('applyPlanning()', 1000);
+        if (meshEnabled) {
             connectViaMesh();
-            meshEnabled = true;
+           // meshEnabled = true;
             //markerCluster.clearMarkers();
-            $('#checkRFMesh').button({
-                icons: {
-                    primary: "ui-icon-check"
-                }
-            })
+            //$('#checkRFMesh').button({
+            //    icons: {
+            //        primary: "ui-icon-check"
+            //    }
+            //})
         }
        // applyPlanning();
 
@@ -215,30 +223,7 @@ function setButtons()
 
 
     });
-    $('#autoPlanningSemMesh').button().click(function () {
-
-
-        $(this).blur();
-        $.blockUI({ message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
-        // autoPlanningGrasp();
-        setTimeout('applyPlanning(false)', 1000);
-        //if (!meshEnabled) {
-        //    //connectViaMesh();
-        //    //meshEnabled = true;
-        //    //markerCluster.clearMarkers();
-        //    $('#checkRFMesh').button({
-        //        icons: {
-        //            primary: "ui-icon-check"
-        //        }
-        //    })
-        //}
-        // applyPlanning();
-
-        //$('#check').button.removeClass("ui-state-focus ui-state-hover");
-        // $.unblockUI();
-
-
-    });
+    
     $('#checkRFMesh').button({
         icons: {
             primary: "ui-icon-closethick"
@@ -380,16 +365,19 @@ function setButtons()
 		$("#ZigBee").click(function () {
 		    $("#technology").text("ZigBee");
 		    technology = "802_15_4";
+		    BIT_RATE = 1/4;
 		    refresh();
 		});
 		$("#80211a").click(function () {
 		    $("#technology").text("802.11a");
 		    technology = "802_11_a";
+		    BIT_RATE = 6;
 		    refresh();
 		});
 		$("#80211g").click(function () {
 		    $("#technology").text("802.11g");
 		    technology = "802_11_g";
+		    BIT_RATE = 6;
 		    refresh();
 		});
 		$("#urbanRadio").click(function () {

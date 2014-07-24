@@ -43,14 +43,15 @@
     width: 510px;
 height: 54px;
 
--ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-filter: alpha(opacity=80);
+/*-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+filter: alpha(opacity=80);*/
 -moz-opacity: 0.8;
 -khtml-opacity: 0.8;
-opacity: 0.8;
+/*opacity: 0.8;*/
 border: 9px #888888 solid;
 
-background-color: #ffffff;
+/*background-color: #ffffff;*/
+background-color: rgba(255,255,255,0.8);
 
 -webkit-border-bottom-left-radius: 80px;
 -moz-border-radius-bottomleft: 80px;

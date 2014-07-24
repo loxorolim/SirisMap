@@ -4,12 +4,13 @@
 //Indicar o uso de ponto flutuante de maior precisão
 
 var scenario = "Urbano";
-var technology = "802_11_g";
+var technology = "802_15_4";
 var H_TX = 3;
 var H_RX = 5;
-var BIT_RATE = 6;
-var TRANSMITTER_POWER = -20;
+var BIT_RATE = 1/4;
+var TRANSMITTER_POWER = -3;
 var SRD = true;
+
 function getHataSRDSuccessRate(distance) {
     return 1 - bit_error_probability(scenario, technology, BIT_RATE, TRANSMITTER_POWER, H_TX, H_RX, distance, SRD);
 }
