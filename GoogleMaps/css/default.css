@@ -1,14 +1,27 @@
-#legenda
-{
-    position:absolute;
-	left: 640px;
-	top:2px;
-	height:0px;
-	
-}
 
 #slider{
     width:80px;
+}
+.ui-button .ui-icon.dap {
+     background-image: url(dapicon.png); 
+}
+.ui-button .ui-icon.meter {
+     background-image: url(metericon.png); 
+}
+.ui-button .ui-icon.pole {
+     background-image: url(poleicon.png); 
+}
+.ui-button .ui-icon.view {
+     background-image: url(viewicon.png); 
+}
+.ui-button .ui-icon.eraser {
+     background-image: url(removecursor.png); 
+}
+.ui-button .ui-icon.heatmap {
+     background-image: url(heatmap.png); 
+}
+.ui-button .ui-icon.mesh {
+     background-image: url(meshicon.png); 
 }
 .selections{
 
@@ -35,7 +48,7 @@
 }
 #insideTrapezoid{
     width:420px;
-    height: 80px;
+    /*height: 80px;*/
     margin-left: 45px;
 }
 #trapezoid {
@@ -67,16 +80,10 @@ box-shadow: -3px 3px 11px 0px #575757;
 
     
 }
-#image{
-position:absolute;
-opacity:0.4;
-z-index:100;
-}
 
-.ui-menu { position: absolute; width: 150px; }
-.ui-button {
-    width: 155px;
-}
+
+
+
 .labels {
      color: red;
      background-color: white;
@@ -89,132 +96,10 @@ z-index:100;
      white-space: nowrap;
    }
 
-#TextoCor
-{
-	margin-right: 25px;
-	margin-left: 10px;
-}
-.legendaImagem
-{
-	float:left;
-	height: 16px;
-	margin-right: 20px;
-	margin-top: 10px;
-
-}
-.legendas
-{
-
-	
-	width: 260px;
-	height: 16px;
-}
-.escritaLegenda
-{
-
-	font: bold 14px
- "helvetica", sans-serif;
- color: #FFFFFF;
-}
-#dialogBackground {
-    position:absolute;
-	left: 320px;
-	top:2px;
-	height:0px;
-}
 
 
 
-#radio
-{
 
-}
-#xmldisplay
-{
-
-	width: 500px;
-	height:500px;
-}
-.ui-accordion-header  {  
-
-    text-align: center;  
-
-} 
-#square{
-    position:absolute;
-    width: 0%;
-    height:0px;
-    background-color:#808080;
-    z-index:100;
-    opacity:0.7;
-}
-#helpimage{
-   background-color:#f00;
-
-   position:absolute;
-   top:50%;
-   left:50%;
-   width:0%;
-   height:0%;
-   margin-top:-305px;
-   margin-left:-327px;
-   opacity:1.0;
-   z-index:101
- 
-}
-button
-{
-	width:158px;
-	padding:0px;
-	margin: 0px;
-	
-}
-
-.dbButtons
-{
-	width:80px;
-	padding:0px;
-	margin: 0px;
-}
-
-#accordion
-{
-	
-	float:right;
-	width: 160px;
-}
-#techAccordion
-{
-	
-	float:right;
-	width: 160px;
-	overflow: hidden;
-}
-#controls
-{
-
-	width:160px;
-
-
-}
-#insertionBackground
-{
-	width:158px;
-}
-#powerbackground
-{
-	width:158px;
-	overflow: hidden;
-}
-
-#scenarioBackground
-{
-	width:158px;
-}
-#technologyBackground
-{
-	width:158px;
-}
 
 
 

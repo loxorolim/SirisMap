@@ -4,7 +4,7 @@ var GREEN = "#00FF00";
 var YELLOW = "#FFFF00";
 var BLUE = "#0000FF";
 
-var drawHeatmap = true;
+var drawHeatmap = false;
 var heatmap;
 var taxiData = [];
 var heatmapPoints = [];

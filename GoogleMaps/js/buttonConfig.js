@@ -1,22 +1,84 @@
+function setRadio() {
+    $("#radio").buttonset();
+    $("#Insertion").click(function () {
 
+    });
+    $("#eraserRadio").button({
+        icons: {
+            primary: "eraser",
+            secondary: null
+        },
+        text: false
+    });
+    $("#eraserRadio").click(function (event) {
+
+
+
+        setOpMode("Removal");
+        map.setOptions({ draggableCursor: "url(cursors/removecursor.cur), default" });
+        setInfoWindowNull();
+        //$('#configMessage').html(getConfigurations());
+
+    });
+    $("#viewRadio").button({
+        icons: {
+            primary: "view",
+            secondary: null
+        },
+        text: false
+    });
+    $("#viewRadio").click(function () {
+        setOpMode("View");
+        map.setOptions({ draggableCursor: "url(https://maps.gstatic.com/mapfiles/openhand_8_8.cur), auto" });
+
+    });
+    $("#dapRadio").button({
+        icons: {
+            primary: "dap",
+            secondary: null
+        },
+        text: false
+    });
+    $("#dapRadio").click(function () {
+        setOpMode("Insertion");
+        setInfoWindowNull();
+        setInsertionOptions("DAP")
+        map.setOptions({ draggableCursor: "url(cursors/dapcursor.cur), auto" });
+
+    });
+    $("#meterRadio").button({
+        icons: {
+            primary: "meter",
+            secondary: null
+        },
+        text: false
+    });
+    $("#meterRadio").click(function () {
+        setOpMode("Insertion");
+        setInfoWindowNull();
+        setInsertionOptions("Meter");
+        map.setOptions({ draggableCursor: "url(cursors/metercursor.cur), default" })
+
+    });
+    $("#pole").button({
+        icons: {
+            primary: "pole",
+            secondary: null
+        },
+        text: false
+    });
+    $("#pole").click(function () {
+        setOpMode("Insertion");
+        setInfoWindowNull();
+        setInsertionOptions("Pole");
+        map.setOptions({ draggableCursor: "url(cursors/polecursor.cur), default" })
+
+    });
+}
 function setButtons()
 {
 
-		
-		$("#Insertion").click(function() {
-
-		});
-		$("#Removal").click(function (event)
-		{
-			
-
-
-		    setOpMode("Removal");
-		    map.setOptions({ draggableCursor: "url(cursors/removecursor.cur), default" });
-			setInfoWindowNull();
-			//$('#configMessage').html(getConfigurations());
-
-		});
+      setRadio();
 		$("#DisplayXML").click(function() {
 			showNodesXml();
 			setInfoWindowNull();
@@ -126,7 +188,7 @@ function setButtons()
 	       }
 	   });
 	  // $("#amount").val("$" + $("#slider").slider("value"));
-	   
+	  
 	   $("#slider").css({ opacity: 0.5 });
 	   $("#slider").slider({
 	       stop: function (event, ui) {
@@ -168,33 +230,23 @@ function setButtons()
 
     $('#checkHeatmap').button({
         icons: {
-            primary: "ui-icon-check"
-        }
+            primary: "heatmap"
+        },
+        text: false
 
     }).click(function () {
-	       $(this).blur();
-	       $.blockUI({ fadeIn: 0,  message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
-	       drawHeatmap = !drawHeatmap;
-	       if (drawHeatmap){
-	           heatmap.setMap(map);
-	           $(this).button({
-	               icons: {
-	                   primary: "ui-icon-check"
-	               }
-	           })
-	       }              
-	           
-	       else {
+	      
+        $(this).blur();
+        drawHeatmap = !drawHeatmap;
+	       if (drawHeatmap)
+	           heatmap.setMap(map);                             
+	       else 
 	           heatmap.setMap(null);
-	           $(this).button({
-	               icons: {
-	                   primary: "ui-icon-closethick"
-	               }
-	           })
-	       }
+
+	      
 	           
 	       //$('#check').button.removeClass("ui-state-focus ui-state-hover");
-	       $.unblockUI();
+
 
 	       
     });
@@ -226,19 +278,21 @@ function setButtons()
     
     $('#checkRFMesh').button({
         icons: {
-            primary: "ui-icon-closethick"
-        }
+            primary: "mesh"
+        },
+ 
+        text: false
 
     }).click(function () {
         $(this).blur();
         $.blockUI({ fadeIn: 0, message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
         if (meshEnabled) {
             resetMesh();
-            $(this).button({
-                icons: {
-                    primary: "ui-icon-closethick"
-                }
-            })
+            //$(this).button({
+            //    icons: {
+            //        primary: "ui-icon-closethick"
+            //    }
+            //})
         }
 
         else {
@@ -246,11 +300,11 @@ function setButtons()
             connectViaMesh();         
             
             //markerCluster.clearMarkers();
-            $(this).button({
-                icons: {
-                    primary: "ui-icon-check"
-                }
-            })
+            //$(this).button({
+            //    icons: {
+            //        primary: "ui-icon-check"
+            //    }
+            //})
         }
         meshEnabled = !meshEnabled;
 
@@ -338,30 +392,10 @@ function setButtons()
 	   $( "#radioBackground" ).buttonset().find('label').width(122);
 
 		
-	
-		$("#dapRadio").click(function() 
-		{
-			setOpMode("Insertion");		
-			setInfoWindowNull();
-			setInsertionOptions("DAP")
-			map.setOptions({ draggableCursor: "url(cursors/dapcursor.cur), auto" });
-			
-		});
-		$("#meterRadio").click(function()
-		{
-			setOpMode("Insertion");		
-			setInfoWindowNull();
-			setInsertionOptions("Meter");
-			map.setOptions({ draggableCursor: "url(cursors/metercursor.cur), default" })
-			
-		});
-		$("#pole").click(function () {
-		    setOpMode("Insertion");
-		    setInfoWindowNull();
-		    setInsertionOptions("Pole");
-		    map.setOptions({ draggableCursor: "url(cursors/polecursor.cur), default" })
-		   
-		});
+	   //$('#dapRadio').button({
+	   //    icons: { primary: 'ui-icon-dap', secondary: null }
+	   //});
+	   
 		$("#ZigBee").click(function () {
 		    $("#technology").text("ZigBee");
 		    technology = "802_15_4";
