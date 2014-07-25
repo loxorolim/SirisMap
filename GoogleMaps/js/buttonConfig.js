@@ -78,7 +78,8 @@ function setRadio() {
 function setButtons()
 {
 
-      setRadio();
+    setRadio();
+    $(document).tooltip();
 		$("#DisplayXML").click(function() {
 			showNodesXml();
 			setInfoWindowNull();
