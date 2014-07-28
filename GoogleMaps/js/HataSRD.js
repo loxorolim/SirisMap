@@ -8,7 +8,7 @@ var technology = "802_15_4";
 var H_TX = 3;
 var H_RX = 5;
 var BIT_RATE = 1/4;
-var TRANSMITTER_POWER = -3;
+var TRANSMITTER_POWER = -20;
 var SRD = true;
 
 function getHataSRDSuccessRate(distance) {
