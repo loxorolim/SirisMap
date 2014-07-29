@@ -119,6 +119,8 @@ function createMeter() {
         zIndex: 2,
         connected: false,
         draggable: true,
+        load: 0,
+
 //        meshConnectionLines: [],
         icon: meterOffIconImage,
 //        dapsConnected: [],
@@ -241,7 +243,7 @@ function createMeter() {
                 '<br>Latitude: ' + this.position.lat() +
                 '<br>Longitude: ' + this.position.lng() +
                 '<br>Quantidade de vizinhos: ' + this.neighbours.length +
-                '<br>Carga: ' + this.meshNeighbours.length +
+                '<br>Carga: ' + this.load +
                 '<br>Conectado?: ' + this.connected;
                 
             infowindow.setContent(content);
@@ -448,6 +450,7 @@ function createDAP() {
             }
             this.meshMeters.push(meshToAdd);
             routerPath.setMap(map);
+            this.propagateMeshLoad(target);
             //this.meshConnectionLines.push(routerPath);
             
             //    }
@@ -458,6 +461,21 @@ function createDAP() {
             this.coveredMeters++;
             mesh.meshNeighbours.push(this);
             target.connected = true;
+        },
+        propagateMeshLoad: function (meter) {
+            var m = meter;
+            var parent = this.meshMeters.filter(function (item) {
+                return item.target.ID == m.ID;
+            });
+            while (parent.length != 0) {              
+                parent[0].mesh.load++;
+                m = parent[0].mesh;
+                var parent = this.meshMeters.filter(function (item) {
+                    return item.target.ID == m.ID;
+                });
+            }
+            
+
         },
         connectByDistanceMesh: function () {
             var aux = this.neighbours;
@@ -511,8 +529,10 @@ function createDAP() {
             for (var i = 0; i < this.meshMeters.length; i++) {
                 this.meshMeters[i].meshLine.setMap(null);
                 this.meshMeters[i].mesh.meshNeighbours = [];
+                this.meshMeters[i].mesh.load = 0;
                 this.meshMeters[i].target.changeIcon(meterOffIconImage);
                 this.meshMeters[i].target.connected = false;
+                
             }
             this.meshMeters = [];
             
