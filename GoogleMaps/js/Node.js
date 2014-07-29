@@ -37,15 +37,15 @@ function connectViaMeshTeste() {
 
     }
 
-    //NOVA MESH
-    //1) SELECIONAR OS MEDIDORES CONECTADOS POSSÍVEIS (DAP NÃO ESTÁ CHEIO, MEDIDORES CONECTADOS NÃO ESTAO CHEIOS)
-    //2) ORDENAR OS MEDIDORES CONECTADOS POR ORDEM DE VANTAGEM (DAPS MENOS CARREGADOS, MEDIDORES MENOS CARREGADOS)
-    //3) CONECTAR AO MELHOR CANDIDATO
-    //4) CASO
+
 }
 function connectViaMesh() {
     resetMesh();
-    teste();
+    for (var i = 0; i < daps.length; i++) {
+        
+        daps[i].connectByDistanceMesh();
+    }
+       
     //var connectedMeters = meters.filter(function (item) {
     //    return (item.connected == true);
     //});
@@ -69,8 +69,8 @@ function connectViaMesh() {
 
 function resetMesh() {
 
-    for (var i = 0; i < meters.length; i++) {
-        meters[i].disconnectMesh();
+    for (var i = 0; i < daps.length; i++) {
+        daps[i].removeMeshConnections();
     }
 }
 
@@ -119,9 +119,9 @@ function createMeter() {
         zIndex: 2,
         connected: false,
         draggable: true,
-        meshConnectionLines: [],
+//        meshConnectionLines: [],
         icon: meterOffIconImage,
-        dapsConnected: [],
+//        dapsConnected: [],
         neighbours: [],
         meshNeighbours: [],
         place: function (latitude, longitude) {
@@ -131,6 +131,7 @@ function createMeter() {
             meters.push(this);
             markerCluster.addMarker(this, true);
             this.ID = generateUUID();
+            resetMesh();
             this.removeConnections(this.getPosition());
             this.connectByDistance(this.getPosition());
             if (meshEnabled)
@@ -145,9 +146,7 @@ function createMeter() {
             for (var i = 0; i < this.neighbours.length; i++) {
                 this.neighbours[i].disconnectTarget(this);
             }
-            for (var i = 0; i < this.meshConnectionLines.length; i++) {
-                this.meshConnectionLines[i].setMap(null);
-            }
+
             markerCluster.removeMarker(this, true);
         },
         changeIcon: function (newIcon) {
@@ -186,15 +185,15 @@ function createMeter() {
                     break;
                 }
             }
-            for (var i = 0; i < this.dapsConnected.length; i++) {
-                if (this.dapsConnected[i].ID == target.ID) {
-                    this.dapsConnected.splice(i, 1);
-                    break;
-                }
-            }
+            //for (var i = 0; i < this.dapsConnected.length; i++) {
+            //    if (this.dapsConnected[i].ID == target.ID) {
+            //        this.dapsConnected.splice(i, 1);
+            //        break;
+            //    }
+            //}
             this.neighbours.push(target);
-            this.dapsConnected.push(target);
-            
+            //this.dapsConnected.push(target);
+            this.connected = true;
             this.changeMeterColor();
 
             //target.neighbours.push(this);
@@ -206,141 +205,15 @@ function createMeter() {
                     break;
                 }
             }
-            for (var i = 0; i < this.dapsConnected.length; i++) {
-                if (this.dapsConnected[i].ID == target.ID) {
-                    this.dapsConnected.splice(i, 1);
-                    break;
-                }
-            }
+            //for (var i = 0; i < this.dapsConnected.length; i++) {
+            //    if (this.dapsConnected[i].ID == target.ID) {
+            //        this.dapsConnected.splice(i, 1);
+            //        break;
+            //    }
+            //}
             this.changeMeterColor();
         },
 
-        meshConnect: function (target, color) {
-       //     if (source) {
-                var lineSymbol = {
-                    path: 'M 0,-1 0,1',
-                    strokeOpacity: 1,
-                    scale: 3
-                };
-                var meterPositions = [this.getPosition(), target.getPosition()];
-                var routerPath = new google.maps.Polyline(
-                {
-                    path: meterPositions,
-                    strokeColor: color,
-                    strokeOpacity: 0,
-                    icons: [{
-                        icon: lineSymbol,
-                        offset: '0',
-                        repeat: '15px'
-                    }],
-                    clickable: false,
-                    strokeWeight: 1
-                });
-                this.meshConnectionLines.push(routerPath);
-                routerPath.setMap(map);
-        //    }
-          //  else {
-                this.changeIcon(meterMeshIconImage);
-         //   }
-                //this.meshNeighbours.push(target);
-                target.meshNeighbours.push(this);
-                this.connected = true;
-        },
-        disconnectMesh: function () {
-            this.meshNeighbours = [];
-            for (var i = 0; i < this.meshConnectionLines.length; i++) {
-                this.meshConnectionLines[i].setMap(null);
-            }
-            this.meshConnectionLines = [];
-            if (this.neighbours.length == 0) {
-                this.connected = false;
-                this.changeIcon(meterOffIconImage);
-            }
-               
-        },
-        meshConnect2: function (connectedMeters) {
-            var closest = -1;
-            var minDist = -1;
-            var color = null;
-            //var connectedMeters = meters.filter(function (item) {
-            //    return (item.connected == true);
-            //});
-            for (var i = 0; i < connectedMeters.length; i++) {
-                // if (connectedMeters[i].connected) {
-                var dist = google.maps.geometry.spherical.computeDistanceBetween(this.getPosition(), connectedMeters[i].getPosition());
-                var distToDap = google.maps.geometry.spherical.computeDistanceBetween(this.getPosition(), connectedMeters[i].dapsConnected[0].getPosition());
-                var values = getValuesFromTable(dist);
-                if ((values != -1) && (distToDap < minDist || minDist == -1) && (connectedMeters[i].dapsConnected[0].coveredMeters < DAPLIMIT)) {
-                    minDist = distToDap;
-                    closest = i;
-                    color = values.color;
-                    //this.meshConnect(meters[i], true, values.color);
-                    //meters[i].meshConnect(this, false);
-                }
-                //  }
-            }
-            if (closest != -1) {
-                this.meshConnect(connectedMeters[closest], color);
-            }
-        },
-        connectViaMesh: function (connectedMeters) {
-            var candidatesToConnect = [];
-
-            for (var i = 0; i < connectedMeters.length; i++) { // PEGA OS MEDIDORES QUE ESTÃO CONECTADOS E EM DISTANCIA VÁLIDA
-                if (connectedMeters[i].dapsConnected[0].coveredMeters < DAPLIMIT && connectedMeters[i].meshNeighbours.length < METERLIMIT) { //POR ENQUANTO NÃO LEVA EM CONSIDERAÇÃO SE UM MEDIDOR ESTÁ CONECTADO A DOIS DAPS
-                    var dist = google.maps.geometry.spherical.computeDistanceBetween(this.getPosition(), connectedMeters[i].position);
-                    var values = getValuesFromTable(dist);
-                    if (values != -1 ) {
-                        var toAdd = {
-                            marker: connectedMeters[i],
-                            distance: dist,
-                            value: values,
-                            dapLoad: connectedMeters[i].dapsConnected[0].coveredMeters,
-                            meterLoad: connectedMeters[i].meshNeighbours.length
-                        };
-                        candidatesToConnect.push(toAdd);
-                    }
-                }       
-            }
-            if (candidatesToConnect.length > 0) {
-                var best = candidatesToConnect[0];
-                for (var i = 1; i < candidatesToConnect.length; i++) {// BUSCA O MELHOR CANDIDATO
-                    if (candidatesToConnect[i].dapLoad < best.dapLoad) 
-                        best = candidatesToConnect[i];                 
-                    else if (candidatesToConnect[i].dapLoad == best.dapLoad) 
-                        if(candidatesToConnect[i].meterLoad < best.meterLoad)
-                            best = candidatesToConnect[i]
-                        else if (candidatesToConnect[i].meterLoad == best.meterLoad) 
-                            if (candidatesToConnect[i].distance < best.distance)
-                                best = candidatesToConnect[i];                    
-                }
-                this.dapsConnected.push(best.marker.dapsConnected[0]);
-                this.meshConnect(best.marker, best.value.color);
-                //var aux = [];
-                //var leastLoad = candidatesToConnect[0].dapLoad;
-                //for (var i = 0; i < candidatesToConnect.length; i++) {
-                //    if (candidatesToConnect[i].dapLoad == leastLoad) 
-                //        aux.push(candidatesToConnect[i])
-                //    if (candidatesToConnect[i].dapLoad < leastLoad) {
-                //        leastLoad = candidatesToConnect[i].dapLoad;
-                //        aux = [];
-                //        aux.push(candidatesToConnect[i]);
-                //    }
-                //}
-               
-            }
-
-            //for (var i = 0; i < meters.length; i++) {
-            //    if (!meters[i].connected) {
-            //        var dist = google.maps.geometry.spherical.computeDistanceBetween(this.getPosition(), meters[i].getPosition());
-            //        var values = getValuesFromTable(dist);
-            //        if (values != -1) {
-            //            this.meshConnect(meters[i], true, values.color);
-            //            meters[i].meshConnect(this, false);
-            //        }
-            //    }
-            //}
-        },
         connectByDistance: function (newDistance) {
             for (var i = 0; i < daps.length; i++) {
                 var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, daps[i].position);
@@ -350,17 +223,14 @@ function createMeter() {
                     // this.connect(daps[i], values.color);
                         daps[i].removeConnections(daps[i].getPosition());
                         daps[i].connectByDistance(daps[i].getPosition());
-                    
+
+                           
                 }
             }                 
         },
         removeConnections: function (newDistance) {
             for (var i = 0; i < this.neighbours.length; i++) {
-             //   var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, this.neighbours[i].position);
-             //   var values = getValuesFromTable(dist);
-             //   if (values == -1) {
                     this.neighbours[i].disconnectTarget(this);
-             //   }
             }
             this.neighbours = [];
             this.changeMeterColor();
@@ -371,7 +241,8 @@ function createMeter() {
                 '<br>Latitude: ' + this.position.lat() +
                 '<br>Longitude: ' + this.position.lng() +
                 '<br>Quantidade de vizinhos: ' + this.neighbours.length +
-                '<br>Carga: ' + this.meshNeighbours.length;
+                '<br>Carga: ' + this.meshNeighbours.length +
+                '<br>Conectado?: ' + this.connected;
                 
             infowindow.setContent(content);
             infowindow.open(map, this);
@@ -422,6 +293,7 @@ function createDAP() {
         coveredMeters: 0,
         neighbours: [],
         connectionLines: [],
+        meshMeters: [],
         labelContent: "0",
         labelAnchor: new google.maps.Point(22,25),
         labelClass: "labels", // the CSS class for the label
@@ -432,6 +304,7 @@ function createDAP() {
             daps.push(this);
             markerCluster.addMarker(this, true);
             this.ID = generateUUID();
+            resetMesh();
             this.removeConnections(this.getPosition());
             this.connectByDistance(this.getPosition());
             if (meshEnabled)
@@ -446,13 +319,15 @@ function createDAP() {
             });
             this.setMap(null);
             markerCluster.removeMarker(this, true);
-            for (var i = 0; i < this.connectionLines.length; i++) {
-                this.connectionLines[i].setMap(null);
-            }
-            for (var i = 0; i < this.neighbours.length; i++) {
-                this.neighbours[i].disconnectTarget(this);
-            }
-            this.connectionLines = [];
+            //for (var i = 0; i < this.connectionLines.length; i++) {
+            //    this.connectionLines[i].setMap(null);
+            //}
+            //for (var i = 0; i < this.neighbours.length; i++) {
+            //    this.neighbours[i].disconnectTarget(this);
+            //}
+            this.removeConnections();
+            this.removeMeshConnections();
+       //     this.connectionLines = [];
         },
         changeIcon: function (newIcon) {
             this.icon = newIcon;
@@ -545,15 +420,54 @@ function createDAP() {
               //  }
             }
         },
+        meshConnect: function (mesh,target, color) {
+            //     if (source) {
+            var lineSymbol = {
+                path: 'M 0,-1 0,1',
+                strokeOpacity: 1,
+                scale: 3
+            };
+            var meterPositions = [mesh.getPosition(), target.getPosition()];
+            var routerPath = new google.maps.Polyline(
+            {
+                path: meterPositions,
+                strokeColor: color,
+                strokeOpacity: 0,
+                icons: [{
+                    icon: lineSymbol,
+                    offset: '0',
+                    repeat: '15px'
+                }],
+                clickable: false,
+                strokeWeight: 1
+            });
+            var meshToAdd  = {
+                mesh: mesh,
+                target: target,
+                meshLine: routerPath
+            }
+            this.meshMeters.push(meshToAdd);
+            routerPath.setMap(map);
+            //this.meshConnectionLines.push(routerPath);
+            
+            //    }
+            //  else {
+            target.changeIcon(meterMeshIconImage);
+            //   }
+            //this.meshNeighbours.push(target);
+            this.coveredMeters++;
+            mesh.meshNeighbours.push(this);
+            target.connected = true;
+        },
         connectByDistanceMesh: function () {
             var aux = this.neighbours;
-            var disconnectedMeters = meters.filter(function (item) {
-                return (item.connected != true);
-            });
+            
 
             for (var k = 0; k < meshMaxJumps; k++) {
 
-
+                var disconnectedMeters = meters.filter(function (item) {
+                    return (item.connected != true);
+                });
                 var mesh = [];
                 for (var i = 0; i < aux.length; i++) {
                     for (var j = 0; j < disconnectedMeters.length; j++) {
@@ -583,15 +497,26 @@ function createDAP() {
                 mesh.sort(function (a, b) { return a.distanceToDap - b.distanceToDap });
                 aux = [];
                 for (var i = 0; i < mesh.length && this.coveredMeters < DAPLIMIT; i++) {
-                    this.coveredMeters++;
-                    mesh[i].marker.meshConnect(mesh[i].mesh, mesh[i].value.color);
+                    //this.coveredMeters++;
+
+                    this.meshConnect(mesh[i].mesh, mesh[i].marker, mesh[i].value.color)
+                    //mesh[i].marker.meshConnect(mesh[i].mesh, mesh[i].value.color);
                     aux.push(mesh[i].marker);
+                    
                 }
+            }           
+        },
+        removeMeshConnections: function () {
+            this.coveredMeters -= this.meshMeters.length;
+            for (var i = 0; i < this.meshMeters.length; i++) {
+                this.meshMeters[i].meshLine.setMap(null);
+                this.meshMeters[i].mesh.meshNeighbours = [];
+                this.meshMeters[i].target.changeIcon(meterOffIconImage);
+                this.meshMeters[i].target.connected = false;
             }
-           
+            this.meshMeters = [];
             
         },
-
         removeConnections: function (newDistance) {
             for (var i = 0; i < this.neighbours.length; i++) {
               //  var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, this.neighbours[i].position);
@@ -620,7 +545,8 @@ function createDAP() {
             var content = 'ID: ' + this.ID +
                 '<br>Latitude: ' + this.position.lat() +
                 '<br>Longitude: ' + this.position.lng() +
-                '<br>Quantidade de vizinhos: ' + this.neighbours.length;
+                '<br>Medidores cobertos: ' + this.neighbours.length +
+                '<br>Medidores em mesh: ' + this.meshMeters.length;
 
             infowindow.setContent(content);
             infowindow.open(map, this);
