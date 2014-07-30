@@ -4,10 +4,18 @@ var p = 0.75;
 
 function autoPlanningGrasp() {
     var Matrixes;
-    if(meshEnabled)
-        Matrixes = createMeshScpMatrixes();
-    else
-        Matrixes = createScpMatrixes();
+    //var start = new Date().getTime();
+
+    //createMeshCoverageMatrix(poles);
+
+    Matrixes = createScpMatrixes();
+    //if(meshEnabled)
+       // Matrixes = createMeshScpMatrixes();
+    //else
+      //  Matrixes = createScpMatrixes();
+   // var end = new Date().getTime();
+    //var time = end - start;
+    //alert('Execution time: ' + time);
 //    var meterNeighbourhood = createMeterNeighbourhoodMatrix();
     var scpMatrix = Matrixes.scpMatrix;
     var coverageMatrix = Matrixes.coverageMatrix;

@@ -2,7 +2,7 @@
 var MeterLimit = 5; // Cada Medidor só aguentar até 5 medidores em MESh
 
 
-function createScpMatrixes() {
+function createScpMatrixes2() {
     var points = metersToPoints(meters);
     var electricPoles = [];
     for (var i = 0 ; i < poles.length ; i++) {
@@ -140,32 +140,49 @@ function createMeshScpMatrixes2() {
     });
     return scpMatrixes;
 }
-function createMeshCoverageMatrix(poles) {
+function createScpMatrixes() {
     var cM = [];
+    var sM = [];
+    for (var i = 0; i < meters.length; i++) {
+        var aux = [];
+        sM.push(aux);
+    }
+    var dapsToRemove = [];
     for (var j = 0; j < poles.length; j++) {
         var dap = createDAP();
+       // dapsToRemove.push(dap);
         dap.place(poles[j].getPosition().lat(), poles[j].getPosition().lng());
        // dap.connectByDistance();
        // dap.connectByDistanceMesh();
         var covered = [];
         for (var i = 0; i < dap.neighbours.length; i++) {
-            covered.push(positionInArray(dap.neighbours[i]));
+            if (dap.neighbours[i].type == "Meter") {
+                var toAdd = positionInArray(dap.neighbours[i]);
+                covered.push(toAdd);
+                sM[toAdd].push(j);
+            }
+            
+            
+          //  covered.push(dap.neighbours[i]);
         }
         for (var i = 0; i < dap.meshMeters.length; i++) {
             covered.push(positionInArray(dap.meshMeters[i].target));
+            sM[toAdd].push(j);
+          // covered.push(dap.meshMeters[i].target);
         }
-
+        cM.push(covered);
         dap.remove();
     }
-    return cM;
+   // for (var i = 0; i < dapsToRemove.length;i++)
+   //     dapsToRemove[i].remove();
+    var scpMatrixes = ({
+        scpMatrix: sM,
+        coverageMatrix: cM
+    });
+    return scpMatrixes;
 }
 function positionInArray(marker) {
-    if (marker.type == "DAP") {
-        for (var i = 0; i < daps.length; i++) {
-            if (marker.ID == daps[i].ID)
-                return i;
-        }
-    }
+
     if (marker.type == "Meter") {
         for (var i = 0; i < meters.length; i++) {
             if (marker.ID == meters[i].ID)

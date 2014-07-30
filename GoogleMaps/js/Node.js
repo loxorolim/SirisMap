@@ -448,7 +448,11 @@ function createDAP() {
                 target: target,
                 meshLine: routerPath
             }
-            this.meshMeters.push(meshToAdd);
+            
+                this.meshMeters.push(meshToAdd);
+            
+               
+           
             routerPath.setMap(map);
             this.propagateMeshLoad(target);
             //this.meshConnectionLines.push(routerPath);
@@ -459,7 +463,12 @@ function createDAP() {
             //   }
             //this.meshNeighbours.push(target);
             this.coveredMeters++;
-            mesh.meshNeighbours.push(this);
+            try {
+           // mesh.meshNeighbours.push(this);
+            }
+            catch (err) {
+                var wow = "doge";
+            }
             target.connected = true;
         },
         propagateMeshLoad: function (meter) {
