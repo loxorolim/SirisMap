@@ -254,21 +254,21 @@ function setButtons()
 
     $('#autoPlanning').button().click(function () {
         
-
-        $(this).blur();
-        $.blockUI({  message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
-        // autoPlanningGrasp();
-        setTimeout('applyPlanning()', 1000);
-        if (meshEnabled) {
-            connectViaMesh();
-           // meshEnabled = true;
-            //markerCluster.clearMarkers();
-            //$('#checkRFMesh').button({
-            //    icons: {
-            //        primary: "ui-icon-check"
-            //    }
-            //})
-        }
+        createMeshCoverageMatrix(poles);
+        //$(this).blur();
+        //$.blockUI({  message: '<h1><img src="siri2.gif" /> Carregando </h1>' });
+        //// autoPlanningGrasp();
+        //setTimeout('applyPlanning()', 1000);
+        //if (meshEnabled) {
+        //    connectViaMesh();
+        //   // meshEnabled = true;
+        //    //markerCluster.clearMarkers();
+        //    //$('#checkRFMesh').button({
+        //    //    icons: {
+        //    //        primary: "ui-icon-check"
+        //    //    }
+        //    //})
+        //}
        // applyPlanning();
 
         //$('#check').button.removeClass("ui-state-focus ui-state-hover");

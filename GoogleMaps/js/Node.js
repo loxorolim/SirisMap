@@ -383,25 +383,25 @@ function createDAP() {
                 }
             }
         },
-        connectByDistance: function (newDistance) {
+        connectByDistance: function () {
    
-            var toCover = [];
-            var allMarkers = meters.concat(daps);
-            for (var i = 0; i < allMarkers.length; i++) {
-                var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, allMarkers[i].position);
-                var values = getValuesFromTable(dist);
-                if (values != -1 && this.ID != allMarkers[i].ID) {
-                    var toAdd = {
-                        marker: allMarkers[i],
-                        distance: dist,
-                        value: values
-                    };
-                    toCover.push(toAdd);
-                }
-            }
+            //var toCover = [];
+            //var allMarkers = meters.concat(daps);
+            //for (var i = 0; i < allMarkers.length; i++) {
+            //    var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, allMarkers[i].position);
+            //    var values = getValuesFromTable(dist);
+            //    if (values != -1 && this.ID != allMarkers[i].ID) {
+            //        var toAdd = {
+            //            marker: allMarkers[i],
+            //            distance: dist,
+            //            value: values
+            //        };
+            //        toCover.push(toAdd);
+            //    }
+            //}
 
-            toCover = toCover.sort(function (a, b) { return a.distance - b.distance });
-            
+            //toCover = toCover.sort(function (a, b) { return a.distance - b.distance });
+            var toCover = this.normalCoverage();
             for (var i = 0; i < toCover.length; i++) {
                // var dist = google.maps.geometry.spherical.computeDistanceBetween(newDistance, allMarkers[i].position);
                // var values = getValuesFromTable(dist);
@@ -410,7 +410,7 @@ function createDAP() {
                     
                     if (toCover[i].marker.type == "DAP") {
                         this.connect(toCover[i].marker, toCover[i].value.color);
-                        toCover[i].marker.connect(this, values.color);
+                        toCover[i].marker.connect(this, toCover[i].value.color);
                     }
                     else {
                         if (this.coveredMeters < DAPLIMIT) {
@@ -477,9 +477,66 @@ function createDAP() {
             
 
         },
-        connectByDistanceMesh: function () {
+        meterIsOverloaded: function (meter) {
+            if (meter.load >= METERLIMIT)
+                return true;
+            else {          
+                var m = meter;
+                var parent = this.meshMeters.filter(function (item) {
+                    return item.target.ID == m.ID;
+                });
+                while (parent.length != 0) {
+                    //parent[0].mesh.load++;
+                    if (parent[0].mesh.load >= METERLIMIT)
+                        return true;
+                    m = parent[0].mesh;
+                    var parent = this.meshMeters.filter(function (item) {
+                        return item.target.ID == m.ID;
+                    });
+                }
+                return false;
+            }
+            return false;
+        },
+        normalCoverage: function(){
+            var toCover = [];
+            var allMarkers = meters.concat(daps);
+            for (var i = 0; i < allMarkers.length; i++) {
+                var dist = google.maps.geometry.spherical.computeDistanceBetween(this.getPosition(), allMarkers[i].position);
+                var values = getValuesFromTable(dist);
+                if (values != -1 && this.ID != allMarkers[i].ID) {
+                    var toAdd = {
+                        marker: allMarkers[i],
+                        distance: dist,
+                        value: values
+                    };
+                    toCover.push(toAdd);
+                }
+            }
+
+            toCover = toCover.sort(function (a, b) { return a.distance - b.distance });
+            var ret = [];
+            var coveredMeters = 0;
+            for (var i = 0; i < toCover.length; i++) {
+                if (toCover[i].marker.type == "DAP") {
+                      ret.push(toCover[i]);
+              //      this.connect(toCover[i].marker, toCover[i].value.color);
+              //      toCover[i].marker.connect(this, values.color);
+                }
+                else {
+                    if (coveredMeters < DAPLIMIT) {
+                     //   this.connect(toCover[i].marker, toCover[i].value.color);
+                        //   toCover[i].marker.connect(this);
+                        ret.push(toCover[i]);
+                        coveredMeters++;
+                    }
+                }
+            }
+            return ret;
+        },
+        meshCoverage: function(){
             var aux = this.neighbours;
-            
+            var ret = [];
 
             for (var k = 0; k < meshMaxJumps; k++) {
 
@@ -507,7 +564,7 @@ function createDAP() {
                                     if (mesh[z].distance > toAdd.distance)
                                         mesh[z] = toAdd;
                                 }
-                            if(!found)
+                            if (!found)
                                 mesh.push(toAdd);
                         }
                     }
@@ -516,10 +573,72 @@ function createDAP() {
                 aux = [];
                 for (var i = 0; i < mesh.length && this.coveredMeters < DAPLIMIT; i++) {
                     //this.coveredMeters++;
+                    if (!this.meterIsOverloaded(mesh[i].mesh)) {
+                        ret.push(mesh[i]);
+                        //this.meshConnect(mesh[i].mesh, mesh[i].marker, mesh[i].value.color)
+                        //mesh[i].marker.meshConnect(mesh[i].mesh, mesh[i].value.color);
+                        aux.push(mesh[i].marker);
+                    }
 
-                    this.meshConnect(mesh[i].mesh, mesh[i].marker, mesh[i].value.color)
-                    //mesh[i].marker.meshConnect(mesh[i].mesh, mesh[i].value.color);
-                    aux.push(mesh[i].marker);
+
+                }
+            }
+            return ret;
+        },
+        calculateCoverage: function() {
+            if(meshEnabled){
+
+            }
+            else{
+
+            }
+        },
+        connectByDistanceMesh: function () {
+
+            var aux = this.neighbours;
+            
+
+            for (var k = 0; k < meshMaxJumps; k++) {
+
+                var disconnectedMeters = meters.filter(function (item) {
+                    return (item.connected != true);
+                });
+                var mesh = [];
+                for (var i = 0; i < aux.length; i++) {                    
+                        for (var j = 0; j < disconnectedMeters.length; j++) {
+                            var dist = google.maps.geometry.spherical.computeDistanceBetween(aux[i].getPosition(), disconnectedMeters[j].getPosition());
+                            var distToDap = google.maps.geometry.spherical.computeDistanceBetween(this.getPosition(), disconnectedMeters[j].position);
+                            var values = getValuesFromTable(dist);
+                            if (values != -1) {
+                                var toAdd = {
+                                    marker: disconnectedMeters[j],
+                                    mesh: aux[i],
+                                    distance: dist,
+                                    distanceToDap: distToDap,
+                                    value: values
+                                };
+                                var found = false;
+                                for (var z = 0; z < mesh.length; z++)
+                                    if (mesh[z].marker == toAdd.marker) {
+                                        found = true;
+                                        if (mesh[z].distance > toAdd.distance)
+                                            mesh[z] = toAdd;
+                                    }
+                                if (!found)
+                                    mesh.push(toAdd);
+                            }
+                        }                                       
+                }
+                mesh.sort(function (a, b) { return a.distanceToDap - b.distanceToDap });
+                aux = [];
+                for (var i = 0; i < mesh.length && this.coveredMeters < DAPLIMIT; i++) {
+                    //this.coveredMeters++;
+                    if (!this.meterIsOverloaded(mesh[i].mesh)) {
+                        this.meshConnect(mesh[i].mesh, mesh[i].marker, mesh[i].value.color)
+                        //mesh[i].marker.meshConnect(mesh[i].mesh, mesh[i].value.color);
+                        aux.push(mesh[i].marker);
+                    }
+                        
                     
                 }
             }           
@@ -601,7 +720,7 @@ function createDAP() {
     google.maps.event.addListener(marker, 'dragend', function (event) {
         marker.setPosition(event.latLng);
         marker.removeConnections(event.latLng);
-        marker.connectByDistance(event.latLng);
+        marker.connectByDistance();
         calculateEfficiency(marker);
         if (meshEnabled)
             connectViaMesh();
