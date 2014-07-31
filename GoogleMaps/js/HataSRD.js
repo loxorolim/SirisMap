@@ -16,11 +16,13 @@ function getHataSRDSuccessRate(distance) {
 }
 function refresh() {
     createTableFromOptions();
+
     for (var i = 0; i < daps.length; i++) {
         daps[i].refresh();
     }
     if (meshEnabled)
         connectViaMesh();
+    
 }
 
 

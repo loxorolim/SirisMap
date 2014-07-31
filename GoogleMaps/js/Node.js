@@ -685,9 +685,13 @@ function createDAP() {
         calculateEfficiency: function () {
 
         },
-        refresh: function() {
+        refresh: function () {
+            if (meshEnabled)
+                resetMesh();
             this.removeConnections(this.getPosition());
             this.connectByDistance(this.getPosition());
+            if (meshEnabled)
+                this.connectByDistanceMesh();
         },
         displayInfoWindow: function () {
             var content = 'ID: ' + this.ID +
