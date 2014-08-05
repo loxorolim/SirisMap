@@ -8,11 +8,11 @@ function autoPlanningGrasp() {
 
     //createMeshCoverageMatrix(poles);
 
-    Matrixes = createScpMatrixes();
-    //if(meshEnabled)
-       // Matrixes = createMeshScpMatrixes();
-    //else
-      //  Matrixes = createScpMatrixes();
+    //Matrixes = createScpMatrixes();
+    if(meshEnabled)
+        Matrixes = createMeshScpMatrixes();
+    else
+        Matrixes = createScpMatrixes();
    // var end = new Date().getTime();
     //var time = end - start;
     //alert('Execution time: ' + time);
