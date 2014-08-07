@@ -1,6 +1,15 @@
 ﻿function applyPlanning() {
-    var solution = autoPlanningGrasp();
-    applySolution(solution);
+    //var solution = autoPlanningGrasp();
+    //applySolution(solution);
+
+    printScpMatrixTeste();
+    var solution = [];
+    //for (var i = 0; i < 140; i++)
+    //    if (i == 40 || i == 57 || i == 59)
+    //        solution[i] = 1;
+    //    else
+    //        solution[i] = 0;
+    //applySolution(solution);
     $.unblockUI();
 }
 function applySolution(solution) {

@@ -1,7 +1,47 @@
-﻿var DAPLimit = 20; // Cada DAP só pode atender 20 medidores
-var MeterLimit = 5; // Cada Medidor só aguentar até 5 medidores em MESh
+﻿
 
 
+
+function printScpMatrixTeste() {
+    Matrixes = createMeshScpMatrixes();
+    var scpMatrix = Matrixes.scpMatrix;
+    var coverageMatrix = Matrixes.coverageMatrix;
+    var Z = scpMatrix.length;
+    var Y = coverageMatrix.length;
+    var ret = "";
+    ret += "set Z:= ";
+    for (var i = 0; i < Z; i++)
+        ret += "Z" + (i + 1) + " ";
+    ret += ";\n"
+    ret += "set Y:= ";
+    for (var i = 0; i < Y; i++)
+        ret += "Y" + (i + 1) + " ";
+    ret += ";\n";
+
+
+
+    for (var i = 0; i < Y; i++)
+        ret += "Y" + (i + 1) + " ";
+    ret += ":= \n";
+    for (var i = 0; i < Z; i++) {
+        ret += "Z" + (i + 1) + " ";
+        for (var j = 0; j < Y; j++) {
+            var um = false;
+            for(var k = 0; k < scpMatrix[i].length;k++)
+                if(j == scpMatrix[i][k])
+                    um = true;
+            if (um)
+                ret += "1 ";
+            else
+                ret += "0 ";
+
+        }
+        ret += "\n";
+    }
+    
+
+   // for(var i = 0; i < )
+}
 function createScpMatrixes() {
     var points = metersToPoints(meters);
     var electricPoles = [];
