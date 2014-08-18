@@ -1,9 +1,9 @@
 ﻿function applyPlanning() {
     //var solution = autoPlanningGrasp();
     //applySolution(solution);
-
-    printScpMatrixTeste();
-    var solution = [];
+    sendSCPToServer();
+    //printScpMatrixTeste();
+    //var solution = [];
     //for (var i = 0; i < 140; i++)
     //    if (i == 40 || i == 57 || i == 59)
     //        solution[i] = 1;
@@ -17,10 +17,10 @@ function applySolution(solution) {
         if (solution[i] == 1) {
             var latLng = poles[i].position;
             var newDap = createDAP();
-            newDap.place(latLng.lat(),latLng.lng());
+            newDap.place(latLng.lat(), latLng.lng());
             //placeDAP(latLng.lat(), latLng.lng(), "bla");
         }
-            
+
     }
 
 }
@@ -38,7 +38,7 @@ function covers(c, pt, r) {
 //    return -1;
 //}
 //function findBestCoverage(points, coverage) {
-   
+
 //    var coveragePos = -1;
 //    var numContained = 0;
 //    for (var i = 0; i < coverage.length; i++) {
@@ -53,8 +53,8 @@ function covers(c, pt, r) {
 //                numContained = contained;
 //            }
 //        }
-        
-            
+
+
 //    }
 //    return coveragePos;
 //}
@@ -91,7 +91,7 @@ function getDapMaximumReach() {
 //        for(var j = 0; j < points.length; j ++)
 //            if(covers(electricPoles[i],points[j],r)){
 //                obj.points.push(points[j]);
-                
+
 //            }   
 //        coverage.push(obj);
 //    }
@@ -101,7 +101,7 @@ function getDapMaximumReach() {
 //        return 0;
 //    });
 //    var circlesChosen = [];
-   
+
 //    while (points.length > 0) {
 //        var bestCoveragePos = findBestCoverage(points, coverage);
 //        if (bestCoveragePos == -1)
@@ -122,9 +122,9 @@ function getDapMaximumReach() {
 //        circlesChosen.push(coverage[bestCoveragePos].c);
 //        coverage.splice(bestCoveragePos, 1);
 
-  
+
 //    }
-    
+
 //    addDapAtPoints(circlesChosen, meters);
 
 //}

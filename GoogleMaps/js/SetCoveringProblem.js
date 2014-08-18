@@ -1,14 +1,43 @@
 ﻿
 
+function sendSCPToServer() {
+    var data = printScpMatrixTeste();
+    // var data = data.toString();
+    _ajax_request("http://localhost:3000/autoplan", data, 'POST');
+}
+
+function _ajax_request(url, data, method) {
 
 
+    $.ajax({
+        url: url,
+        type: method,
+        data: {
+            'data': data
+
+        },
+        dataType: 'text',
+        success: function (data) {
+            var split = data.split(" ");
+
+            for (var i = 0 ; i < split.length - 1; i++) {
+                var toAdd = parseInt(split[i].slice(1));
+                var latLng = poles[toAdd - 1].position;
+                var newDap = createDAP();
+                newDap.place(latLng.lat(), latLng.lng());
+
+            }
+        }
+    });
+}
 function printScpMatrixTeste() {
     Matrixes = createMeshScpMatrixes();
     var scpMatrix = Matrixes.scpMatrix;
     var coverageMatrix = Matrixes.coverageMatrix;
     var Z = scpMatrix.length;
     var Y = coverageMatrix.length;
-    var ret = "";
+    //TEM Q MUDAR ESSE NEGÓCIO AQUI!
+    var ret = "set Z;\n set Y;\n param A{r in Z, m in Y}, binary;\n var Route{m in Y}, binary;\n minimize cost: sum{m in Y} Route[m];\n subject to covers{r in Z}: sum{m in Y} A[r,m]*Route[m]>=1;\n solve; \n printf {m in Y:  Route[m] == 1} \"%s \", m > \"Results.txt\";\n data;\n";
     ret += "set Z:= ";
     for (var i = 0; i < Z; i++)
         ret += "Z" + (i + 1) + " ";
@@ -18,7 +47,7 @@ function printScpMatrixTeste() {
         ret += "Y" + (i + 1) + " ";
     ret += ";\n";
 
-
+    ret += "param A : ";
 
     for (var i = 0; i < Y; i++)
         ret += "Y" + (i + 1) + " ";
@@ -27,8 +56,8 @@ function printScpMatrixTeste() {
         ret += "Z" + (i + 1) + " ";
         for (var j = 0; j < Y; j++) {
             var um = false;
-            for(var k = 0; k < scpMatrix[i].length;k++)
-                if(j == scpMatrix[i][k])
+            for (var k = 0; k < scpMatrix[i].length; k++)
+                if (j == scpMatrix[i][k])
                     um = true;
             if (um)
                 ret += "1 ";
@@ -36,11 +65,16 @@ function printScpMatrixTeste() {
                 ret += "0 ";
 
         }
-        ret += "\n";
-    }
-    
 
-   // for(var i = 0; i < )
+    }
+    ret += "\n";
+    ret += ";";
+    ret += "end;";
+
+    return ret;
+
+
+    // for(var i = 0; i < )
 }
 function createScpMatrixes() {
     var points = metersToPoints(meters);
@@ -58,7 +92,7 @@ function createScpMatrixes() {
     for (var i = 0 ; i < electricPoles.length ; i++) {
         var pointsCovered = [];
         for (var j = 0; j < points.length; j++)
-            if (covers(electricPoles[i], points[j], r)){
+            if (covers(electricPoles[i], points[j], r)) {
                 pointsCovered.push(j);
                 sM[j].push(i);
 
@@ -67,12 +101,12 @@ function createScpMatrixes() {
     }
     var scpMatrixes = ({
         scpMatrix: sM,
-        coverageMatrix: cM 
+        coverageMatrix: cM
     });
     return scpMatrixes;
 }
 function createCoverageMatrix(points) {
-    
+
     var electricPoles = [];
     for (var i = 0 ; i < poles.length ; i++) {
         electricPoles.push(latLngToPoint(poles[i].position));
@@ -91,7 +125,7 @@ function createCoverageMatrix(points) {
     return cM;
 }
 function createMeshScpMatrixes() {
- //   var Matrixes = createScpMatrixes();
+    //   var Matrixes = createScpMatrixes();
     //   var scpMatrix = Matrixes.scpMatrix;
     var points = metersToPoints(meters);
     var sM = [];
@@ -103,7 +137,7 @@ function createMeshScpMatrixes() {
         sM.push(newArray);
     }
 
-  //  var added = [];
+    //  var added = [];
     //  var s = coverageMatrix[pos].length; //OS MEDIDORES QUE O DAP EM POS SATISFAZ
     for (var k = 0; k < cM.length; k++) {
         var added = [];
@@ -203,8 +237,8 @@ function createMeshScpMatrixes2() {
 //                covered.push(toAdd);
 //                sM[toAdd].push(j);
 //            }
-            
-            
+
+
 //          //  covered.push(dap.neighbours[i]);
 //        }
 //        for (var i = 0; i < dap.meshMeters.length; i++) {
